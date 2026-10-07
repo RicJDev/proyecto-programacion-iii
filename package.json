@@ -1,0 +1,22 @@
+{
+  "name": "proyecto-programacion-iii",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:frontend": "pnpm --filter frontend dev",
+    "start:backend": "pnpm --filter backend dev",
+    "start": "pnpm run start:frontend & pnpm run start:backend",
+    "build": "pnpm recursive run build",
+    "test": "pnpm recursive run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}
