@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Avanzado - Centro de Salud</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+    <!-- CABECERA INSTITUCIONAL -->
+    <header>
+        <h1>Sistema Nacional de Información de Vacunación</h1>
+        
+    </header>
+
+    <div class="container">
+        
+        
+
+        <!-- SECCIÓN 2: BÚSQUEDA Y CONSULTA DE PACIENTES -->
+        <fieldset>
+            <legend>1. Búsqueda de Ciudadano en el Sistema</legend>
+            <label for="buscar_cedula">Cédula de Identidad o Nombre Completo:</label>
+            <input type="text" id="buscar_cedula" placeholder="Ingrese Cédula o Nombre...">
+            <button type="button" class="btn-search">Consultar Historial del Paciente</button>
+
+            <!-- Historial detallado de vacunas encontradas -->
+            <div class="resultado-historial" style="margin-top: 15px;">
+                <h4>Historial Médico del Paciente Encontrado</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dosis / Vacuna</th>
+                            <th>Lote Aplicado</th>
+                            <th>Fecha</th>
+                            <th>Estatus</th>
+                            <th>Centro Emisor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BCG (Dosis Única)</td>
+                            <td>LOT-BCG-992</td>
+                            <td>10/01/2021</td>
+                            <td>Aplicada</td>
+                            <td>Ambulatorio La Victoria</td>
+                        </tr>
+                        <tr>
+                            <td>Hepatitis B (1era Dosis)</td>
+                            <td>LOT-HEP-441</td>
+                            <td>15/03/2022</td>
+                            <td>Aplicada</td>
+                            <td>Hospital Central</td>
+                        </tr>
+                        <tr>
+                            <td>Pentavalente (Refuerzo)</td>
+                            <td>--</td>
+                            <td>--/--/----</td>
+                            <td>Pendiente</td>
+                            <td>--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+
+        <!-- SECCIÓN 3: REGISTRO RÁPIDO DE NUEVO PACIENTE (Si no existe) -->
+        <fieldset style="border-color: var(--orange);">
+            <legend style="background-color: var(--orange); color: white;">2. Registro de Nuevo Ciudadano (Si no está en el sistema)</legend>
+            <form>
+                <div class="grid-form">
+                    <div>
+                        <label for="nuevo_cedula">Cédula de Identidad:</label>
+                        <input type="text" id="nuevo_cedula" placeholder="V-XXXXXXXX">
+                    </div>
+                    <div>
+                        <label for="nuevo_nombre">Nombre Completo:</label>
+                        <input type="text" id="nuevo_nombre" placeholder="Nombres y Apellidos">
+                    </div>
+                    <div>
+                        <label for="nuevo_nacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" id="nuevo_nacimiento">
+                    </div>
+                    <div>
+                        <label for="nuevo_sector">Sector de Residencia:</label>
+                        <input type="text" id="nuevo_sector" placeholder="Ingrese Sector o Barrio">
+                    </div>
+                    
+                </div>
+                <button type="button" class="btn-search" style="background-color: var(--orange); color: white; margin-top: 15px;">Registrar Ciudadano</button>
+            </form>
+        </fieldset>
+
+        <!-- SECCIÓN 4: APLICACIÓN Y REGISTRO DE NUEVA DOSIS -->
+        <fieldset>
+            <legend>3. Registrar Aplicación de Dosis Diaria</legend>
+            <form>
+                <label for="vacuna_aplicar">Seleccionar Vacuna Correspondiente:</label>
+                <select id="vacuna_aplicar">
+                    <option value="">-- Seleccionar Vacuna del Día --</option>
+                    <option value="polio">Polio (Oral / Inyectada)</option>
+                    <option value="pentavalente">Pentavalente</option>
+                    <option value="fiebre_amarilla">Fiebre Amarilla</option>
+                    <option value="tetanos">Toxoide Tetánico</option>
+                    <option value="covid19">COVID-19 (Refuerzo)</option>
+                </select>
+
+                <label for="lote_dosis">Número de Lote del Frasco:</label>
+                <input type="text" id="lote_dosis" placeholder="Ej: LOT-2026-VAL-09">
+
+                <label for="observaciones">Observaciones Clínicas (Opcional):</label>
+                <input type="text" id="observaciones" placeholder=" Paciente sin reacciones adversas inmediatas">
+
+                <button type="submit" class="btn-save">Guardar e Imprimir Comprobante de Vacunación</button>
+            </form>
+        </fieldset>
+
+        <!-- SECCIÓN 5: REPORTE DIARIO DEL CENTRO DE SALUD -->
+        <fieldset style="background-color: #f4f6f8;">
+            <legend style="background-color: var(--dark-text); color: white;">4. Resumen de Dosis Aplicadas Hoy en este Centro</legend>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vacuna</th>
+                        <th>Total Aplicadas Hoy</th>
+                        <th>Personal a Cargo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pentavalente</td>
+                        <td>14 dosis</td>
+                        <td>Enf. Ana Gómez</td>
+                    </tr>
+                    <tr>
+                        <td>Polio</td>
+                        <td>22 dosis</td>
+                        <td>Dr. Carlos Silva</td>
+                    </tr>
+                    <tr>
+                        <td>COVID-19</td>
+                        <td>35 dosis</td>
+                        <td>Lic. María Rodríguez</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+
+    </div>
+
+    <footer>
+        <p>Sistema Nacional de Información de Vacunación &copy; 2026 - Módulo Operativo de Salud</p>
+    </footer>
+
+</body>
+</html>
