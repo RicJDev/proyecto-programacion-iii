@@ -3,31 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo Avanzado - Centro de Salud</title>
+    <title>Módulo Centro de Salud - Sistema Nacional de Vacunación</title>
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
-    <!-- CABECERA INSTITUCIONAL -->
     <header>
         <h1>Sistema Nacional de Información de Vacunación</h1>
-        
+        <p>Módulo Operativo: Centro de Salud</p>
     </header>
 
     <div class="container">
-        
-        
 
-        <!-- SECCIÓN 2: BÚSQUEDA Y CONSULTA DE PACIENTES -->
+        <!--  BÚSQUEDA Y CONSULTA DE PACIENTES -->
         <fieldset>
             <legend>1. Búsqueda de Ciudadano en el Sistema</legend>
-            <label for="buscar_cedula">Cédula de Identidad o Nombre Completo:</label>
-            <input type="text" id="buscar_cedula" placeholder="Ingrese Cédula o Nombre...">
+            <div class="form-group">
+                <label for="buscar_cedula">Cédula de Identidad o Nombre Completo:</label>
+                <input type="text" id="buscar_cedula" placeholder="Ingrese Cédula (Ej: V-12345678) o Nombre...">
+            </div>
             <button type="button" class="btn-search">Consultar Historial del Paciente</button>
 
-            <!-- Historial detallado de vacunas encontradas -->
-            <div class="resultado-historial" style="margin-top: 15px;">
-                <h4>Historial Médico del Paciente Encontrado</h4>
+            <div class="resultado-historial">
+                <h4>Historial Médico del Paciente</h4>
                 <table>
                     <thead>
                         <tr>
@@ -46,111 +44,118 @@
                             <td>Aplicada</td>
                             <td>Ambulatorio La Victoria</td>
                         </tr>
-                        <tr>
-                            <td>Hepatitis B (1era Dosis)</td>
-                            <td>LOT-HEP-441</td>
-                            <td>15/03/2022</td>
-                            <td>Aplicada</td>
-                            <td>Hospital Central</td>
-                        </tr>
-                        <tr>
-                            <td>Pentavalente (Refuerzo)</td>
-                            <td>--</td>
-                            <td>--/--/----</td>
-                            <td>Pendiente</td>
-                            <td>--</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </fieldset>
 
-        <!-- SECCIÓN 3: REGISTRO RÁPIDO DE NUEVO PACIENTE (Si no existe) -->
-        <fieldset style="border-color: var(--orange);">
-            <legend style="background-color: var(--orange); color: white;">2. Registro de Nuevo Ciudadano (Si no está en el sistema)</legend>
+        <!--  REGISTRO DE NUEVO CIUDADANO (ESTRUCTURA TERRITORIAL VENEZUELA) -->
+        <fieldset>
+            <legend>2. Registro de Nuevo Ciudadano</legend>
             <form>
                 <div class="grid-form">
-                    <div>
+                    <div class="form-group">
                         <label for="nuevo_cedula">Cédula de Identidad:</label>
                         <input type="text" id="nuevo_cedula" placeholder="V-XXXXXXXX">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="nuevo_nombre">Nombre Completo:</label>
                         <input type="text" id="nuevo_nombre" placeholder="Nombres y Apellidos">
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label for="nuevo_nacimiento">Fecha de Nacimiento:</label>
                         <input type="date" id="nuevo_nacimiento">
                     </div>
-                    <div>
-                        <label for="nuevo_sector">Sector de Residencia:</label>
-                        <input type="text" id="nuevo_sector" placeholder="Ingrese Sector o Barrio">
-                    </div>
-                    
                 </div>
-                <button type="button" class="btn-search" style="background-color: var(--orange); color: white; margin-top: 15px;">Registrar Ciudadano</button>
+
+                <!-- Ubicación Geográfica -->
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label for="nuevo_estado">1. Estado:</label>
+                        <select id="nuevo_estado" name="estado">
+                            <option value="">-- Seleccione el Estado --</option>
+                            <option value="amazonas">Amazonas</option>
+                            <option value="anzoategui">Anzoátegui</option>
+                            <option value="apure">Apure</option>
+                            <option value="aragua">Aragua</option>
+                            <option value="barinas">Barinas</option>
+                            <option value="bolivar">Bolívar</option>
+                            <option value="carabobo">Carabobo</option>
+                            <option value="cojedes">Cojedes</option>
+                            <option value="delta_amacuro">Delta Amacuro</option>
+                            <option value="distrito_capital">Distrito Capital</option>
+                            <option value="falcon">Falcón</option>
+                            <option value="guarico">Guárico</option>
+                            <option value="lara">Lara</option>
+                            <option value="merida">Mérida</option>
+                            <option value="miranda">Miranda</option>
+                            <option value="monagas">Monagas</option>
+                            <option value="nueva_esparta">Nueva Esparta</option>
+                            <option value="portuguesa">Portuguesa</option>
+                            <option value="sucre">Sucre</option>
+                            <option value="tachira">Táchira</option>
+                            <option value="trujillo">Trujillo</option>
+                            <option value="la_guaira">La Guaira (Vargas)</option>
+                            <option value="yaracuy">Yaracuy</option>
+                            <option value="zulia">Zulia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nuevo_municipio">2. Municipio:</label>
+                        <select id="nuevo_municipio" name="municipio">
+                            <option value="">-- Seleccione Municipio --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nuevo_parroquia">3. Parroquia:</label>
+                        <select id="nuevo_parroquia" name="parroquia">
+                            <option value="">-- Seleccione Parroquia --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nuevo_sector">4. Sector / Caserío / Barrio:</label>
+                        <input type="text" id="nuevo_sector" placeholder="Escriba el sector exacto">
+                    </div>
+                </div>
+
+                <button type="button" class="btn-search">Registrar Ciudadano</button>
             </form>
         </fieldset>
 
-        <!-- SECCIÓN 4: APLICACIÓN Y REGISTRO DE NUEVA DOSIS -->
+        <!--  REGISTRO DE APLICACIÓN DE DOSIS -->
         <fieldset>
-            <legend>3. Registrar Aplicación de Dosis Diaria</legend>
+            <legend>3. Registrar Aplicación de Dosis</legend>
             <form>
-                <label for="vacuna_aplicar">Seleccionar Vacuna Correspondiente:</label>
-                <select id="vacuna_aplicar">
-                    <option value="">-- Seleccionar Vacuna del Día --</option>
-                    <option value="polio">Polio (Oral / Inyectada)</option>
-                    <option value="pentavalente">Pentavalente</option>
-                    <option value="fiebre_amarilla">Fiebre Amarilla</option>
-                    <option value="tetanos">Toxoide Tetánico</option>
-                    <option value="covid19">COVID-19 (Refuerzo)</option>
-                </select>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label for="vacuna_aplicar">Seleccionar Vacuna Correspondiente:</label>
+                        <select id="vacuna_aplicar">
+                            <option value="">-- Seleccionar Vacuna --</option>
+                            <option value="polio">Polio (Oral / Inyectada)</option>
+                            <option value="pentavalente">Pentavalente</option>
+                            <option value="fiebre_amarilla">Fiebre Amarilla</option>
+                            <option value="tetanos">Toxoide Tetánico</option>
+                            <option value="covid19">COVID-19 (Refuerzo)</option>
+                        </select>
+                    </div>
 
-                <label for="lote_dosis">Número de Lote del Frasco:</label>
-                <input type="text" id="lote_dosis" placeholder="Ej: LOT-2026-VAL-09">
+                    <div class="form-group">
+                        <label for="lote_dosis">Número de Lote del Frasco:</label>
+                        <input type="text" id="lote_dosis" placeholder="Ej: LOT-2026-VAL-09">
+                    </div>
+                </div>
 
-                <label for="observaciones">Observaciones Clínicas (Opcional):</label>
-                <input type="text" id="observaciones" placeholder=" Paciente sin reacciones adversas inmediatas">
-
-                <button type="submit" class="btn-save">Guardar e Imprimir Comprobante de Vacunación</button>
+                <button type="submit" class="btn-save">Guardar e Imprimir Comprobante</button>
             </form>
-        </fieldset>
-
-        <!-- SECCIÓN 5: REPORTE DIARIO DEL CENTRO DE SALUD -->
-        <fieldset style="background-color: #f4f6f8;">
-            <legend style="background-color: var(--dark-text); color: white;">4. Resumen de Dosis Aplicadas Hoy en este Centro</legend>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Vacuna</th>
-                        <th>Total Aplicadas Hoy</th>
-                        <th>Personal a Cargo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Pentavalente</td>
-                        <td>14 dosis</td>
-                        <td>Enf. Ana Gómez</td>
-                    </tr>
-                    <tr>
-                        <td>Polio</td>
-                        <td>22 dosis</td>
-                        <td>Dr. Carlos Silva</td>
-                    </tr>
-                    <tr>
-                        <td>COVID-19</td>
-                        <td>35 dosis</td>
-                        <td>Lic. María Rodríguez</td>
-                    </tr>
-                </tbody>
-            </table>
         </fieldset>
 
     </div>
 
     <footer>
-        <p>Sistema Nacional de Información de Vacunación &copy; 2026 - Módulo Operativo de Salud</p>
+        <p>Sistema Nacional de Información de Vacunación &copy; 2026 - Módulo Centro de Salud</p>
     </footer>
 
 </body>
