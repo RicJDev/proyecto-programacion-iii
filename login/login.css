@@ -1,0 +1,567 @@
+/* Estilos del Módulo de Inicio de Sesión y Autenticación Sanitaria */
+.login-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 1.5rem auto;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: #1e293b;
+}
+
+.login-header-box {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-radius: 9999px;
+  margin-bottom: 0.6rem;
+}
+
+.login-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.login-main-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Alertas */
+.auth-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  animation: fadeIn 0.25s ease;
+}
+
+.auth-alert-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.auth-alert-success {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tarjeta del formulario de inicio de sesión */
+.login-role-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.login-role-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.login-role-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.login-role-icon.maestro {
+  background-color: #eef2ff;
+  border: 1px solid #c7d2fe;
+}
+
+.login-role-icon.regional {
+  background-color: #e0f2fe;
+  border: 1px solid #7dd3fc;
+}
+
+.login-role-icon.local {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.login-role-icon.inmunizador {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.login-role-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+}
+
+.login-role-desc {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.login-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  text-align: left;
+}
+
+.login-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.login-input,
+.login-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.login-input:focus,
+.login-select:focus {
+  outline: none;
+  border-color: #0284c7;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.login-submit-btn {
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #0284c7;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.login-submit-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.login-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-submit-btn.small {
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+
+/* Acceso rápido a cuentas demo */
+.demo-accounts-bar {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed #e2e8f0;
+  text-align: left;
+}
+
+.demo-accounts-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 0.65rem;
+}
+
+.demo-accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+}
+
+.demo-account-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.demo-account-btn:hover {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 3px 8px -2px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+}
+
+.demo-role-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.demo-role-email {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+/* Vistas de Sesión Autenticada */
+.session-view {
+  background-color: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+}
+
+.session-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.session-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.session-tag.maestro {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.session-tag.regional {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.session-tag.local {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.session-tag.inmunizador {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.session-logout-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #dc2626;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.session-logout-btn:hover {
+  background-color: #fee2e2;
+}
+
+.session-user-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: #f8fafc;
+  border-radius: 14px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+.session-user-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.session-user-avatar.maestro {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.session-user-avatar.regional {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+}
+
+.session-user-avatar.local {
+  background: linear-gradient(135deg, #0d9488, #059669);
+}
+
+.session-user-avatar.inmunizador {
+  background: linear-gradient(135deg, #d97706, #ea580c);
+}
+
+.session-user-meta {
+  text-align: left;
+}
+
+.session-user-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.2rem 0;
+}
+
+.session-user-email {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+}
+
+.session-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.session-chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.session-chip.maestro-chip {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.session-chip.regional-chip {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.session-chip.local-chip {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.session-chip.inmunizador-chip {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.session-chip.status-ok {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+/* Grids de Estadísticas */
+.admin-stats-grid,
+.centro-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.admin-stat-card,
+.centro-stat-card {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Módulo de acción administrativa */
+.session-action-section {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.action-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.action-section-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.session-cancel-btn {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.section-subtext {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* Tabla de Registro de Inmunizaciones */
+.vaccine-table-responsive {
+  overflow-x: auto;
+}
+
+.vaccine-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.vaccine-table th {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.vaccine-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.vaccine-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.bold-td {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.badge-lot {
+  font-family: monospace;
+  font-size: 0.8rem;
+  background-color: #f1f5f9;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  color: #475569;
+}
+
+.badge-applied {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
