@@ -49,9 +49,9 @@
             </div>
         </fieldset>
 
-        <!--  REGISTRO DE NUEVO CIUDADANO (ESTRUCTURA TERRITORIAL VENEZUELA) -->
-        <fieldset>
-            <legend>2. Registro de Nuevo Ciudadano</legend>
+        <!--  REGISTRO RÁPIDO DE NUEVO PACIENTE (Si no existe) -->
+        <fieldset style="border-color: var(--orange);">
+            <legend style="background-color: var(--orange); color: white;">2. Registro de Nuevo Ciudadano (Si no está en el sistema)</legend>
             <form>
                 <div class="grid-form">
                     <div class="form-group">
@@ -125,7 +125,7 @@
             </form>
         </fieldset>
 
-        <!--  REGISTRO DE APLICACIÓN DE DOSIS -->
+        <!--  APLICACIÓN Y REGISTRO DE NUEVA DOSIS -->
         <fieldset>
             <legend>3. Registrar Aplicación de Dosis</legend>
             <form>
@@ -150,6 +150,37 @@
 
                 <button type="submit" class="btn-save">Guardar e Imprimir Comprobante</button>
             </form>
+        </fieldset>
+
+        <!--  REPORTE DIARIO DEL CENTRO DE SALUD -->
+        <fieldset style="background-color: #f4f6f8;">
+            <legend style="background-color: var(--dark-text); color: white;">4. Resumen de Dosis Aplicadas Hoy en este Centro</legend>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vacuna</th>
+                        <th>Total Aplicadas Hoy</th>
+                        <th>Personal a Cargo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pentavalente</td>
+                        <td>14 dosis</td>
+                        <td>Enf. Ana Gómez</td>
+                    </tr>
+                    <tr>
+                        <td>Polio</td>
+                        <td>22 dosis</td>
+                        <td>Dr. Carlos Silva</td>
+                    </tr>
+                    <tr>
+                        <td>COVID-19</td>
+                        <td>35 dosis</td>
+                        <td>Lic. María Rodríguez</td>
+                    </tr>
+                </tbody>
+            </table>
         </fieldset>
 
     </div>
