@@ -1,111 +1,130 @@
+@import 'tailwindcss';
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  TEMA PÚBLICO «TU TARjeta» — SIGEV
+ *  Misma paleta institucional que el panel administrativo.
+ *  Los tokens de `@theme inline` se emiten en `:root` y
+ *  habilitan utilidades como bg-primary, border-border,
+ *  text-surface-text, etc.
+ * ─────────────────────────────────────────────────────────────
+ */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --sys-primary: #1e40af;
+  --sys-primary-hover: #1e3a8a;
+  --sys-primary-foreground: #ffffff;
+  --sys-primary-soft: #e8edfb;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sys-secondary: #475569;
+  --sys-secondary-soft: #eef2f6;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --sys-accent: #b45309;
+  --sys-accent-soft: #fdf3e3;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --sys-bg: #f1f5f9;
+  --sys-surface: #ffffff;
+  --sys-surface-alt: #f8fafc;
+  --sys-surface-text: #0f172a;
+  --sys-text-muted: #64748b;
+  --sys-border: #cbd5e1;
+  --sys-border-strong: #94a3b8;
+
+  --sys-success: #15803d;
+  --sys-success-soft: #e8f5ec;
+  --sys-warning: #a16207;
+  --sys-warning-soft: #fdf5e2;
+  --sys-danger: #b91c1c;
+  --sys-danger-soft: #fdecec;
+  --sys-info: #0369a1;
+  --sys-info-soft: #e6f2fa;
+
+  --sys-font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+}
+
+@theme inline {
+  --color-primary: var(--sys-primary);
+  --color-primary-hover: var(--sys-primary-hover);
+  --color-primary-foreground: var(--sys-primary-foreground);
+  --color-primary-soft: var(--sys-primary-soft);
+
+  --color-secondary: var(--sys-secondary);
+  --color-secondary-soft: var(--sys-secondary-soft);
+
+  --color-accent: var(--sys-accent);
+  --color-accent-soft: var(--sys-accent-soft);
+
+  --color-bg: var(--sys-bg);
+  --color-surface: var(--sys-surface);
+  --color-surface-alt: var(--sys-surface-alt);
+  --color-surface-text: var(--sys-surface-text);
+  --color-text-muted: var(--sys-text-muted);
+  --color-border: var(--sys-border);
+  --color-border-strong: var(--sys-border-strong);
+
+  --color-success: var(--sys-success);
+  --color-success-soft: var(--sys-success-soft);
+  --color-warning: var(--sys-warning);
+  --color-warning-soft: var(--sys-warning-soft);
+  --color-danger: var(--sys-danger);
+  --color-danger-soft: var(--sys-danger-soft);
+  --color-info: var(--sys-info);
+  --color-info-soft: var(--sys-info-soft);
+
+  --font-sans: var(--sys-font-sans);
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-radius: 0 !important;
   }
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  html {
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  body {
+    margin: 0;
+    background-color: var(--sys-bg);
+    color: var(--sys-surface-text);
+    font-family: var(--sys-font-sans);
+    font-size: 14px;
+    line-height: 1.5;
   }
-}
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+  p {
+    margin: 0;
   }
-}
-p {
-  margin: 0;
-}
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+  table {
+    border-collapse: collapse;
+  }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  ::selection {
+    background-color: var(--sys-primary);
+    color: var(--sys-primary-foreground);
+  }
 }
