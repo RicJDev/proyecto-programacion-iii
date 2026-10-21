@@ -7,7 +7,7 @@ import { AdminLocal } from './AdminLocal'
 import { PersonalInmunizador } from './PersonalInmunizador'
 import './login.css'
 
-export function LoginSection() {
+export default function App() {
   const [currentUser, setCurrentUser] = useState<UserSession | null>(() =>
     getStoredSession(),
   )
@@ -128,7 +128,10 @@ export function LoginSection() {
             currentUser.role !== 'admin_regional' &&
             currentUser.role !== 'admin_local' &&
             currentUser.role !== 'personal_inmunizador' && (
-              <div className='login-role-card' style={{ textAlign: 'center' }}>
+              <div
+                className='login-role-card'
+                style={{ textAlign: 'center' }}
+              >
                 <p>Sesión con rol no reconocido ({currentUser.role}).</p>
                 <button
                   type='button'
@@ -156,9 +159,15 @@ export function LoginSection() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className='login-form'>
+          <form
+            onSubmit={handleSubmit}
+            className='login-form'
+          >
             <div className='login-field-group'>
-              <label htmlFor='login-email' className='login-label'>
+              <label
+                htmlFor='login-email'
+                className='login-label'
+              >
                 Correo Electrónico
               </label>
               <input
@@ -174,7 +183,10 @@ export function LoginSection() {
             </div>
 
             <div className='login-field-group'>
-              <label htmlFor='login-pass' className='login-label'>
+              <label
+                htmlFor='login-pass'
+                className='login-label'
+              >
                 Contraseña
               </label>
               <input
@@ -246,6 +258,3 @@ export function LoginSection() {
     </div>
   )
 }
-
-export { LoginSection as AuthSection }
-export default LoginSection
