@@ -1,19 +1,12 @@
 import express from 'express'
-import dotenv from 'dotenv'
-import userRoutes from '@/routes/users.routes'
-
-dotenv.config()
+import apiRoutes from '@/routes/api.routes'
+import { HOST, PORT } from '@/config'
 
 const app = express()
+
 app.use(express.json())
-app.use('/api/users', userRoutes)
-
-app.get('/', (_, res) => {
-  res.send('API is running, bruh')
-})
-
-const PORT = process.env.PORT ?? 5000
+app.use('/api', apiRoutes)
 
 app.listen(PORT, () => {
-  console.log(`server is running at http://localhost:${PORT}`)
+  console.log(`server is running at http://${HOST}:${PORT}`)
 })
