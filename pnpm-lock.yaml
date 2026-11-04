@@ -21,8 +21,8 @@ importers:
         specifier: ^7.10.1
         version: 7.10.1
       '@prisma/client':
-        specifier: ^7.10.1
-        version: 7.10.1(prisma@8.1.0-dev.9(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2))(typescript@7.0.2)
+        specifier: '7'
+        version: 7.10.1(prisma@7.10.1(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2))(typescript@7.0.2)
       dotenv:
         specifier: ^18.0.5
         version: 18.0.5
@@ -43,8 +43,8 @@ importers:
         specifier: ^26.6.4
         version: 26.6.4
       prisma:
-        specifier: 8.1.0-dev.9
-        version: 8.1.0-dev.9(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
+        specifier: 7.10.1
+        version: 7.10.1(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
@@ -485,17 +485,14 @@ packages:
       typescript:
         optional: true
 
-  '@prisma/config@8.1.0-dev.9':
-    resolution: {integrity: sha512-/OPSCBAC3CFaFJrLJbjpgJpM9eQqbHFu7/t+TQdti5YE+G2WpI4Zn6MrvVLErZu0Pg1QHa+ilci2+PITpuqh4g==}
+  '@prisma/config@7.10.1':
+    resolution: {integrity: sha512-+0swF5ELUa3P/9cIR26+gpYjjCbGE0qvEBZhV4zMDkYsrtHjZ884MQbOnWFWXj600N0sSJNnHbtBqe12yDngWg==}
 
   '@prisma/debug@7.10.1':
     resolution: {integrity: sha512-eFCAkGZ13D/qPg48JBlG5IWi9cSBBOC7oG3abDPcAkYioDWlIjh0YJJLK2J7qo5S+xWWD8I6egAN/8KbCaiMCA==}
 
   '@prisma/debug@7.2.0':
     resolution: {integrity: sha512-YSGTiSlBAVJPzX4ONZmMotL+ozJwQjRmZweQNIq/ER0tQJKJynNkRB3kyvt37eOfsbMCXk3gnLF6J9OJ4QWftw==}
-
-  '@prisma/debug@8.1.0-dev.9':
-    resolution: {integrity: sha512-OKgOei19mrw6gdbCoAqJTL5AkKNuJl1nJVaJXAiEJhSBaRPD09BiHrB7UxwTbBhkyURBtxuU2VppXsTiE03eOw==}
 
   '@prisma/dev@0.24.17':
     resolution: {integrity: sha512-UvdZzmpFwknnfreh6Jije84ekkYGPYEJhXG1tFzCsCfQyzJifrOo38eZc0qajzvaC6OLUOrN9ML5XfCnEZL9DA==}
@@ -506,17 +503,17 @@ packages:
   '@prisma/engines-version@8.1.0-1.d1b3f377ca835d73fd50954a5e22128b9ebdd6b8':
     resolution: {integrity: sha512-XjXmwjN2NE340RpXoXv8ZF8aNAvr0FE+7gNfkKeW6vyjXs7F8uxvEbWQoVrhioXDQoIsnNmv7r+wxvzfdEZaWA==}
 
-  '@prisma/engines@8.1.0-dev.9':
-    resolution: {integrity: sha512-7haDEHKUfB8tkoAjD79hIvo3X21cXiPogPqW+8XSeWGarXxgRziXCWqzpAO6gVZx7EiG2OQLntxhQ+eIrtLLnw==}
+  '@prisma/engines@7.10.1':
+    resolution: {integrity: sha512-R6/ghv1Bu36FhCdQLFof1pNtyoWoeDzJLYeTKjgqb4eGtOAJx7ZqJtcm4pzkahLfZ9rYz8AkmsMDwkyiYbXPCQ==}
 
-  '@prisma/fetch-engine@8.1.0-dev.9':
-    resolution: {integrity: sha512-3+1RJA7bGz2y0Tb4m6xkFD9/hRaWGO/gy3DyB6AIF3gx48NyMV9FGDjO0IXkLsvz2B00o+6yXbxERX1bQ7tlZA==}
+  '@prisma/fetch-engine@7.10.1':
+    resolution: {integrity: sha512-qZezeaExLWG2ptbHOrMxdiWluKHgqEclTdJbvY6pk6+Wg7EiVkeq5U3cXz9ti8nd0bngNvsDgledLHVRg5LF1w==}
+
+  '@prisma/get-platform@7.10.1':
+    resolution: {integrity: sha512-iVnghHne5vcaobBjPVCMEjh5r/1UCj394EIGTUclasFRatpR/MQwcM2veLv5kgoFSyYP54nch/lNFCQRYcDxvg==}
 
   '@prisma/get-platform@7.2.0':
     resolution: {integrity: sha512-k1V0l0Td1732EHpAfi2eySTezyllok9dXb6UQanajkJQzPUGi3vO2z7jdkz67SypFTdmbnyGYxvEvYZdZsMAVA==}
-
-  '@prisma/get-platform@8.1.0-dev.9':
-    resolution: {integrity: sha512-hYMpZ5Kou+IPwCirSwWLa+dF/XItHkJcUmo4tVGKJorZe5cHw/sWB9bbPqWeaEaNt0XYUMDQxuBbNVkYZYcsnw==}
 
   '@prisma/query-plan-executor@7.2.0':
     resolution: {integrity: sha512-EOZmNzcV8uJ0mae3DhTsiHgoNCuu1J9mULQpGCh62zN3PxPTd+qI9tJvk5jOst8WHKQNwJWR3b39t0XvfBB0WQ==}
@@ -1748,8 +1745,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  prisma@8.1.0-dev.9:
-    resolution: {integrity: sha512-oSVw+THfRO8aPIXhWQ+guUJmAiijCmbMkR4Vk9kLaBenPBwjE+YTdWW0pLwGbiVN7Drbn04bR2Xa/da+j/fsww==}
+  prisma@7.10.1:
+    resolution: {integrity: sha512-GoVeErHGGtsSjsflQ1r2BA3RKTXtxNraQJz8OLkLhoLr7OgCscdx4qw4WMM4HnERYc+a1cq2VnMNbep+vOjNcQ==}
     engines: {node: ^20.19 || ^22.12 || >=24.0}
     hasBin: true
     peerDependencies:
@@ -2204,14 +2201,14 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.10.1': {}
 
-  '@prisma/client@7.10.1(prisma@8.1.0-dev.9(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2))(typescript@7.0.2)':
+  '@prisma/client@7.10.1(prisma@7.10.1(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2))(typescript@7.0.2)':
     dependencies:
       '@prisma/client-runtime-utils': 7.10.1
     optionalDependencies:
-      prisma: 8.1.0-dev.9(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
+      prisma: 7.10.1(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2)
       typescript: 7.0.2
 
-  '@prisma/config@8.1.0-dev.9':
+  '@prisma/config@7.10.1':
     dependencies:
       c12: 3.3.4
       deepmerge-ts: 8.0.2
@@ -2223,8 +2220,6 @@ snapshots:
   '@prisma/debug@7.10.1': {}
 
   '@prisma/debug@7.2.0': {}
-
-  '@prisma/debug@8.1.0-dev.9': {}
 
   '@prisma/dev@0.24.17(typescript@7.0.2)':
     dependencies:
@@ -2252,26 +2247,26 @@ snapshots:
 
   '@prisma/engines-version@8.1.0-1.d1b3f377ca835d73fd50954a5e22128b9ebdd6b8': {}
 
-  '@prisma/engines@8.1.0-dev.9':
+  '@prisma/engines@7.10.1':
     dependencies:
-      '@prisma/debug': 8.1.0-dev.9
+      '@prisma/debug': 7.10.1
       '@prisma/engines-version': 8.1.0-1.d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
-      '@prisma/fetch-engine': 8.1.0-dev.9
-      '@prisma/get-platform': 8.1.0-dev.9
+      '@prisma/fetch-engine': 7.10.1
+      '@prisma/get-platform': 7.10.1
 
-  '@prisma/fetch-engine@8.1.0-dev.9':
+  '@prisma/fetch-engine@7.10.1':
     dependencies:
-      '@prisma/debug': 8.1.0-dev.9
+      '@prisma/debug': 7.10.1
       '@prisma/engines-version': 8.1.0-1.d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
-      '@prisma/get-platform': 8.1.0-dev.9
+      '@prisma/get-platform': 7.10.1
+
+  '@prisma/get-platform@7.10.1':
+    dependencies:
+      '@prisma/debug': 7.10.1
 
   '@prisma/get-platform@7.2.0':
     dependencies:
       '@prisma/debug': 7.2.0
-
-  '@prisma/get-platform@8.1.0-dev.9':
-    dependencies:
-      '@prisma/debug': 8.1.0-dev.9
 
   '@prisma/query-plan-executor@7.2.0': {}
 
@@ -3339,11 +3334,11 @@ snapshots:
 
   prettier@3.9.9: {}
 
-  prisma@8.1.0-dev.9(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2):
+  prisma@7.10.1(@types/node@26.6.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@7.0.2):
     dependencies:
-      '@prisma/config': 8.1.0-dev.9
+      '@prisma/config': 7.10.1
       '@prisma/dev': 0.24.17(typescript@7.0.2)
-      '@prisma/engines': 8.1.0-dev.9
+      '@prisma/engines': 7.10.1
       '@prisma/studio-core': 0.33.0(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       mysql2: 3.24.4(@types/node@26.6.4)
       postgres: 3.4.7
