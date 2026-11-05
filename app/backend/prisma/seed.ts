@@ -1,6 +1,6 @@
 import mariadb from 'mariadb'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
-import { PrismaClient } from '../src/generated/prisma'
+import { PrismaClient } from '../src/generated/prisma/client'
 import {
   DB_HOST,
   DB_PORT,
