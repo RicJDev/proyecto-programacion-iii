@@ -6,7 +6,7 @@ export {
   DB_PORT,
   DB_HOST,
   DB_PASSWORD,
-  DATABASE_URL,
+  DB_URL,
   HOST,
 } from './variables'
 export { prisma } from './client'
