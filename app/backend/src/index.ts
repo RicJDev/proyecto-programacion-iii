@@ -1,6 +1,6 @@
 import express from 'express'
-import apiRoutes from '@/routes/api.routes'
-import { HOST, PORT } from '@/config'
+import apiRoutes from './routes/api.routes'
+import { HOST, PORT } from './config'
 
 const app = express()
 
