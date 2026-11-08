@@ -7,7 +7,7 @@ COPY app/backend ./app/backend
 
 RUN pnpm install --frozen-lockfile
 WORKDIR /app/app/backend
-ENV DB_URL="mysql://root:root@db:3306/vacunas"
+ENV DB_URL="mysql://vacunas:vacunas@db:3306/vacunas"
 RUN pnpm prisma generate
 RUN pnpm run build
 
