@@ -1,0 +1,117 @@
+:root {
+    --orange: #FF9D50;
+    --cream: #FFF9D8;
+    --cyan: #1DCED8;
+    --green: #55E07E;
+    --dark-text: #333333;
+    --white: #ffffff;
+}
+
+body {
+    background-color: var(--cream);
+    color: var(--dark-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--cyan);
+    color: var(--dark-text);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--orange);
+    border-radius: 8px 8px 0 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.container {
+    background-color: var(--white);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 25px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+fieldset {
+    border: 2px solid var(--cyan);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fafbfc;
+}
+
+legend {
+    background-color: var(--cyan);
+    color: var(--dark-text);
+    padding: 5px 12px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+input[type="text"], 
+input[type="date"], 
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.btn-search {
+    background-color: var(--cyan);
+    color: var(--dark-text);
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-save {
+    background-color: var(--green);
+    color: var(--dark-text);
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--cyan);
+    color: var(--dark-text);
+}
