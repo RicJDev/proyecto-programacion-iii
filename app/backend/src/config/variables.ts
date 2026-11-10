@@ -13,3 +13,7 @@ export const DB_PASSWORD = process.env.DB_PASSWORD ?? 'vacunas'
 export const DB_URL =
   process.env.DB_URL ??
   `mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
+
+export const JWT_SECRET = process.env.JWT_SECRET ?? 'proga3_super_secret_jwt_key_2026'
+export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '24h'
+

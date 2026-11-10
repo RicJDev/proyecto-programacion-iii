@@ -1,18 +1,9 @@
 import { Router } from 'express'
-import { constants } from 'node:http2'
+import { login, logout } from '../controllers/auth'
 
 const router = Router()
 
-router.post('/login', (_, res) => {
-  res
-    .status(constants.HTTP_STATUS_NOT_IMPLEMENTED)
-    .json({ message: 'login not implemented' })
-})
-
-router.post('/logout', (_, res) => {
-  res
-    .status(constants.HTTP_STATUS_NOT_IMPLEMENTED)
-    .json({ message: 'logout not implemented' })
-})
+router.post('/login', login)
+router.post('/logout', logout)
 
 export default router

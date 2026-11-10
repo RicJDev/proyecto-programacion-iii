@@ -8,5 +8,7 @@ export {
   DB_PASSWORD,
   DB_URL,
   HOST,
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
 } from './variables'
 export { prisma } from './client'
