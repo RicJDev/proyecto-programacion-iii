@@ -1,15 +1,23 @@
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS base
+RUN npm install -g pnpm@10.33.0
 WORKDIR /app
 
-RUN npm install -g pnpm@10.33.0
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY app/tu-tarjeta ./app/tu-tarjeta
+FROM base AS deps
+COPY app/tu-tarjeta/package.json  ./
+RUN pnpm install
 
-RUN pnpm install --frozen-lockfile
-WORKDIR /app/app/tu-tarjeta
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY app/tu-tarjeta/package.json ./
+COPY app/tu-tarjeta/tsconfig.app.json app/tu-tarjeta/tsconfig.node.json app/tu-tarjeta/tsconfig.json ./
+COPY app/tu-tarjeta/vite.config.ts app/tu-tarjeta/index.html ./
+COPY app/tu-tarjeta/src ./src
+COPY app/tu-tarjeta/public ./public
 RUN pnpm run build
+RUN pnpm prune --prod
 
 FROM nginx:alpine
-COPY --from=builder /app/app/tu-tarjeta/dist /usr/share/nginx/html
+WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
