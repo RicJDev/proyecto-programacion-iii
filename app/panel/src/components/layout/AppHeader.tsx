@@ -1,4 +1,4 @@
-import { Badge, Button, Select } from '../ui'
+import { Badge, Select } from '../ui'
 import type { RoleId, RoleProfile } from '../../types'
 import { roleProfiles } from '../../mockData'
 
@@ -6,8 +6,6 @@ export interface AppHeaderProps {
   profile: RoleProfile
   activeRole: RoleId
   onRoleChange: (role: RoleId) => void
-  user?: { name: string; email: string; role: string } | null
-  onLogout?: () => void
 }
 
 function BrandMark() {
@@ -39,8 +37,6 @@ export function AppHeader({
   profile,
   activeRole,
   onRoleChange,
-  user,
-  onLogout,
 }: AppHeaderProps) {
   return (
     <header className='sticky top-0 z-40 border-b border-border bg-surface'>
@@ -51,7 +47,7 @@ export function AppHeader({
             para la Salud
           </span>
           <span className='hidden sm:inline'>
-            SINACINM · Sistema Nacional de Inmunizaciones
+            Sistema Nacional de Gestión y Seguimiento de Vacunas
           </span>
         </div>
       </div>
@@ -61,55 +57,40 @@ export function AppHeader({
           <BrandMark />
           <div className='border-l border-border pl-3'>
             <p className='text-sm font-bold uppercase tracking-widest text-surface-text'>
-              SINACINM
+              SIGEV
             </p>
             <p className='text-[11px] text-text-muted'>
-              Sistema Nacional de Inmunizaciones
+              {profile.scope} · {profile.organization}
             </p>
           </div>
         </div>
 
         <div className='flex flex-wrap items-center gap-3'>
-          {user && (
-            <>
-              <div className='flex items-center gap-2 border border-border bg-surface-alt px-3 py-1'>
-                <div className='text-right'>
-                  <p className='text-xs font-bold text-surface-text'>{user.name}</p>
-                  <p className='text-[10px] text-text-muted'>{user.email}</p>
-                </div>
-                {onLogout && (
-                  <Button
-                    variant='danger'
-                    size='sm'
-                    onClick={onLogout}
-                    className='ml-2 h-7 px-2 text-xs'
-                  >
-                    Cerrar Sesión
-                  </Button>
-                )}
-              </div>
-
-              <div className='flex flex-wrap items-center gap-2 border border-dashed border-info/60 bg-info-soft px-3 py-2'>
-                <label
-                  className='text-[10px] font-bold uppercase tracking-widest text-info'
-                  htmlFor='dev-role-switcher'
-                >
-                  Rol activo
-                </label>
-                <Select
-                  id='dev-role-switcher'
-                  aria-label='Cambiar rol activo sin autenticación'
-                  className='w-52 [&_select]:h-7 [&_select]:border-info/40 [&_select]:text-xs [&_select]:font-semibold'
-                  value={activeRole}
-                  options={roleProfiles.map((item) => ({
-                    value: item.id,
-                    label: item.label,
-                  }))}
-                  onChange={(event) => onRoleChange(event.target.value as RoleId)}
-                />
-              </div>
-            </>
-          )}
+          <Badge
+            variant='info'
+            size='sm'
+          >
+            Modo desarrollo
+          </Badge>
+          <div className='flex flex-wrap items-center gap-2 border border-dashed border-info/60 bg-info-soft px-3 py-2'>
+            <label
+              className='text-[10px] font-bold uppercase tracking-widest text-info'
+              htmlFor='dev-role-switcher'
+            >
+              Rol activo
+            </label>
+            <Select
+              id='dev-role-switcher'
+              aria-label='Cambiar rol activo sin autenticación'
+              className='w-52 [&_select]:h-7 [&_select]:border-info/40 [&_select]:text-xs [&_select]:font-semibold'
+              value={activeRole}
+              options={roleProfiles.map((item) => ({
+                value: item.id,
+                label: item.label,
+              }))}
+              onChange={(event) => onRoleChange(event.target.value as RoleId)}
+            />
+          </div>
         </div>
       </div>
     </header>
@@ -118,22 +99,21 @@ export function AppHeader({
 
 export interface AppFooterProps {
   profile: RoleProfile
-  isLoggedIn?: boolean
 }
 
-export function AppFooter({ profile, isLoggedIn }: AppFooterProps) {
+export function AppFooter({ profile }: AppFooterProps) {
   return (
     <footer className='border-t border-border bg-surface'>
       <div className='mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2 px-4 py-4 text-[11px] text-text-muted sm:px-6'>
         <span>
-          © 2026 SINACINM — Sistema Nacional de Inmunizaciones.
+          © 2026 SIGEV — Datos simulados con fines académicos. Módulo público
+          «Tu Tarjeta»: app independiente{' '}
+          <code className='font-mono font-semibold'>app/tu-tarjeta</code>.
         </span>
-        {isLoggedIn && (
-          <span>
-            Sesión activa:{' '}
-            <strong className='font-semibold'>{profile.label}</strong>
-          </span>
-        )}
+        <span>
+          Sesión activa:{' '}
+          <strong className='font-semibold'>{profile.label}</strong>
+        </span>
       </div>
     </footer>
   )
