@@ -1,15 +1,19 @@
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS base
+RUN npm install -g pnpm@10.33.0
 WORKDIR /app
 
-RUN npm install -g pnpm@10.33.0
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY app/panel ./app/panel
+FROM base AS deps
+COPY app/panel/package.json  ./
+RUN pnpm install
 
-RUN pnpm install --frozen-lockfile
-WORKDIR /app/app/panel
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY app/panel/ ./
 RUN pnpm run build
+RUN pnpm prune --prod
 
 FROM nginx:alpine
-COPY --from=builder /app/app/panel/dist /usr/share/nginx/html
+WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
