@@ -1,26 +1,24 @@
-FROM node:26-alpine AS builder
-WORKDIR /app
-
+FROM node:26-alpine AS base
 RUN npm install -g pnpm@10.33.0
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-COPY app/backend ./app/backend
-
-RUN pnpm install --frozen-lockfile
-WORKDIR /app/app/backend
-ENV DB_URL="mysql://vacunas:vacunas@db:3306/vacunas"
-RUN pnpm prisma generate
-RUN pnpm run build
-
-FROM node:26-alpine
 WORKDIR /app
 
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/app/backend/package.json ./app/backend/package.json
-COPY --from=builder /app/app/backend/dist ./app/backend/dist
-COPY --from=builder /app/app/backend/prisma ./app/backend/prisma
-COPY --from=builder /app/app/backend/node_modules ./app/backend/node_modules
+FROM base AS deps
+COPY app/backend/package.json app/backend/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-WORKDIR /app/app/backend
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY app/backend/ ./
+ENV DB_URL="mysql://build:build@localhost:3306/build"
+RUN pnpm exec prisma generate
+RUN pnpm run build
+RUN pnpm prune --prod
+
+FROM base AS runner
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/dist ./dist
 EXPOSE 5000
 CMD ["node", "dist/index.js"]

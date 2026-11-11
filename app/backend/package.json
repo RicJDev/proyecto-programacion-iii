@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "pnpm run build && node dist/index.js"
+    "dev": "dotenv run -f ../../.env -- tsx watch src/index.ts",
+    "db:migrate": "dotenv run -f ../../.env -- prisma migrate dev",
+    "db:push": "dotenv run -f ../../.env -- prisma db push",
+    "db:seed": "dotenv run -f ../../.env -- prisma db seed",
+    "generate": "dotenv run -f ../../.env -- prisma generate",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -16,12 +19,18 @@
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.10.1",
     "@prisma/client": "7",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mariadb": "^3.5.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.6.4",
     "prisma": "7.10.1",
     "tsx": "^4.23.15",

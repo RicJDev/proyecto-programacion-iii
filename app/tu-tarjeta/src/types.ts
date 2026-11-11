@@ -12,8 +12,12 @@ export interface ParentData {
 }
 
 export interface Patient {
+  document: string
   name: string
   gender: Gender
   birthday: string
+  email: string
+  cardNumber: string
+  municipality: string
   parent: ParentData
 }
