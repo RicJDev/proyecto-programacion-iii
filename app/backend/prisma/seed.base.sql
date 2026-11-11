@@ -1,0 +1,11 @@
+-- VACUNAS
+
+-- PERMISOS
+
+-- ROLES
+
+-- ESTADOS
+
+-- MUNICIPIOS
+
+-- PARROQUIAS

@@ -1,23 +1,8 @@
-import mariadb from 'mariadb'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { PrismaClient } from '../src/generated/prisma/client'
-import {
-  DB_HOST,
-  DB_PORT,
-  DB_USER,
-  DB_PASSWORD,
-  DB_NAME,
-} from '../src/config/variables'
+import { DB_URL } from '../src/config/variables'
 
-const pool = mariadb.createPool({
-  host: DB_HOST || 'localhost',
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-})
-
-const adapter = new PrismaMariaDb(pool)
+const adapter = new PrismaMariaDb(DB_URL)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
@@ -263,5 +248,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect()
-    await pool.end()
   })
