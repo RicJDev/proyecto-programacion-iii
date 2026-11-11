@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Sistema Nacional de Gestión y Seguimiento de Vacunas</h1>
+<h1>Sistema Nacional de Inmunización y Control de Vacunación (SINACIMN)</h1>
 
 ![PNPM](https://img.shields.io/badge/PNPM-F69220?style=flat-square&logo=pnpm&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
@@ -22,7 +22,6 @@ Sistema centralizado de alto nivel diseñado para la administración, control, m
 ## Documentación
 
 - [Especificación de la API](./docs/api.md)
-- [Diagrama de entidad-relación](./docs/erd.md)
 - [Especificaciones del sistema](./docs/specs.md)
 - [Guía de estilo](./docs/style.md)
 

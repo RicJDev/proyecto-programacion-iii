@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "pnpm run build && node dist/index.js"
+    "dev": "dotenv run -f ../../.env -- tsx watch src/index.ts",
+    "db:migrate": "dotenv run -f ../../.env -- prisma migrate dev",
+    "db:push": "dotenv run -f ../../.env -- prisma db push",
+    "db:seed": "dotenv run -f ../../.env -- prisma db seed",
+    "generate": "dotenv run -f ../../.env -- prisma generate",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
