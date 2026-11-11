@@ -8,11 +8,7 @@ RUN pnpm install
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY app/panel/package.json ./
-COPY app/panel/tsconfig.app.json app/panel/tsconfig.node.json app/panel/tsconfig.json ./
-COPY app/panel/vite.config.ts app/panel/index.html ./
-COPY app/panel/src ./src
-COPY app/panel/public ./public
+COPY app/panel/ ./
 RUN pnpm run build
 RUN pnpm prune --prod
 

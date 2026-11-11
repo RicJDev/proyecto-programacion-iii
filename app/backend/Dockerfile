@@ -8,10 +8,7 @@ RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY app/backend/package.json app/backend/pnpm-lock.yaml ./
-COPY app/backend/prisma ./prisma
-COPY app/backend/prisma.config.ts app/backend/tsconfig.json ./
-COPY app/backend/src ./src
+COPY app/backend/ ./
 ENV DB_URL="mysql://build:build@localhost:3306/build"
 RUN pnpm exec prisma generate
 RUN pnpm run build

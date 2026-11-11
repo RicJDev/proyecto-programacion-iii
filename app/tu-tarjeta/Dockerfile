@@ -8,11 +8,7 @@ RUN pnpm install
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY app/tu-tarjeta/package.json ./
-COPY app/tu-tarjeta/tsconfig.app.json app/tu-tarjeta/tsconfig.node.json app/tu-tarjeta/tsconfig.json ./
-COPY app/tu-tarjeta/vite.config.ts app/tu-tarjeta/index.html ./
-COPY app/tu-tarjeta/src ./src
-COPY app/tu-tarjeta/public ./public
+COPY app/tu-tarjeta/ ./
 RUN pnpm run build
 RUN pnpm prune --prod
 
