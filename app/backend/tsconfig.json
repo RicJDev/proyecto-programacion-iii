@@ -14,9 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
   },
   "include": [
     "src/**/*"
