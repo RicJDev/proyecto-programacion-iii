@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "express"],
     "rootDir": "./src",
     "outDir": "./dist",
     "target": "esnext",
@@ -16,5 +17,12 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

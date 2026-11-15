@@ -1,1 +1,130 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  TEMA PÚBLICO «TU TARjeta» — SIGEV
+ *  Misma paleta institucional que el panel administrativo.
+ *  Los tokens de `@theme inline` se emiten en `:root` y
+ *  habilitan utilidades como bg-primary, border-border,
+ *  text-surface-text, etc.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+:root {
+  --sys-primary: #1e40af;
+  --sys-primary-hover: #1e3a8a;
+  --sys-primary-foreground: #ffffff;
+  --sys-primary-soft: #e8edfb;
+
+  --sys-secondary: #475569;
+  --sys-secondary-soft: #eef2f6;
+
+  --sys-accent: #b45309;
+  --sys-accent-soft: #fdf3e3;
+
+  --sys-bg: #f1f5f9;
+  --sys-surface: #ffffff;
+  --sys-surface-alt: #f8fafc;
+  --sys-surface-text: #0f172a;
+  --sys-text-muted: #64748b;
+  --sys-border: #cbd5e1;
+  --sys-border-strong: #94a3b8;
+
+  --sys-success: #15803d;
+  --sys-success-soft: #e8f5ec;
+  --sys-warning: #a16207;
+  --sys-warning-soft: #fdf5e2;
+  --sys-danger: #b91c1c;
+  --sys-danger-soft: #fdecec;
+  --sys-info: #0369a1;
+  --sys-info-soft: #e6f2fa;
+
+  --sys-font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+}
+
+@theme inline {
+  --color-primary: var(--sys-primary);
+  --color-primary-hover: var(--sys-primary-hover);
+  --color-primary-foreground: var(--sys-primary-foreground);
+  --color-primary-soft: var(--sys-primary-soft);
+
+  --color-secondary: var(--sys-secondary);
+  --color-secondary-soft: var(--sys-secondary-soft);
+
+  --color-accent: var(--sys-accent);
+  --color-accent-soft: var(--sys-accent-soft);
+
+  --color-bg: var(--sys-bg);
+  --color-surface: var(--sys-surface);
+  --color-surface-alt: var(--sys-surface-alt);
+  --color-surface-text: var(--sys-surface-text);
+  --color-text-muted: var(--sys-text-muted);
+  --color-border: var(--sys-border);
+  --color-border-strong: var(--sys-border-strong);
+
+  --color-success: var(--sys-success);
+  --color-success-soft: var(--sys-success-soft);
+  --color-warning: var(--sys-warning);
+  --color-warning-soft: var(--sys-warning-soft);
+  --color-danger: var(--sys-danger);
+  --color-danger-soft: var(--sys-danger-soft);
+  --color-info: var(--sys-info);
+  --color-info-soft: var(--sys-info-soft);
+
+  --font-sans: var(--sys-font-sans);
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-radius: 0 !important;
+  }
+
+  html {
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--sys-bg);
+    color: var(--sys-surface-text);
+    font-family: var(--sys-font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  ::selection {
+    background-color: var(--sys-primary);
+    color: var(--sys-primary-foreground);
+  }
+}

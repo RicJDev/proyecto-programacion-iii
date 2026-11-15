@@ -1,20 +1,14 @@
-import dotenv from 'dotenv'
-import { join } from 'node:path'
-
-dotenv.config({ path: join(__dirname, '../../.env') })
-
-interface Config {
-  env: string
-  port: number
-  mongoose: {
-    url: string
-  }
-}
-
-export const config: Config = {
-  env: process.env.NODE_ENV ?? 'development',
-  port: parseInt(process.env.PORT ?? '5000', 10),
-  mongoose: {
-    url: process.env.DB_URI ?? 'mongodb://localhost:27017/app_db',
-  },
-}
+export {
+  BACKEND_PORT,
+  BACKEND_HOST,
+  DB_NAME,
+  DB_ROOT_PASSWORD,
+  DB_USER,
+  DB_PORT,
+  DB_HOST,
+  DB_PASSWORD,
+  DB_URL,
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+} from './variables'
+export { prisma } from './client'
