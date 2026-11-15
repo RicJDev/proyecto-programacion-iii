@@ -1,170 +1,125 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Navbar, type NavTab } from './components/layout/Navbar';
+import { LoginView } from './views/LoginView';
+import { DashboardView } from './views/DashboardView';
+import { RecipientsView } from './views/RecipientsView';
+import { ImmunizationView } from './views/ImmunizationView';
+import { CertificatesView } from './views/CertificatesView';
+import { CentersView } from './views/CentersView';
+import { InventoryView } from './views/InventoryView';
+import { UsersView } from './views/UsersView';
+import { PERMISSIONS } from './types/permissions';
 
-function App() {
-  const [count, setCount] = useState(0)
+function MainPanel() {
+  const { user, hasPermission } = useAuth();
+  const [activeTab, setActiveTab] = useState<NavTab>('dashboard');
+
+  if (!user) {
+    return <LoginView />;
+  }
 
   return (
-    <>
-      <section id='center'>
-        <div className='hero'>
-          <img
-            src={heroImg}
-            className='base'
-            width='170'
-            height='179'
-            alt=''
-          />
-          <img
-            src={reactLogo}
-            className='framework'
-            alt='React logo'
-          />
-          <img
-            src={viteLogo}
-            className='vite'
-            alt='Vite logo'
-          />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type='button'
-          className='counter'
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className='ticks'></div>
+      <main className="gov-container" style={{ flex: 1, width: '100%' }}>
+        {activeTab === 'dashboard' && <DashboardView />}
 
-      <section id='next-steps'>
-        <div id='docs'>
-          <svg
-            className='icon'
-            role='presentation'
-            aria-hidden='true'
-          >
-            <use href='/icons.svg#documentation-icon'></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a
-                href='https://vite.dev/'
-                target='_blank'
-              >
-                <img
-                  className='logo'
-                  src={viteLogo}
-                  alt=''
-                />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://react.dev/'
-                target='_blank'
-              >
-                <img
-                  className='button-icon'
-                  src={reactLogo}
-                  alt=''
-                />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id='social'>
-          <svg
-            className='icon'
-            role='presentation'
-            aria-hidden='true'
-          >
-            <use href='/icons.svg#social-icon'></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a
-                href='https://github.com/vitejs/vite'
-                target='_blank'
-              >
-                <svg
-                  className='button-icon'
-                  role='presentation'
-                  aria-hidden='true'
-                >
-                  <use href='/icons.svg#github-icon'></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://chat.vite.dev/'
-                target='_blank'
-              >
-                <svg
-                  className='button-icon'
-                  role='presentation'
-                  aria-hidden='true'
-                >
-                  <use href='/icons.svg#discord-icon'></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://x.com/vite_js'
-                target='_blank'
-              >
-                <svg
-                  className='button-icon'
-                  role='presentation'
-                  aria-hidden='true'
-                >
-                  <use href='/icons.svg#x-icon'></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a
-                href='https://bsky.app/profile/vite.dev'
-                target='_blank'
-              >
-                <svg
-                  className='button-icon'
-                  role='presentation'
-                  aria-hidden='true'
-                >
-                  <use href='/icons.svg#bluesky-icon'></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {activeTab === 'recipients' &&
+          (hasPermission(PERMISSIONS.RECIPIENTS_READ) ? (
+            <RecipientsView />
+          ) : (
+            <AccessDenied permission="recipients:read" />
+          ))}
 
-      <div className='ticks'></div>
-      <section id='spacer'></section>
-    </>
-  )
+        {activeTab === 'immunization' &&
+          (hasPermission(PERMISSIONS.IMMUNIZATIONS_READ) ? (
+            <ImmunizationView />
+          ) : (
+            <AccessDenied permission="immunizations:read" />
+          ))}
+
+        {activeTab === 'certificates' &&
+          (hasPermission(PERMISSIONS.CERTIFICATES_ISSUE) ||
+          hasPermission(PERMISSIONS.CERTIFICATES_VERIFY) ? (
+            <CertificatesView />
+          ) : (
+            <AccessDenied permission="certificates:issue / certificates:verify" />
+          ))}
+
+        {activeTab === 'centers' &&
+          (hasPermission(PERMISSIONS.CENTERS_READ) ? (
+            <CentersView />
+          ) : (
+            <AccessDenied permission="centers:read" />
+          ))}
+
+        {activeTab === 'inventory' &&
+          (hasPermission(PERMISSIONS.INVENTORY_READ) ? (
+            <InventoryView />
+          ) : (
+            <AccessDenied permission="inventory:read" />
+          ))}
+
+        {activeTab === 'users' &&
+          (hasPermission(PERMISSIONS.USERS_READ) ? (
+            <UsersView />
+          ) : (
+            <AccessDenied permission="users:read" />
+          ))}
+      </main>
+
+      <footer
+        style={{
+          borderTop: '1px solid var(--color-border)',
+          backgroundColor: '#ffffff',
+          padding: '1.25rem',
+          textAlign: 'center',
+          fontSize: '0.8rem',
+          color: 'var(--color-text-muted)',
+          marginTop: '2rem',
+        }}
+      >
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <strong>Sistema Nacional de Información y Control de Vacunación &copy; 2026</strong>
+          <div>República Bolivariana de Venezuela — Ministerio del Poder Popular para la Salud</div>
+          <div style={{ marginTop: '0.25rem', fontSize: '0.75rem' }}>
+            Diseño plano institucional conforme a directrices de estilo (`rounded-none`).
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+function AccessDenied({ permission }: { permission: string }) {
+  return (
+    <div
+      style={{
+        backgroundColor: 'var(--color-danger-bg)',
+        border: '1px solid var(--color-danger)',
+        padding: '2rem',
+        textAlign: 'center',
+        margin: '2rem auto',
+        maxWidth: '600px',
+      }}
+    >
+      <h3 style={{ color: 'var(--color-danger)', marginBottom: '0.5rem' }}>Acceso No Autorizado (403 Forbidden)</h3>
+      <p style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>
+        Su rol actual no posee el permiso requerido: <code>{permission}</code>.
+      </p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+        Utilice el selector rápido de rol en la barra superior para alternar a un perfil con atribuciones suficientes.
+      </p>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainPanel />
+    </AuthProvider>
+  );
+}

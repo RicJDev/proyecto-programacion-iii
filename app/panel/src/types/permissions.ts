@@ -1,0 +1,121 @@
+// Definición oficial de los 23 permisos del sistema según docs/permissions.md y docs/specs.md
+
+export const PERMISSIONS = {
+  // 1. Módulo de Seguridad & Usuarios
+  USERS_CREATE: 'users:create',
+  USERS_READ: 'users:read',
+  USERS_UPDATE: 'users:update',
+  USERS_SUSPEND: 'users:suspend',
+  ROLES_MANAGE: 'roles:manage',
+
+  // 2. Módulo Geográfico & Centros de Salud
+  CENTERS_CREATE: 'centers:create',
+  CENTERS_READ: 'centers:read',
+  CENTERS_UPDATE: 'centers:update',
+
+  // 3. Módulo de Pacientes
+  RECIPIENTS_CREATE: 'recipients:create',
+  RECIPIENTS_READ: 'recipients:read',
+  RECIPIENTS_UPDATE: 'recipients:update',
+
+  // 4. Módulo de Vacunas e Inventario
+  VACCINES_MANAGE: 'vaccines:manage',
+  INVENTORY_READ: 'inventory:read',
+  INVENTORY_MANAGE: 'inventory:manage',
+
+  // 5. Módulo de Inmunización
+  IMMUNIZATIONS_CREATE: 'immunizations:create',
+  IMMUNIZATIONS_READ: 'immunizations:read',
+
+  // 6. Módulo Clínico & Certificados
+  EXAMS_CREATE: 'exams:create',
+  EXAMS_READ: 'exams:read',
+  CERTIFICATES_ISSUE: 'certificates:issue',
+  CERTIFICATES_VERIFY: 'certificates:verify',
+
+  // 7. Módulo de Supervisión & Reportes
+  REPORTS_NATIONAL: 'reports:national',
+  REPORTS_REGIONAL: 'reports:regional',
+  REPORTS_LOCAL: 'reports:local',
+} as const;
+
+export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
+
+export type UserRole =
+  | 'admin_maestro'
+  | 'admin_regional'
+  | 'admin_local'
+  | 'personal_inmunizador';
+
+// Matriz oficial ROLE_PERMISSION según docs/permissions.md
+export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  admin_maestro: [
+    PERMISSIONS.USERS_CREATE,
+    PERMISSIONS.USERS_READ,
+    PERMISSIONS.USERS_UPDATE,
+    PERMISSIONS.USERS_SUSPEND,
+    PERMISSIONS.ROLES_MANAGE,
+    PERMISSIONS.CENTERS_CREATE,
+    PERMISSIONS.CENTERS_READ,
+    PERMISSIONS.CENTERS_UPDATE,
+    PERMISSIONS.RECIPIENTS_READ,
+    PERMISSIONS.VACCINES_MANAGE,
+    PERMISSIONS.INVENTORY_READ,
+    PERMISSIONS.INVENTORY_MANAGE,
+    PERMISSIONS.IMMUNIZATIONS_READ,
+    PERMISSIONS.EXAMS_READ,
+    PERMISSIONS.CERTIFICATES_VERIFY,
+    PERMISSIONS.REPORTS_NATIONAL,
+    PERMISSIONS.REPORTS_REGIONAL,
+    PERMISSIONS.REPORTS_LOCAL,
+  ],
+  admin_regional: [
+    PERMISSIONS.USERS_CREATE,
+    PERMISSIONS.USERS_READ,
+    PERMISSIONS.USERS_UPDATE,
+    PERMISSIONS.USERS_SUSPEND,
+    PERMISSIONS.CENTERS_CREATE,
+    PERMISSIONS.CENTERS_READ,
+    PERMISSIONS.CENTERS_UPDATE,
+    PERMISSIONS.RECIPIENTS_READ,
+    PERMISSIONS.INVENTORY_READ,
+    PERMISSIONS.IMMUNIZATIONS_READ,
+    PERMISSIONS.EXAMS_READ,
+    PERMISSIONS.CERTIFICATES_VERIFY,
+    PERMISSIONS.REPORTS_REGIONAL,
+    PERMISSIONS.REPORTS_LOCAL,
+  ],
+  admin_local: [
+    PERMISSIONS.USERS_CREATE,
+    PERMISSIONS.USERS_READ,
+    PERMISSIONS.USERS_UPDATE,
+    PERMISSIONS.USERS_SUSPEND,
+    PERMISSIONS.CENTERS_READ,
+    PERMISSIONS.RECIPIENTS_CREATE,
+    PERMISSIONS.RECIPIENTS_READ,
+    PERMISSIONS.RECIPIENTS_UPDATE,
+    PERMISSIONS.INVENTORY_READ,
+    PERMISSIONS.INVENTORY_MANAGE,
+    PERMISSIONS.IMMUNIZATIONS_READ,
+    PERMISSIONS.EXAMS_CREATE,
+    PERMISSIONS.EXAMS_READ,
+    PERMISSIONS.CERTIFICATES_ISSUE,
+    PERMISSIONS.CERTIFICATES_VERIFY,
+    PERMISSIONS.REPORTS_LOCAL,
+  ],
+  personal_inmunizador: [
+    PERMISSIONS.CENTERS_READ,
+    PERMISSIONS.RECIPIENTS_CREATE,
+    PERMISSIONS.RECIPIENTS_READ,
+    PERMISSIONS.RECIPIENTS_UPDATE,
+    PERMISSIONS.INVENTORY_READ,
+    PERMISSIONS.IMMUNIZATIONS_CREATE,
+    PERMISSIONS.IMMUNIZATIONS_READ,
+    PERMISSIONS.EXAMS_CREATE,
+    PERMISSIONS.EXAMS_READ,
+    PERMISSIONS.CERTIFICATES_ISSUE,
+    PERMISSIONS.CERTIFICATES_VERIFY,
+    PERMISSIONS.REPORTS_LOCAL,
+  ],
+};
+
