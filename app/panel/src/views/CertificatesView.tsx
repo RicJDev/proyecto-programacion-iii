@@ -63,19 +63,10 @@ export function CertificatesView() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: '1.4rem' }}>Certificación Médica Oficial y Validación QR</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+          <h2 className="text-xl font-bold text-surface-text">Certificación Médica Oficial y Validación QR</h2>
+          <p className="text-sm text-text-muted">
             Emisión de certificados con hash único inalterable y validación pública de autenticidad sanitaria.
           </p>
         </div>
@@ -87,7 +78,7 @@ export function CertificatesView() {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Módulo de Verificación Pública / Operativa (certificates:verify) */}
         {canVerify && (
           <Card>
@@ -96,64 +87,50 @@ export function CertificatesView() {
               subtitle="Ingrese el código alfanumérico único impreso en el documento o carnet digital"
             />
             <CardBody>
-              <form onSubmit={handleVerify}>
+              <form onSubmit={handleVerify} className="space-y-4">
                 <Input
-                  label="Código Único de Certificado (`code`)"
+                  label="Código Único de Certificado (code)"
                   placeholder="Ej: CERT-2026-MIR-9941A"
                   value={verifyCode}
                   onChange={(e) => setVerifyCode(e.target.value)}
-                  style={{ textTransform: 'uppercase' }}
+                  className="uppercase"
                 />
-                <Button variant="secondary" type="submit" style={{ width: '100%' }}>
-                  🔍 Verificar Autenticidad en Base de Datos Nacional
+                <Button variant="secondary" type="submit" className="w-full">
+                  Verificar Autenticidad en Base de Datos Nacional
                 </Button>
               </form>
 
               {verificationResult === 'NOT_FOUND' && (
-                <div
-                  style={{
-                    marginTop: '1rem',
-                    padding: '1rem',
-                    backgroundColor: 'var(--color-danger-bg)',
-                    border: '1px solid var(--color-danger)',
-                    color: 'var(--color-danger)',
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  ❌ <strong>Certificado Inválido o No Encontrado:</strong> El código ingresado no corresponde a ningún
+                <div className="mt-4 border border-danger bg-danger-soft p-4 text-sm text-danger">
+                  <strong className="font-bold">Certificado Inválido o No Encontrado:</strong> El código ingresado no corresponde a ningún
                   registro legítimo emitido por el Ministerio de Salud.
                 </div>
               )}
 
               {verificationResult && verificationResult !== 'NOT_FOUND' && (
-                <div
-                  style={{
-                    marginTop: '1rem',
-                    padding: '1.25rem',
-                    backgroundColor: 'var(--color-success-bg)',
-                    border: '2px solid var(--color-success)',
-                    color: 'var(--color-text)',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h4 style={{ color: 'var(--color-success)', margin: 0 }}>✓ CERTIFICADO OFICIAL VÁLIDO</h4>
+                <div className="mt-4 border-2 border-success bg-success-soft p-5 text-surface-text">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-success">
+                      CERTIFICADO OFICIAL VÁLIDO
+                    </h4>
                     <Badge variant="success">ESTATUS: ACTIVO</Badge>
                   </div>
-                  <div style={{ marginTop: '0.75rem', fontSize: '0.875rem', lineHeight: 1.6 }}>
+                  <div className="mt-3 space-y-1 text-sm">
                     <div>
-                      <strong>Titular:</strong> {verificationResult.recipientName} ({verificationResult.recipientCedula})
+                      <strong className="font-semibold">Titular:</strong> {verificationResult.recipientName} ({verificationResult.recipientCedula})
                     </div>
                     <div>
-                      <strong>Código de Autenticidad:</strong> <code>{verificationResult.code}</code>
+                      <strong className="font-semibold">Código de Autenticidad:</strong>{' '}
+                      <code className="font-mono text-xs">{verificationResult.code}</code>
                     </div>
                     <div>
-                      <strong>Centro Emisor:</strong> {verificationResult.centerName}
+                      <strong className="font-semibold">Centro Emisor:</strong> {verificationResult.centerName}
                     </div>
                     <div>
-                      <strong>Dosis Certificadas:</strong> {verificationResult.doseCount} dosis verificadas
+                      <strong className="font-semibold">Dosis Certificadas:</strong> {verificationResult.doseCount} dosis verificadas
                     </div>
                     <div>
-                      <strong>Fecha de Emisión:</strong> {verificationResult.issuedAt}
+                      <strong className="font-semibold">Fecha de Emisión:</strong> {verificationResult.issuedAt}
                     </div>
                   </div>
                 </div>
@@ -169,68 +146,43 @@ export function CertificatesView() {
             subtitle="Diseño institucional de carnet para impresión y consulta ciudadana"
           />
           <CardBody>
-            <div
-              style={{
-                border: '2px solid var(--color-primary)',
-                padding: '1.25rem',
-                backgroundColor: '#ffffff',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderBottom: '2px solid var(--color-primary)',
-                  paddingBottom: '0.75rem',
-                  marginBottom: '1rem',
-                }}
-              >
+            <div className="border-2 border-primary bg-surface p-5">
+              <div className="mb-4 flex items-start justify-between border-b-2 border-primary pb-3">
                 <div>
-                  <h4 style={{ fontSize: '0.95rem', color: 'var(--color-primary)' }}>
+                  <h4 className="text-sm font-bold text-primary">
                     REPÚBLICA BOLIVARIANA DE VENEZUELA
                   </h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <p className="text-xs text-text-muted">
                     Ministerio del Poder Popular para la Salud — Certificado Digital
                   </p>
                 </div>
                 <Badge variant="primary">OFICIAL</Badge>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px', gap: '1rem', alignItems: 'center' }}>
-                <div style={{ fontSize: '0.85rem' }}>
+              <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-[1fr_100px]">
+                <div className="space-y-1 text-sm">
                   <div>
-                    <strong>Ciudadano(a):</strong> Valeria Martínez Soto
+                    <strong className="font-semibold">Ciudadano(a):</strong> Valeria Martínez Soto
                   </div>
                   <div>
-                    <strong>Cédula:</strong> V-24555888
+                    <strong className="font-semibold">Cédula:</strong> V-24555888
                   </div>
                   <div>
-                    <strong>Esquema:</strong> Completo (Fiebre Amarilla, Pentavalente, COVID-19)
+                    <strong className="font-semibold">Esquema:</strong> Completo (Fiebre Amarilla, Pentavalente, COVID-19)
                   </div>
                   <div>
-                    <strong>Hash de Validación:</strong> <code>CERT-2026-MIR-9941A</code>
+                    <strong className="font-semibold">Hash de Validación:</strong>{' '}
+                    <code className="font-mono text-xs">CERT-2026-MIR-9941A</code>
                   </div>
                 </div>
 
                 {/* Código QR Ilustrativo Plano */}
-                <div
-                  style={{
-                    width: '90px',
-                    height: '90px',
-                    border: '2px solid #000000',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#ffffff',
-                    fontSize: '0.65rem',
-                    textAlign: 'center',
-                    fontWeight: 700,
-                  }}
-                >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '0.1rem' }}>☵</div>
-                  <span>QR CÓDIGO</span>
-                  <span style={{ fontSize: '0.55rem' }}>VERIFICADO</span>
+                <div className="flex h-[90px] w-[90px] flex-col items-center justify-center border-2 border-surface-text bg-surface text-center text-[10px] font-bold">
+                  <div className="mb-1 border border-surface-text px-1.5 py-0.5 font-mono text-xs">
+                    QR
+                  </div>
+                  <span>CÓDIGO</span>
+                  <span className="text-[9px] text-text-muted">VERIFICADO</span>
                 </div>
               </div>
             </div>
@@ -244,15 +196,15 @@ export function CertificatesView() {
           title="Directorio de Certificados Registrados en el Sistema"
           subtitle="Lista de certificados emitidos para auditoría y reenvío ciudadano"
         />
-        <CardBody style={{ padding: 0 }}>
+        <CardBody className="p-0">
           <Table headers={['Código Oficial', 'Ciudadano Titular', 'Cédula', 'Dosis', 'Centro Emisor', 'Fecha', 'Estatus']}>
             {certificates.map((cert) => (
               <TableRow key={cert.id}>
                 <TableCell>
-                  <code>{cert.code}</code>
+                  <code className="font-mono text-xs">{cert.code}</code>
                 </TableCell>
                 <TableCell>
-                  <strong>{cert.recipientName}</strong>
+                  <strong className="font-semibold">{cert.recipientName}</strong>
                 </TableCell>
                 <TableCell>{cert.recipientCedula}</TableCell>
                 <TableCell>{cert.doseCount} dosis</TableCell>
@@ -285,7 +237,7 @@ export function CertificatesView() {
           </>
         }
       >
-        <form onSubmit={handleIssueCertificate}>
+        <form onSubmit={handleIssueCertificate} className="space-y-4">
           <Select
             label="Seleccione Ciudadano Solicitante"
             value={selectedRecipientId}
@@ -307,20 +259,12 @@ export function CertificatesView() {
             onChange={(e) => setDoseCount(Number(e.target.value))}
           />
 
-          <div
-            style={{
-              backgroundColor: 'var(--color-surface-muted)',
-              padding: '0.85rem',
-              border: '1px solid var(--color-border)',
-              fontSize: '0.825rem',
-            }}
-          >
-            <strong>Aviso Legal y Sanitario:</strong> Al emitir este documento, se estampa la firma digital institucional y
-            se genera un código hash único irrepetible que permitirá la verificación pública ciudadana en "Tu Tarjeta".
+          <div className="border border-border bg-surface-alt p-3.5 text-xs">
+            <strong className="font-semibold">Aviso Legal y Sanitario:</strong> Al emitir este documento, se estampa la firma digital institucional y
+            se genera un código hash único irrepetible que permitirá la verificación pública ciudadana en &quot;Tu Tarjeta&quot;.
           </div>
         </form>
       </Modal>
     </div>
   );
 }
-

@@ -2,7 +2,7 @@
 
 ## Sistema Nacional de Inmunización y Control de Vacunación
 
-Este documento define formalmente la lista y granularidad de permisos del sistema conforme a la entidad `PERMISSION` y la tabla intermedia `ROLE_PERMISSION` especificadas en [`docs/specs.md`](./specs.md) y [`docs/erd.md`](./erd.md).
+Este documento define formalmente la lista y granularidad de permisos del sistema conforme a la entidad `PERMISSION` y la tabla intermedia `ROLE_PERMISSION` especificadas en [`docs/specs.md`](./specs.md).
 
 ---
 
@@ -12,14 +12,14 @@ Convención de nomenclatura: `recurso:accion`
 
 | ID | Nombre de Permiso (`permission_name`) | Módulo Funcional | Descripción Oficial |
 | :-: | :--- | :--- | :--- |
-| **1** | `users:create` | Seguridad & Usuarios | Crear y registrar nuevos usuarios en el sistema. |
-| **2** | `users:read` | Seguridad & Usuarios | Consultar y listar cuentas de usuario existentes. |
-| **3** | `users:update` | Seguridad & Usuarios | Actualizar datos, credenciales y perfiles de usuarios. |
-| **4** | `users:suspend` | Seguridad & Usuarios | Suspender, desactivar o revocar el acceso a un usuario. |
-| **5** | `roles:manage` | Seguridad & Usuarios | Crear roles y gestionar la asignación de permisos globales. |
-| **6** | `centers:create` | Geografía & Centros | Registrar y dar de alta un nuevo centro de salud en el sistema. |
-| **7** | `centers:read` | Geografía & Centros | Consultar el directorio y detalles de centros de salud. |
-| **8** | `centers:update` | Geografía & Centros | Modificar datos, estatus operativo e información de centros. |
+| **1** | `users:create` | Seguridad y Usuarios | Crear y registrar nuevos usuarios en el sistema. |
+| **2** | `users:read` | Seguridad y Usuarios | Consultar y listar cuentas de usuario existentes. |
+| **3** | `users:update` | Seguridad y Usuarios | Actualizar datos, credenciales y perfiles de usuarios. |
+| **4** | `users:suspend` | Seguridad y Usuarios | Suspender, desactivar o revocar el acceso a un usuario. |
+| **5** | `roles:manage` | Seguridad y Usuarios | Crear roles y gestionar la asignación de permisos globales. |
+| **6** | `centers:create` | Geografía y Centros | Registrar y dar de alta un nuevo centro de salud en el sistema. |
+| **7** | `centers:read` | Geografía y Centros | Consultar el directorio y detalles de centros de salud. |
+| **8** | `centers:update` | Geografía y Centros | Modificar datos, estatus operativo e información de centros. |
 | **9** | `recipients:create` | Pacientes | Dar de alta a un nuevo ciudadano/paciente en el padrón nacional. |
 | **10** | `recipients:read` | Pacientes | Buscar y consultar expedientes de pacientes por cédula o nombre. |
 | **11** | `recipients:update` | Pacientes | Actualizar información demográfica o de residencia de pacientes. |
@@ -28,13 +28,13 @@ Convención de nomenclatura: `recurso:accion`
 | **14** | `inventory:manage` | Vacunas e Inventario | Recepcionar lotes, registrar entradas y controlar el stock del centro. |
 | **15** | `immunizations:create` | Inmunización | Registrar formalmente la aplicación de una dosis a un paciente. |
 | **16** | `immunizations:read` | Inmunización | Consultar el historial de dosis aplicadas de un paciente. |
-| **17** | `exams:create` | Clínico & Exámenes | Registrar resultados de evaluaciones médicas previas a la dosis. |
-| **18** | `exams:read` | Clínico & Exámenes | Consultar el historial de exámenes médicos de un paciente. |
+| **17** | `exams:create` | Clínico y Exámenes | Registrar resultados de evaluaciones médicas previas a la dosis. |
+| **18** | `exams:read` | Clínico y Exámenes | Consultar el historial de exámenes médicos de un paciente. |
 | **19** | `certificates:issue` | Certificación | Emitir y firmar certificados sanitarios oficiales y carnets locales. |
 | **20** | `certificates:verify` | Certificación | Validar la autenticidad e integridad de certificados (código único / QR). |
-| **21** | `reports:national` | Supervisión & Reportes | Acceder al dashboard de métricas epidemiológicas nacionales. |
-| **22** | `reports:regional` | Supervisión & Reportes | Visualizar mapas y estadísticas de cobertura a nivel de estado/municipio. |
-| **23** | `reports:local` | Supervisión & Reportes | Generar el reporte diario de dosis aplicadas por el centro y vacunador. |
+| **21** | `reports:national` | Supervisión y Reportes | Acceder al dashboard de métricas epidemiológicas nacionales. |
+| **22** | `reports:regional` | Supervisión y Reportes | Visualizar mapas y estadísticas de cobertura a nivel de estado/municipio. |
+| **23** | `reports:local` | Supervisión y Reportes | Generar el reporte diario de dosis aplicadas por el centro y vacunador. |
 
 ---
 
@@ -42,29 +42,29 @@ Convención de nomenclatura: `recurso:accion`
 
 | Permiso | Administrador Maestro (Ministerio) | Administrador Regional (SACS) | Administrador Local (Centro de Salud) | Personal Inmunizador (Campo) |
 | :--- | :---: | :---: | :---: | :---: |
-| `users:create` | ✅ (Cualquier rol) | ✅ (Local e Inmunizador) | ✅ (Inmunizador) | ❌ |
-| `users:read` | ✅ | ✅ | ✅ | ❌ |
-| `users:update` | ✅ | ✅ | ✅ | ❌ |
-| `users:suspend` | ✅ | ✅ | ✅ | ❌ |
-| `roles:manage` | ✅ | ❌ | ❌ | ❌ |
-| `centers:create` | ✅ | ✅ (En su estado) | ❌ | ❌ |
-| `centers:read` | ✅ | ✅ | ✅ | ✅ |
-| `centers:update` | ✅ | ✅ (En su estado) | ❌ | ❌ |
-| `recipients:create` | ❌ | ❌ | ✅ | ✅ |
-| `recipients:read` | ✅ | ✅ | ✅ | ✅ |
-| `recipients:update` | ❌ | ❌ | ✅ | ✅ |
-| `vaccines:manage` | ✅ | ❌ | ❌ | ❌ |
-| `inventory:read` | ✅ | ✅ | ✅ | ✅ |
-| `inventory:manage` | ✅ | ❌ | ✅ (En su centro) | ❌ |
-| `immunizations:create` | ❌ | ❌ | ❌ | ✅ |
-| `immunizations:read` | ✅ | ✅ | ✅ | ✅ |
-| `exams:create` | ❌ | ❌ | ✅ | ✅ |
-| `exams:read` | ✅ | ✅ | ✅ | ✅ |
-| `certificates:issue` | ❌ | ❌ | ✅ (Certificado Oficial) | ✅ (Carnet Local) |
-| `certificates:verify` | ✅ | ✅ | ✅ | ✅ |
-| `reports:national` | ✅ | ❌ | ❌ | ❌ |
-| `reports:regional` | ✅ | ✅ | ❌ | ❌ |
-| `reports:local` | ✅ | ✅ | ✅ | ✅ |
+| `users:create` | SI (Cualquier rol) | SI (Local e Inmunizador) | SI (Inmunizador) | NO |
+| `users:read` | SI | SI | SI | NO |
+| `users:update` | SI | SI | SI | NO |
+| `users:suspend` | SI | SI | SI | NO |
+| `roles:manage` | SI | NO | NO | NO |
+| `centers:create` | SI | SI (En su estado) | NO | NO |
+| `centers:read` | SI | SI | SI | SI |
+| `centers:update` | SI | SI (En su estado) | NO | NO |
+| `recipients:create` | NO | NO | SI | SI |
+| `recipients:read` | SI | SI | SI | SI |
+| `recipients:update` | NO | NO | SI | SI |
+| `vaccines:manage` | SI | NO | NO | NO |
+| `inventory:read` | SI | SI | SI | SI |
+| `inventory:manage` | SI | NO | SI (En su centro) | NO |
+| `immunizations:create` | NO | NO | NO | SI |
+| `immunizations:read` | SI | SI | SI | SI |
+| `exams:create` | NO | NO | SI | SI |
+| `exams:read` | SI | SI | SI | SI |
+| `certificates:issue` | NO | NO | SI (Certificado Oficial) | SI (Carnet Local) |
+| `certificates:verify` | SI | SI | SI | SI |
+| `reports:national` | SI | NO | NO | NO |
+| `reports:regional` | SI | SI | NO | NO |
+| `reports:local` | SI | SI | SI | SI |
 
 ---
 
@@ -134,7 +134,7 @@ INSERT INTO ROLE_PERMISSION (id_role, id_permission) VALUES
 
 ```typescript
 export const PERMISSIONS = {
-  // Usuarios & Roles
+  // Usuarios y Roles
   USERS_CREATE: 'users:create',
   USERS_READ: 'users:read',
   USERS_UPDATE: 'users:update',
@@ -151,7 +151,7 @@ export const PERMISSIONS = {
   RECIPIENTS_READ: 'recipients:read',
   RECIPIENTS_UPDATE: 'recipients:update',
 
-  // Vacunas & Inventario
+  // Vacunas e Inventario
   VACCINES_MANAGE: 'vaccines:manage',
   INVENTORY_READ: 'inventory:read',
   INVENTORY_MANAGE: 'inventory:manage',
@@ -160,7 +160,7 @@ export const PERMISSIONS = {
   IMMUNIZATIONS_CREATE: 'immunizations:create',
   IMMUNIZATIONS_READ: 'immunizations:read',
 
-  // Exámenes & Certificados
+  // Exámenes y Certificados
   EXAMS_CREATE: 'exams:create',
   EXAMS_READ: 'exams:read',
   CERTIFICATES_ISSUE: 'certificates:issue',
@@ -174,4 +174,3 @@ export const PERMISSIONS = {
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
 ```
-

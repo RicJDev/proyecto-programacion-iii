@@ -11,7 +11,7 @@ Su arquitectura garantiza la integridad de los datos mediante una estructura ter
 El sistema define 3 niveles jerárquicos de administración interna, acompañados por un nivel de acceso público para el ciudadano:
 
 - Administrador Maestro (El Ministerio del Poder Popular para la Salud)
-- Administradores Regionales ( Servicio Autónomo de Contraloría Sanitaria (SACS) / Direcciones Regionales)
+- Administradores Regionales (Servicio Autónomo de Contraloría Sanitaria (SACS) / Direcciones Regionales)
 - Administradores Locales (Centro de Salud / Institución sanitaria)
 
 ### 1. Administrador Maestro (El Ministerio)
@@ -53,176 +53,34 @@ Portal web público e independiente orientado a la consulta soberana del ciudada
 
 | Permiso (`permission_name`) | Administrador Maestro | Administrador Regional | Administrador Local | Personal Inmunizador |
 | :--- | :---: | :---: | :---: | :---: |
-| `users:create` / `users:update` | ✅ (Nacional) | ✅ (Regional) | ✅ (Local) | ❌ |
-| `users:suspend` | ✅ | ✅ | ✅ | ❌ |
-| `roles:manage` | ✅ | ❌ | ❌ | ❌ |
-| `centers:create` / `centers:update` | ✅ (Nacional) | ✅ (En su estado) | ❌ | ❌ |
-| `centers:read` | ✅ | ✅ | ✅ | ✅ |
-| `vaccines:manage` | ✅ | ❌ | ❌ | ❌ |
-| `inventory:manage` | ✅ | ❌ | ✅ (En su centro) | ❌ |
-| `inventory:read` | ✅ | ✅ | ✅ | ✅ |
-| `recipients:create` / `recipients:update` | ❌ | ❌ | ✅ | ✅ |
-| `recipients:read` | ✅ | ✅ | ✅ | ✅ |
-| `immunizations:create` | ❌ | ❌ | ❌ | ✅ |
-| `immunizations:read` | ✅ | ✅ | ✅ | ✅ |
-| `exams:create` / `exams:read` | ❌ | ❌ | ✅ | ✅ |
-| `certificates:issue` | ❌ | ❌ | ✅ | ✅ (Carnet local) |
-| `certificates:verify` | ✅ | ✅ | ✅ | ✅ |
-| `reports:national` | ✅ | ❌ | ❌ | ❌ |
-| `reports:regional` | ✅ | ✅ | ❌ | ❌ |
-| `reports:local` | ✅ | ✅ | ✅ | ✅ |
+| `users:create` / `users:update` | SI (Nacional) | SI (Regional) | SI (Local) | NO |
+| `users:suspend` | SI | SI | SI | NO |
+| `roles:manage` | SI | NO | NO | NO |
+| `centers:create` / `centers:update` | SI (Nacional) | SI (En su estado) | NO | NO |
+| `centers:read` | SI | SI | SI | SI |
+| `vaccines:manage` | SI | NO | NO | NO |
+| `inventory:manage` | SI | NO | SI (En su centro) | NO |
+| `inventory:read` | SI | SI | SI | SI |
+| `recipients:create` / `recipients:update` | NO | NO | SI | SI |
+| `recipients:read` | SI | SI | SI | SI |
+| `immunizations:create` | NO | NO | NO | SI |
+| `immunizations:read` | SI | SI | SI | SI |
+| `exams:create` / `exams:read` | NO | NO | SI | SI |
+| `certificates:issue` | NO | NO | SI | SI (Carnet local) |
+| `certificates:verify` | SI | SI | SI | SI |
+| `reports:national` | SI | NO | NO | NO |
+| `reports:regional` | SI | SI | NO | NO |
+| `reports:local` | SI | SI | SI | SI |
 
 ## 3. Arquitectura General y Módulos del Sistema
 
-<<<<<<< HEAD
-```mermaid
-graph TD
-    %% Usuarios y Roles
-    AM[Administrador Maestro - Ministerio] --> System
-    AR[Administrador Regional - SACS] --> System
-    AL[Administrador Local - Centro de Salud] --> System
-    PI[Personal Inmunizador - Campo] --> System
-    CIU[Ciudadano / Paciente] --> TuTarjeta[Módulo Público: Tu Tarjeta]
-
-    subgraph System["Sistema Nacional de Inmunización"]
-        ModSec["Módulo de Seguridad & RBAC<br/>(USER, ROLE, PERMISSION)"]
-        ModGeo["Módulo Geográfico & Estructura<br/>(STATE, MUNICIPALITY, PARISH, HEALTH_CENTER)"]
-        ModPat["Módulo de Pacientes & Aplicaciones<br/>(RECIPIENT, IMMUNIZATION, VACCINE)"]
-        ModCert["Módulo Clínico & Certificación<br/>(MEDICAL_EXAM, MEDICAL_CERTIFICATE)"]
-    end
-
-    %% Relaciones de módulos
-    ModSec --> ModPat
-    ModGeo --> ModPat
-    ModPat --> ModCert
-
-    %% Almacenamiento
-    System <--> DB[(Base de Datos Centralizada)]
-    TuTarjeta <--> DB
-
-```
-=======
 ![Arquitectura](./media/arquitectura.svg)
->>>>>>> d447c1bd51ddea511737f8d1aba3e95f9f5695e2
 
 ## 4. Modelo de Datos Relacional (Entidad-Relación)
 
 El modelo relacional garantiza la trazabilidad geográfica, la integridad clínica de las dosis aplicadas y el control de acceso estricto mediante RBAC:
 
-<<<<<<< HEAD
-```mermaid
-erDiagram
-    STATE {
-        int id_state PK
-        string name
-        string code
-    }
-
-    MUNICIPALITY {
-        int id_municipality PK
-        string name
-        int id_state FK
-    }
-
-    PARISH {
-        int id_parish PK
-        string name
-        int id_municipality FK
-    }
-
-    HEALTH_CENTER {
-        int id_center PK
-        string code
-        string name
-        string type
-        string address
-        string sector
-        string status
-        string phone
-        string email
-        int id_parish FK
-    }
-
-    RECIPIENT {
-        int id_person PK
-        string name
-        string last_name
-        string identification_number
-    }
-
-    VACCINE {
-        int id_vaccine PK
-        string name
-        string type
-    }
-
-    IMMUNIZATION {
-        int id_dose PK
-        int id_person FK
-        int id_vaccine FK
-        datetime date_time
-        int id_center FK
-    }
-
-    MEDICAL_EXAM {
-        int id_exam PK
-        string data
-        int id_person FK
-    }
-
-    MEDICAL_CERTIFICATE {
-        int id_certificate PK
-        int id_exam FK
-        int id_dose FK
-        string code
-        int id_person FK
-    }
-
-    USER {
-        int id_user PK
-        string username
-        string password_hash
-        int id_role FK
-    }
-
-    ROLE {
-        int id_role PK
-        string role_name
-        string description
-    }
-
-    PERMISSION {
-        int id_permission PK
-        string permission_name
-        string description
-    }
-
-    ROLE_PERMISSION {
-        int id_role FK
-        int id_permission FK
-    }
-
-    STATE ||--o{ MUNICIPALITY : "has"
-    MUNICIPALITY ||--o{ PARISH : "has"
-    PARISH ||--o{ HEALTH_CENTER : "hosts"
-
-    RECIPIENT ||--o{ IMMUNIZATION : "receives"
-    VACCINE ||--o{ IMMUNIZATION : "applied_in"
-    HEALTH_CENTER ||--o{ IMMUNIZATION : "administers"
-
-    RECIPIENT ||--o{ MEDICAL_EXAM : "undergoes"
-    MEDICAL_EXAM ||--o{ MEDICAL_CERTIFICATE : "generates"
-    IMMUNIZATION ||--o{ MEDICAL_CERTIFICATE : "requires"
-    RECIPIENT ||--o{ MEDICAL_CERTIFICATE : "owns"
-
-    ROLE ||--o{ USER : "assigned_to"
-    ROLE ||--o{ ROLE_PERMISSION : "contains"
-    PERMISSION ||--o{ ROLE_PERMISSION : "belongs_to"
-
-```
-=======
 ![ERD](./media/ERD.svg)
->>>>>>> d447c1bd51ddea511737f8d1aba3e95f9f5695e2
 
 ### 4.1. Diccionario de Datos: Módulo Territorial y Centro de Salud
 
@@ -320,7 +178,7 @@ CREATE INDEX idx_center_name ON HEALTH_CENTER(name);
 
 ### 4.3. Implementación de Modelos en Backend (TypeScript / Mongoose)
 
-Para la implementación en Node.js/Express con TypeScript y Mongoose (`app/backend`):
+Para la implementación en Node.js/Express con TypeScript (`app/backend`):
 
 ```typescript
 // src/models/HealthCenter.ts

@@ -16,48 +16,25 @@ export function DashboardView() {
   return (
     <div>
       {/* Banner de bienvenida y alcance institucional */}
-      <div
-        style={{
-          backgroundColor: 'var(--color-primary)',
-          color: '#ffffff',
-          padding: '1.5rem',
-          marginBottom: '1.5rem',
-          borderLeft: '6px solid var(--color-secondary)',
-        }}
-      >
-        <span
-          style={{
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            opacity: 0.85,
-            fontWeight: 700,
-          }}
-        >
+      <div className="mb-6 border-l-[6px] border-secondary bg-primary p-6 text-primary-foreground">
+        <span className="text-xs font-bold uppercase tracking-widest opacity-85">
           {canNational
-            ? '🏛️ Nivel Central — Ministerio del Poder Popular para la Salud'
+            ? 'Nivel Central — Ministerio del Poder Popular para la Salud'
             : canRegional
-            ? `🌐 Dirección Regional Sanitaria — Estado ${user?.region || 'Miranda'}`
-            : `🏥 Módulo Operativo — ${user?.centroSalud || 'Centro de Salud Local'}`}
+            ? `Dirección Regional Sanitaria — Estado ${user?.region || 'Miranda'}`
+            : `Módulo Operativo — ${user?.centroSalud || 'Centro de Salud Local'}`}
         </span>
-        <h2 style={{ fontSize: '1.5rem', color: '#ffffff', marginTop: '0.35rem' }}>
+        <h2 className="mt-1 text-2xl font-bold text-primary-foreground">
           Bienvenido(a), {user?.name}
         </h2>
-        <p style={{ opacity: 0.9, fontSize: '0.9rem', marginTop: '0.2rem' }}>
+        <p className="mt-1 text-sm opacity-90">
           Sistema Nacional de Control y Seguimiento Epidemiológico. Sus permisos activos determinan el alcance
           territorial de las métricas visualizadas.
         </p>
       </div>
 
       {/* Tarjetas de Métricas basadas en permisos */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {canNational ? (
           <>
             <StatCard
@@ -65,28 +42,24 @@ export function DashboardView() {
               value="1,420,890"
               subtitle="Consolidado de 24 entidades federales"
               tag="Nacional"
-              accentColor="#1e3a8a"
             />
             <StatCard
               label="Centros Operativos"
               value={INITIAL_CENTERS.length * 142}
               subtitle="Ambulatorios, CDI y Hospitales activos"
               tag="Infraestructura"
-              accentColor="#0f766e"
             />
             <StatCard
               label="Población Inmunizada"
               value="89.4%"
               subtitle="Cobertura del esquema básico nacional"
               tag="Meta País"
-              accentColor="#15803d"
             />
             <StatCard
               label="Biológicos en Catálogo"
               value={`${INITIAL_VACCINES.length} vacunas`}
               subtitle="Esquemas aprobados por el Ministerio"
               tag="Catálogo"
-              accentColor="#b45309"
             />
           </>
         ) : canRegional ? (
@@ -96,28 +69,24 @@ export function DashboardView() {
               value="184,320"
               subtitle="Municipios bajo supervisión regional"
               tag="Regional"
-              accentColor="#0f766e"
             />
             <StatCard
               label="Centros en el Estado"
               value={INITIAL_CENTERS.filter((c) => c.state === (user?.region || 'Miranda')).length + 38}
               subtitle="Centros adscritos al SACS Regional"
               tag="Red Sanitaria"
-              accentColor="#1e3a8a"
             />
             <StatCard
               label="Cobertura Infantil"
               value="91.2%"
               subtitle="Esquema Pentavalente / Polio"
               tag="Regional"
-              accentColor="#15803d"
             />
             <StatCard
               label="Lotes en Tránsito"
               value="45 frascos"
               subtitle="Distribución a municipios"
               tag="Logística"
-              accentColor="#b45309"
             />
           </>
         ) : canLocal ? (
@@ -127,51 +96,46 @@ export function DashboardView() {
               value={INITIAL_IMMUNIZATIONS.length + 68}
               subtitle="Jornada actual en este centro"
               tag="Hoy"
-              accentColor="#1e3a8a"
             />
             <StatCard
               label="Pacientes Atendidos"
               value={INITIAL_RECIPIENTS.length + 42}
               subtitle="Registros ingresados en el padrón"
               tag="Turno Activo"
-              accentColor="#0f766e"
             />
             <StatCard
               label="Stock Disponible Centro"
               value="825 dosis"
               subtitle="Frascos aptos en refrigeración"
               tag="Almacén Local"
-              accentColor="#15803d"
             />
             <StatCard
               label="Certificados Emitidos"
               value="18"
               subtitle="Tarjetas digitales y físicas entregadas"
               tag="Validación"
-              accentColor="#b45309"
             />
           </>
         ) : null}
       </div>
 
       {/* Tablas de Supervisión */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-        {/* Resumen diario de aplicaciones en el centro (Módulo linux.html) */}
+      <div className="grid grid-cols-1 gap-6">
         {canLocal && (
           <Card>
             <CardHeader
               title="Resumen Operativo Diario de Vacunación (Punto de Atención)"
               subtitle="Registro en tiempo real de dosis aplicadas en el centro por el personal de guardia"
             />
-            <CardBody style={{ padding: 0 }}>
+            <CardBody className="p-0">
               <Table headers={['Vacuna', 'Lote', 'Dosis / Esquema', 'Hora', 'Inmunizador a Cargo', 'Paciente']}>
                 {INITIAL_IMMUNIZATIONS.map((imm) => (
                   <TableRow key={imm.id}>
                     <TableCell>
-                      <strong>{imm.vaccineName}</strong>
+                      <strong className="font-semibold">{imm.vaccineName}</strong>
                     </TableCell>
                     <TableCell>
-                      <code>{imm.batchNumber}</code>
+                      <code className="font-mono text-xs">{imm.batchNumber}</code>
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary">{imm.doseType}</Badge>
@@ -199,15 +163,15 @@ export function DashboardView() {
               }
               subtitle="Supervisión del estatus operativo y capacidad instalada de vacunación"
             />
-            <CardBody style={{ padding: 0 }}>
+            <CardBody className="p-0">
               <Table headers={['Código Oficial', 'Nombre del Centro', 'Tipología', 'Ubicación Territorial', 'Estatus Operativo', 'Contacto']}>
                 {INITIAL_CENTERS.map((c) => (
                   <TableRow key={c.id}>
                     <TableCell>
-                      <code>{c.code}</code>
+                      <code className="font-mono text-xs">{c.code}</code>
                     </TableCell>
                     <TableCell>
-                      <strong>{c.name}</strong>
+                      <strong className="font-semibold">{c.name}</strong>
                     </TableCell>
                     <TableCell>
                       <Badge variant="primary">{c.type.toUpperCase()}</Badge>
@@ -231,4 +195,3 @@ export function DashboardView() {
     </div>
   );
 }
-

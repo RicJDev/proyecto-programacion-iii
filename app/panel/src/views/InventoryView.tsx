@@ -81,24 +81,15 @@ export function InventoryView() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: '1.4rem' }}>Inventario de Biológicos y Catálogo de Vacunas</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+          <h2 className="text-xl font-bold text-surface-text">Inventario de Biológicos y Catálogo de Vacunas</h2>
+          <p className="text-sm text-text-muted">
             Control de lotes, fechas de vencimiento, cadena de frío y catálogo nacional de vacunas.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="flex flex-wrap gap-2">
           {canManageVaccines && (
             <Button variant="outline" onClick={() => setIsVaccineModalOpen(true)}>
               + Nueva Vacuna en Catálogo
@@ -113,64 +104,68 @@ export function InventoryView() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.5rem' }}>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Lotes Disponibles en el Centro */}
-        <Card>
-          <CardHeader
-            title="Lotes y Frascos Asignados al Centro de Salud"
-            subtitle="Existencias físicas disponibles para el turno de vacunación"
-          />
-          <CardBody style={{ padding: 0 }}>
-            <Table headers={['Número de Lote', 'Vacuna', 'Dosis Disponibles', 'Fecha Vencimiento', 'Centro']}>
-              {batches.map((b) => (
-                <TableRow key={b.id}>
-                  <TableCell>
-                    <code>{b.batchNumber}</code>
-                  </TableCell>
-                  <TableCell>
-                    <strong>{b.vaccineName}</strong>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={b.availableDoses < 80 ? 'warning' : 'success'}>
-                      {b.availableDoses} dosis
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{b.expirationDate}</TableCell>
-                  <TableCell>{b.centerName}</TableCell>
-                </TableRow>
-              ))}
-            </Table>
-          </CardBody>
-        </Card>
+        <div className="lg:col-span-7">
+          <Card>
+            <CardHeader
+              title="Lotes y Frascos Asignados al Centro de Salud"
+              subtitle="Existencias físicas disponibles para el turno de vacunación"
+            />
+            <CardBody className="p-0">
+              <Table headers={['Número de Lote', 'Vacuna', 'Dosis Disponibles', 'Fecha Vencimiento', 'Centro']}>
+                {batches.map((b) => (
+                  <TableRow key={b.id}>
+                    <TableCell>
+                      <code className="font-mono text-xs">{b.batchNumber}</code>
+                    </TableCell>
+                    <TableCell>
+                      <strong className="font-semibold">{b.vaccineName}</strong>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={b.availableDoses < 80 ? 'warning' : 'success'}>
+                        {b.availableDoses} dosis
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{b.expirationDate}</TableCell>
+                    <TableCell>{b.centerName}</TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </CardBody>
+          </Card>
+        </div>
 
         {/* Catálogo Nacional de Vacunas */}
-        <Card>
-          <CardHeader
-            title="Catálogo Oficial del Esquema Nacional (`VACCINE`)"
-            subtitle="Definición de biológicos regulados por el Ministerio"
-            action={
-              canManageVaccines ? (
-                <Badge variant="primary">👑 Rol Maestro: Catálogo Editable</Badge>
-              ) : undefined
-            }
-          />
-          <CardBody style={{ padding: 0 }}>
-            <Table headers={['Biológico', 'Tipo', 'Dosis Requeridas', 'Grupo Objetivo']}>
-              {vaccines.map((v) => (
-                <TableRow key={v.id}>
-                  <TableCell>
-                    <strong>{v.name}</strong>
-                  </TableCell>
-                  <TableCell>{v.type}</TableCell>
-                  <TableCell>
-                    <Badge variant="neutral">{v.totalRequiredDoses} dosis</Badge>
-                  </TableCell>
-                  <TableCell style={{ fontSize: '0.8rem' }}>{v.targetGroup}</TableCell>
-                </TableRow>
-              ))}
-            </Table>
-          </CardBody>
-        </Card>
+        <div className="lg:col-span-5">
+          <Card>
+            <CardHeader
+              title="Catálogo Oficial del Esquema Nacional (VACCINE)"
+              subtitle="Definición de biológicos regulados por el Ministerio"
+              action={
+                canManageVaccines ? (
+                  <Badge variant="primary">Rol Maestro: Catálogo Editable</Badge>
+                ) : undefined
+              }
+            />
+            <CardBody className="p-0">
+              <Table headers={['Biológico', 'Tipo', 'Dosis Requeridas', 'Grupo Objetivo']}>
+                {vaccines.map((v) => (
+                  <TableRow key={v.id}>
+                    <TableCell>
+                      <strong className="font-semibold">{v.name}</strong>
+                    </TableCell>
+                    <TableCell>{v.type}</TableCell>
+                    <TableCell>
+                      <Badge variant="neutral">{v.totalRequiredDoses} dosis</Badge>
+                    </TableCell>
+                    <TableCell className="text-xs">{v.targetGroup}</TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </CardBody>
+          </Card>
+        </div>
       </div>
 
       {/* Modal para Ingresar Lote */}
@@ -189,7 +184,7 @@ export function InventoryView() {
           </>
         }
       >
-        <form onSubmit={handleCreateBatch}>
+        <form onSubmit={handleCreateBatch} className="space-y-4">
           <Select
             label="Seleccione Vacuna"
             value={selectedVaccineId}
@@ -210,7 +205,7 @@ export function InventoryView() {
             onChange={(e) => setBatchNumber(e.target.value)}
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Cantidad de Dosis Recibidas"
               type="number"
@@ -228,16 +223,9 @@ export function InventoryView() {
             />
           </div>
 
-          <div
-            style={{
-              backgroundColor: 'var(--color-surface-muted)',
-              padding: '0.75rem',
-              border: '1px solid var(--color-border)',
-              fontSize: '0.825rem',
-            }}
-          >
-            <strong>Recepción en:</strong> {user?.centroSalud || 'Ambulatorio La Victoria'} | <strong>Responsable:</strong>{' '}
-            {user?.name}
+          <div className="border border-border bg-surface-alt p-3 text-xs">
+            <strong className="font-semibold">Recepción en:</strong> {user?.centroSalud || 'Ambulatorio La Victoria'} |{' '}
+            <strong className="font-semibold">Responsable:</strong> {user?.name}
           </div>
         </form>
       </Modal>
@@ -258,7 +246,7 @@ export function InventoryView() {
           </>
         }
       >
-        <form onSubmit={handleCreateVaccine}>
+        <form onSubmit={handleCreateVaccine} className="space-y-4">
           <Input
             label="Denominación de la Vacuna"
             required
@@ -267,7 +255,7 @@ export function InventoryView() {
             onChange={(e) => setVacName(e.target.value)}
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Tipo de Biológico"
               placeholder="Inactivada vírica"

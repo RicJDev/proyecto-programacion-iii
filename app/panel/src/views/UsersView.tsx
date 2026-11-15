@@ -59,24 +59,15 @@ export function UsersView() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: '1.4rem' }}>Gestión de Usuarios y Matriz de Permisos (RBAC)</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-            Control de cuentas del personal sanitario y matriz de autorización según `docs/permissions.md`.
+          <h2 className="text-xl font-bold text-surface-text">Gestión de Usuarios y Matriz de Permisos (RBAC)</h2>
+          <p className="text-sm text-text-muted">
+            Control de cuentas del personal sanitario y matriz de autorización según docs/permissions.md.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant={activeTab === 'users' ? 'primary' : 'outline'}
             onClick={() => setActiveTab('users')}
@@ -104,13 +95,13 @@ export function UsersView() {
             title="Cuentas de Personal Sanitario Habilitadas"
             subtitle="Usuarios con acceso activo al sistema y sus respectivos roles asignados"
           />
-          <CardBody style={{ padding: 0 }}>
+          <CardBody className="p-0">
             <Table headers={['Nombre y Cédula', 'Correo Institucional', 'Rol Jerárquico', 'Jurisdicción', 'Total Permisos', 'Acciones']}>
               {users.map((u) => (
                 <TableRow key={u.id}>
                   <TableCell>
-                    <strong>{u.name}</strong>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{u.cedula}</div>
+                    <strong className="font-semibold">{u.name}</strong>
+                    <div className="text-xs text-text-muted">{u.cedula}</div>
                   </TableCell>
                   <TableCell>{u.email}</TableCell>
                   <TableCell>
@@ -140,7 +131,7 @@ export function UsersView() {
                         Suspender
                       </Button>
                     ) : (
-                      <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Solo lectura</span>
+                      <span className="text-xs text-text-muted">Solo lectura</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -155,43 +146,43 @@ export function UsersView() {
             subtitle="Validación en tiempo de compilación y ejecución de los 23 permisos por rol"
             action={
               <Badge variant={canManageRoles ? 'primary' : 'neutral'}>
-                {canManageRoles ? '👑 Gestor Maestro: Edición y Asignación Habilitada' : 'Consulta Informativa'}
+                {canManageRoles ? 'Gestor Maestro: Edición y Asignación Habilitada' : 'Consulta Informativa'}
               </Badge>
             }
           />
-          <CardBody style={{ padding: 0 }}>
-            <Table headers={['Permiso (`permission_name`)', 'Administrador Maestro', 'Administrador Regional', 'Administrador Local', 'Personal Inmunizador']}>
+          <CardBody className="p-0">
+            <Table headers={['Permiso (permission_name)', 'Administrador Maestro', 'Administrador Regional', 'Administrador Local', 'Personal Inmunizador']}>
               {Object.values(PERMISSIONS).map((perm) => (
                 <TableRow key={perm}>
                   <TableCell>
-                    <code>{perm}</code>
+                    <code className="font-mono text-xs">{perm}</code>
                   </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell className="text-center">
                     {ROLE_PERMISSIONS.admin_maestro.includes(perm) ? (
-                      <span style={{ color: 'var(--color-success)', fontWeight: 700 }}>✓ Permitido</span>
+                      <span className="font-bold text-success">Permitido</span>
                     ) : (
-                      <span style={{ color: 'var(--color-border-dark)' }}>—</span>
+                      <span className="text-border-strong">—</span>
                     )}
                   </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell className="text-center">
                     {ROLE_PERMISSIONS.admin_regional.includes(perm) ? (
-                      <span style={{ color: 'var(--color-success)', fontWeight: 700 }}>✓ Permitido</span>
+                      <span className="font-bold text-success">Permitido</span>
                     ) : (
-                      <span style={{ color: 'var(--color-border-dark)' }}>—</span>
+                      <span className="text-border-strong">—</span>
                     )}
                   </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell className="text-center">
                     {ROLE_PERMISSIONS.admin_local.includes(perm) ? (
-                      <span style={{ color: 'var(--color-success)', fontWeight: 700 }}>✓ Permitido</span>
+                      <span className="font-bold text-success">Permitido</span>
                     ) : (
-                      <span style={{ color: 'var(--color-border-dark)' }}>—</span>
+                      <span className="text-border-strong">—</span>
                     )}
                   </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
+                  <TableCell className="text-center">
                     {ROLE_PERMISSIONS.personal_inmunizador.includes(perm) ? (
-                      <span style={{ color: 'var(--color-success)', fontWeight: 700 }}>✓ Permitido</span>
+                      <span className="font-bold text-success">Permitido</span>
                     ) : (
-                      <span style={{ color: 'var(--color-border-dark)' }}>—</span>
+                      <span className="text-border-strong">—</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -217,8 +208,8 @@ export function UsersView() {
           </>
         }
       >
-        <form onSubmit={handleCreateUser}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+        <form onSubmit={handleCreateUser} className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Nombre y Apellido"
               required
@@ -234,7 +225,7 @@ export function UsersView() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Correo Institucional"
               type="email"
@@ -261,7 +252,7 @@ export function UsersView() {
             </Select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Estado / Región Asignada"
               value={region}

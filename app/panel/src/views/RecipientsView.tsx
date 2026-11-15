@@ -117,19 +117,10 @@ export function RecipientsView() {
   return (
     <div>
       {/* Barra superior de acciones */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: '1.4rem' }}>Padrón y Consulta de Ciudadanos</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+          <h2 className="text-xl font-bold text-surface-text">Padrón y Consulta de Ciudadanos</h2>
+          <p className="text-sm text-text-muted">
             Búsqueda centralizada y registro de pacientes conforme al Módulo Operativo de Centro de Salud.
           </p>
         </div>
@@ -141,53 +132,53 @@ export function RecipientsView() {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '1.5rem' }}>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Panel Izquierdo: Buscador y Lista de Pacientes */}
-        <Card>
-          <CardHeader
-            title="1. Búsqueda de Paciente en el Padrón"
-            subtitle="Filtro rápido por Cédula de Identidad o Nombre"
-          />
-          <CardBody>
-            <Input
-              placeholder="Ej: V-20000003 o Carlos..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ marginBottom: '1rem' }}
+        <div className="lg:col-span-5">
+          <Card>
+            <CardHeader
+              title="1. Búsqueda de Paciente en el Padrón"
+              subtitle="Filtro rápido por Cédula de Identidad o Nombre"
             />
+            <CardBody>
+              <Input
+                placeholder="Ej: V-20000003 o Carlos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="mb-4"
+              />
 
-            <Table headers={['Cédula', 'Nombre y Apellido', 'Ubicación']} isEmpty={filteredRecipients.length === 0}>
-              {filteredRecipients.map((r) => {
-                const isSelected = selectedRecipient?.id === r.id;
-                return (
-                  <TableRow
-                    key={r.id}
-                    onClick={() => setSelectedRecipient(r)}
-                    style={{
-                      backgroundColor: isSelected ? 'var(--color-primary-light)' : '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <TableCell>
-                      <code>{r.identification_number}</code>
-                    </TableCell>
-                    <TableCell>
-                      <strong>
-                        {r.name} {r.last_name}
-                      </strong>
-                    </TableCell>
-                    <TableCell>
-                      {r.state} ({r.parish})
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </Table>
-          </CardBody>
-        </Card>
+              <Table headers={['Cédula', 'Nombre y Apellido', 'Ubicación']} isEmpty={filteredRecipients.length === 0}>
+                {filteredRecipients.map((r) => {
+                  const isSelected = selectedRecipient?.id === r.id;
+                  return (
+                    <TableRow
+                      key={r.id}
+                      highlight={isSelected}
+                      onClick={() => setSelectedRecipient(r)}
+                      className="cursor-pointer"
+                    >
+                      <TableCell>
+                        <code className="font-mono text-xs">{r.identification_number}</code>
+                      </TableCell>
+                      <TableCell>
+                        <strong className="font-semibold">
+                          {r.name} {r.last_name}
+                        </strong>
+                      </TableCell>
+                      <TableCell>
+                        {r.state} ({r.parish})
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </Table>
+            </CardBody>
+          </Card>
+        </div>
 
         {/* Panel Derecho: Expediente Clínico de Inmunización */}
-        <div>
+        <div className="lg:col-span-7">
           {selectedRecipient ? (
             <Card>
               <CardHeader
@@ -201,36 +192,25 @@ export function RecipientsView() {
               />
               <CardBody>
                 {/* Metadatos territoriales del paciente */}
-                <div
-                  style={{
-                    backgroundColor: 'var(--color-surface-muted)',
-                    padding: '0.85rem 1rem',
-                    marginBottom: '1.25rem',
-                    border: '1px solid var(--color-border)',
-                    fontSize: '0.85rem',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: '0.5rem',
-                  }}
-                >
+                <div className="mb-5 grid grid-cols-1 gap-2 border border-border bg-surface-alt p-4 text-sm sm:grid-cols-2">
                   <div>
-                    <strong>Estado / Municipio:</strong> {selectedRecipient.state} — {selectedRecipient.municipality}
+                    <strong className="font-semibold">Estado / Municipio:</strong> {selectedRecipient.state} — {selectedRecipient.municipality}
                   </div>
                   <div>
-                    <strong>Parroquia / Sector:</strong> {selectedRecipient.parish} — {selectedRecipient.sector}
+                    <strong className="font-semibold">Parroquia / Sector:</strong> {selectedRecipient.parish} — {selectedRecipient.sector}
                   </div>
                   <div>
-                    <strong>Teléfono:</strong> {selectedRecipient.phone || 'No registrado'}
+                    <strong className="font-semibold">Teléfono:</strong> {selectedRecipient.phone || 'No registrado'}
                   </div>
                   {selectedRecipient.parentName && (
                     <div>
-                      <strong>Tutor Legal:</strong> {selectedRecipient.parentName} ({selectedRecipient.parentRelationship})
+                      <strong className="font-semibold">Tutor Legal:</strong> {selectedRecipient.parentName} ({selectedRecipient.parentRelationship})
                     </div>
                   )}
                 </div>
 
-                <h4 style={{ marginBottom: '0.75rem', fontSize: '1rem' }}>
-                  Historial de Dosis Administradas (`IMMUNIZATION`)
+                <h4 className="mb-3 text-sm font-bold uppercase tracking-wider text-surface-text">
+                  Historial de Dosis Administradas (IMMUNIZATION)
                 </h4>
 
                 <Table
@@ -241,10 +221,10 @@ export function RecipientsView() {
                   {patientDoses.map((dose) => (
                     <TableRow key={dose.id}>
                       <TableCell>
-                        <strong>{dose.vaccineName}</strong>
+                        <strong className="font-semibold">{dose.vaccineName}</strong>
                       </TableCell>
                       <TableCell>
-                        <code>{dose.batchNumber}</code>
+                        <code className="font-mono text-xs">{dose.batchNumber}</code>
                       </TableCell>
                       <TableCell>
                         <Badge variant="secondary">{dose.doseType}</Badge>
@@ -258,8 +238,8 @@ export function RecipientsView() {
             </Card>
           ) : (
             <Card>
-              <CardBody style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-                <p style={{ color: 'var(--color-text-muted)' }}>
+              <CardBody className="py-12 text-center">
+                <p className="text-sm text-text-muted">
                   Seleccione un paciente de la lista para inspeccionar su carnet de vacunación y expediente territorial.
                 </p>
               </CardBody>
@@ -268,7 +248,7 @@ export function RecipientsView() {
         </div>
       </div>
 
-      {/* Modal para Registro Rápido con Cascada Geográfica venezolana (linux.html) */}
+      {/* Modal para Registro Rápido con Cascada Geográfica venezolana */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -284,8 +264,8 @@ export function RecipientsView() {
           </>
         }
       >
-        <form onSubmit={handleRegisterPatient}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+        <form onSubmit={handleRegisterPatient} className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Cédula de Identidad (V-XXXXXXXX)"
               required
@@ -303,7 +283,7 @@ export function RecipientsView() {
             </Select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Nombres"
               required
@@ -320,7 +300,7 @@ export function RecipientsView() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Fecha de Nacimiento"
               type="date"
@@ -337,18 +317,12 @@ export function RecipientsView() {
           </div>
 
           {/* Desplegables de Cascada Geográfica */}
-          <div
-            style={{
-              borderTop: '1px solid var(--color-border)',
-              paddingTop: '1rem',
-              marginTop: '0.5rem',
-            }}
-          >
-            <h4 style={{ fontSize: '0.875rem', marginBottom: '0.75rem', color: 'var(--color-primary)' }}>
+          <div className="mt-2 border-t border-border pt-4">
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary">
               Ubicación Territorial y Domicilio
             </h4>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+            <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <Select
                 label="1. Estado"
                 value={selectedStateId}
@@ -398,4 +372,3 @@ export function RecipientsView() {
     </div>
   );
 }
-

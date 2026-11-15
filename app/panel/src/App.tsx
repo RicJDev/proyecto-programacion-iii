@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar, type NavTab } from './components/layout/Navbar';
@@ -21,10 +20,10 @@ function MainPanel() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="flex min-h-screen flex-col bg-bg text-surface-text">
       <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main className="gov-container" style={{ flex: 1, width: '100%' }}>
+      <main className="mx-auto w-full max-w-[1400px] flex-1 px-6 py-6">
         {activeTab === 'dashboard' && <DashboardView />}
 
         {activeTab === 'recipients' &&
@@ -71,80 +70,37 @@ function MainPanel() {
           ))}
       </main>
 
-      <footer
-        style={{
-          borderTop: '1px solid var(--color-border)',
-          backgroundColor: '#ffffff',
-          padding: '1.25rem',
-          textAlign: 'center',
-          fontSize: '0.8rem',
-          color: 'var(--color-text-muted)',
-          marginTop: '2rem',
-        }}
-      >
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <strong>Sistema Nacional de Información y Control de Vacunación &copy; 2026</strong>
-          <div>República Bolivariana de Venezuela — Ministerio del Poder Popular para la Salud</div>
-          <div style={{ marginTop: '0.25rem', fontSize: '0.75rem' }}>
-            Diseño plano institucional conforme a directrices de estilo (`rounded-none`).
+      <footer className="mt-8 border-t border-border bg-surface px-5 py-5 text-center text-xs text-text-muted">
+        <div className="mx-auto max-w-[1400px]">
+          <strong className="font-semibold text-surface-text">
+            Sistema Nacional de Información y Control de Vacunación &copy; 2026
+          </strong>
+          <div className="mt-0.5">
+            República Bolivariana de Venezuela — Ministerio del Poder Popular para la Salud
+          </div>
+          <div className="mt-1 text-[11px]">
+            Diseño plano institucional conforme a directrices de estilo (rounded-none).
           </div>
         </div>
       </footer>
     </div>
   );
-=======
-import { useState } from 'react'
-import { AppFooter, AppHeader } from './components/layout/AppHeader'
-import { AdminLocalView } from './views/AdminLocalView'
-import { AdminMaestroView } from './views/AdminMaestroView'
-import { AdminRegionalView } from './views/AdminRegionalView'
-import { PersonalInmunizadorView } from './views/PersonalInmunizadorView'
-import { roleProfiles } from './mockData'
-import type { RoleId } from './types'
-
-function App() {
-  const [role, setRole] = useState<RoleId>('ministerio')
-  const profile =
-    roleProfiles.find((item) => item.id === role) ?? roleProfiles[0]
-
-  return (
-    <div className='flex min-h-screen flex-col bg-bg'>
-      <AppHeader
-        profile={profile}
-        activeRole={role}
-        onRoleChange={setRole}
-      />
-
-      <main className='flex-1'>
-        {role === 'ministerio' && <AdminMaestroView />}
-        {role === 'sacs' && <AdminRegionalView />}
-        {role === 'centro' && <AdminLocalView />}
-        {role === 'inmunizador' && <PersonalInmunizadorView />}
-      </main>
-
-      <AppFooter profile={profile} />
-    </div>
-  )
->>>>>>> d447c1bd51ddea511737f8d1aba3e95f9f5695e2
 }
 
 function AccessDenied({ permission }: { permission: string }) {
   return (
-    <div
-      style={{
-        backgroundColor: 'var(--color-danger-bg)',
-        border: '1px solid var(--color-danger)',
-        padding: '2rem',
-        textAlign: 'center',
-        margin: '2rem auto',
-        maxWidth: '600px',
-      }}
-    >
-      <h3 style={{ color: 'var(--color-danger)', marginBottom: '0.5rem' }}>Acceso No Autorizado (403 Forbidden)</h3>
-      <p style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>
-        Su rol actual no posee el permiso requerido: <code>{permission}</code>.
+    <div className="mx-auto my-8 max-w-xl rounded-none border border-danger bg-danger-soft p-8 text-center">
+      <h3 className="mb-2 text-base font-bold uppercase tracking-wider text-danger">
+        Acceso No Autorizado (403 Forbidden)
+      </h3>
+      <p className="text-sm text-surface-text">
+        Su rol actual no posee el permiso requerido:{' '}
+        <code className="border border-border bg-surface px-1.5 py-0.5 font-mono text-xs">
+          {permission}
+        </code>
+        .
       </p>
-      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+      <p className="mt-2 text-xs text-text-muted">
         Utilice el selector rápido de rol en la barra superior para alternar a un perfil con atribuciones suficientes.
       </p>
     </div>

@@ -106,19 +106,10 @@ export function CentersView() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: '1.4rem' }}>Infraestructura de Centros de Salud</h2>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+          <h2 className="text-xl font-bold text-surface-text">Infraestructura de Centros de Salud</h2>
+          <p className="text-sm text-text-muted">
             Registro, habilitación y administración de ambulatorios, hospitales y CDI a nivel territorial.
           </p>
         </div>
@@ -135,12 +126,12 @@ export function CentersView() {
           title="Directorio de Establecimientos de Salud Habilitados"
           subtitle={`Total de centros disponibles: ${filteredCenters.length}`}
           action={
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Filtrar tipo:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-text-muted">Filtrar tipo:</span>
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                style={{ padding: '0.35rem 0.6rem', border: '1px solid var(--color-border)', outline: 'none' }}
+                className="cursor-pointer rounded-none border border-border-strong bg-surface px-2.5 py-1.5 text-xs text-surface-text outline-none"
               >
                 <option value="todos">Todos los tipos</option>
                 <option value="ambulatorio">Ambulatorio</option>
@@ -151,16 +142,16 @@ export function CentersView() {
             </div>
           }
         />
-        <CardBody style={{ padding: 0 }}>
+        <CardBody className="p-0">
           <Table headers={['Código Sanitario', 'Denominación', 'Tipo', 'Jurisdicción Territorial', 'Dirección', 'Estatus', 'Acciones']}>
             {filteredCenters.map((c) => (
               <TableRow key={c.id}>
                 <TableCell>
-                  <code>{c.code}</code>
+                  <code className="font-mono text-xs">{c.code}</code>
                 </TableCell>
                 <TableCell>
-                  <strong>{c.name}</strong>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <strong className="font-semibold">{c.name}</strong>
+                  <div className="text-xs text-text-muted">
                     Sector: {c.sector}
                   </div>
                 </TableCell>
@@ -186,7 +177,7 @@ export function CentersView() {
                       {c.status === 'activo' ? 'Suspender' : 'Reactivar'}
                     </Button>
                   ) : (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Solo lectura</span>
+                    <span className="text-xs text-text-muted">Solo lectura</span>
                   )}
                 </TableCell>
               </TableRow>
@@ -211,8 +202,8 @@ export function CentersView() {
           </>
         }
       >
-        <form onSubmit={handleCreateCenter}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+        <form onSubmit={handleCreateCenter} className="space-y-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Código Sanitario Único (ej. CS-MIR-002)"
               required
@@ -241,7 +232,7 @@ export function CentersView() {
             onChange={(e) => setName(e.target.value)}
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Select
               label="1. Estado"
               value={selectedStateId}
@@ -292,7 +283,7 @@ export function CentersView() {
             </Select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Dirección Física"
               required
@@ -308,7 +299,7 @@ export function CentersView() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Input
               label="Teléfono de Contacto"
               placeholder="0212-000-0000"
@@ -328,4 +319,3 @@ export function CentersView() {
     </div>
   );
 }
-

@@ -30,26 +30,16 @@ export function LoginView() {
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'var(--color-bg)',
-        padding: '1.5rem',
-      }}
-    >
-      <div style={{ maxWidth: '520px', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <Badge variant="primary" style={{ marginBottom: '0.5rem' }}>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-bg p-6">
+      <div className="w-full max-w-[520px]">
+        <div className="mb-6 text-center">
+          <Badge variant="primary" className="mb-2">
             REPÚBLICA BOLIVARIANA DE VENEZUELA
           </Badge>
-          <h1 style={{ fontSize: '1.45rem', color: 'var(--color-primary)', marginTop: '0.25rem' }}>
+          <h1 className="mt-1 text-2xl font-bold text-primary">
             Sistema Nacional de Inmunización y Vacunación
           </h1>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+          <p className="mt-1 text-sm text-text-muted">
             Módulo Central de Autenticación Sanitaria (RBAC)
           </p>
         </div>
@@ -61,21 +51,12 @@ export function LoginView() {
           />
           <CardBody>
             {error && (
-              <div
-                style={{
-                  backgroundColor: 'var(--color-danger-bg)',
-                  border: '1px solid var(--color-danger)',
-                  color: 'var(--color-danger)',
-                  padding: '0.75rem',
-                  marginBottom: '1rem',
-                  fontSize: '0.85rem',
-                }}
-              >
+              <div className="mb-4 border border-danger bg-danger-soft p-3 text-sm text-danger">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 label="Correo Electrónico Institucional"
                 type="email"
@@ -93,65 +74,49 @@ export function LoginView() {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <Button variant="primary" type="submit" style={{ width: '100%', marginTop: '0.5rem' }}>
+              <Button variant="primary" type="submit" className="mt-2 w-full">
                 Iniciar Sesión
               </Button>
             </form>
 
             {/* Accesos rápidos de prueba por perfil */}
-            <div
-              style={{
-                marginTop: '1.5rem',
-                paddingTop: '1.25rem',
-                borderTop: '1px solid var(--color-border)',
-              }}
-            >
-              <span
-                style={{
-                  display: 'block',
-                  fontSize: '0.775rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  color: 'var(--color-text-muted)',
-                  marginBottom: '0.75rem',
-                  textAlign: 'center',
-                }}
-              >
+            <div className="mt-6 border-t border-border pt-5">
+              <span className="mb-3 block text-center text-xs font-bold uppercase tracking-wider text-text-muted">
                 Acceso Demostrativo por Perfil Jerárquico:
               </span>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleDemoSelect('admin_maestro')}
-                  style={{ textAlign: 'left', justifyContent: 'flex-start' }}
+                  className="justify-start text-left"
                 >
-                  👑 Admin Maestro
+                  Admin Maestro
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleDemoSelect('admin_regional')}
-                  style={{ textAlign: 'left', justifyContent: 'flex-start' }}
+                  className="justify-start text-left"
                 >
-                  🌐 Admin Regional
+                  Admin Regional
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleDemoSelect('admin_local')}
-                  style={{ textAlign: 'left', justifyContent: 'flex-start' }}
+                  className="justify-start text-left"
                 >
-                  🏥 Admin Local
+                  Admin Local
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => handleDemoSelect('personal_inmunizador')}
-                  style={{ textAlign: 'left', justifyContent: 'flex-start' }}
+                  className="justify-start text-left"
                 >
-                  💉 Inmunizador
+                  Inmunizador
                 </Button>
               </div>
             </div>
@@ -161,4 +126,3 @@ export function LoginView() {
     </div>
   );
 }
-

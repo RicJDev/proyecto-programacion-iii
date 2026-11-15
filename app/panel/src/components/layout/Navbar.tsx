@@ -27,57 +27,47 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
     personal_inmunizador: 'Personal Inmunizador (Campo)',
   };
 
+  function tabClass(tab: NavTab) {
+    const isActive = activeTab === tab;
+    return `cursor-pointer whitespace-nowrap border-b-[3px] px-5 py-3 text-xs font-semibold uppercase tracking-wider transition-colors ${
+      isActive
+        ? 'border-primary text-primary'
+        : 'border-transparent text-text-muted hover:text-surface-text'
+    }`;
+  }
+
   return (
-    <header style={{ backgroundColor: 'var(--color-surface)', borderBottom: '2px solid var(--color-primary)' }}>
+    <header className="border-b-2 border-primary bg-surface">
       {/* Barra superior de identidad y selector rápido de rol */}
-      <div
-        style={{
-          borderBottom: '1px solid var(--color-border)',
-          backgroundColor: 'var(--color-surface-muted)',
-          padding: '0.5rem 1.5rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '0.75rem',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary)', letterSpacing: '0.05em' }}>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface-alt px-6 py-2">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-bold tracking-wider text-primary">
             REPÚBLICA BOLIVARIANA DE VENEZUELA
           </span>
-          <span style={{ color: 'var(--color-border-dark)' }}>|</span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <span className="text-border-strong">|</span>
+          <span className="text-xs text-text-muted">
             Ministerio del Poder Popular para la Salud
           </span>
         </div>
 
         {/* Selector interactivo de rol para pruebas y demostración */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-semibold text-text-muted">
             Probar como rol:
           </span>
           <select
             value={user?.role || 'admin_maestro'}
             onChange={(e) => switchRole(e.target.value as UserRole)}
-            style={{
-              padding: '0.25rem 0.5rem',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              backgroundColor: '#ffffff',
-              border: '1px solid var(--color-primary)',
-              color: 'var(--color-primary)',
-              cursor: 'pointer',
-            }}
+            className="cursor-pointer rounded-none border border-primary bg-surface px-2.5 py-1 text-xs font-bold text-primary outline-none"
           >
-            <option value="admin_maestro">👑 Administrador Maestro (Nacional)</option>
-            <option value="admin_regional">🌐 Administrador Regional (Miranda)</option>
-            <option value="admin_local">🏥 Administrador Local (Ambulatorio)</option>
-            <option value="personal_inmunizador">💉 Personal Inmunizador (Campo)</option>
+            <option value="admin_maestro">Administrador Maestro (Nacional)</option>
+            <option value="admin_regional">Administrador Regional (Miranda)</option>
+            <option value="admin_local">Administrador Local (Ambulatorio)</option>
+            <option value="personal_inmunizador">Personal Inmunizador (Campo)</option>
           </select>
 
           {user && (
-            <Button variant="ghost" size="sm" onClick={logout} style={{ fontSize: '0.75rem' }}>
+            <Button variant="ghost" size="sm" onClick={logout}>
               Cerrar Sesión
             </Button>
           )}
@@ -85,32 +75,27 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
       </div>
 
       {/* Franja Principal */}
-      <div
-        style={{
-          padding: '1rem 1.5rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
         <div>
-          <h1 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', margin: 0 }}>
+          <h1 className="text-xl font-bold text-primary">
             Sistema Nacional de Gestión y Seguimiento de Vacunas
           </h1>
-          <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0 }}>
+          <p className="text-xs text-text-muted">
             Panel de Administración, Trazabilidad y Control Sanitario (RBAC)
           </p>
         </div>
 
         {/* Datos del usuario autenticado */}
         {user && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textAlign: 'right' }}>
+          <div className="flex items-center gap-3 text-right">
             <div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 700 }}>{user.name}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                {user.centroSalud ? `${user.centroSalud} (${user.region})` : user.region ? `Región ${user.region}` : 'Nivel Central Nacional'}
+              <div className="text-sm font-bold text-surface-text">{user.name}</div>
+              <div className="text-xs text-text-muted">
+                {user.centroSalud
+                  ? `${user.centroSalud} (${user.region})`
+                  : user.region
+                  ? `Región ${user.region}`
+                  : 'Nivel Central Nacional'}
               </div>
             </div>
             <Badge variant="primary">{roleLabels[user.role].split(' ')[0]}</Badge>
@@ -119,147 +104,76 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
       </div>
 
       {/* Pestañas de Navegación controladas por Permisos */}
-      <nav
-        style={{
-          display: 'flex',
-          overflowX: 'auto',
-          backgroundColor: '#ffffff',
-          borderTop: '1px solid var(--color-border)',
-          paddingLeft: '1.5rem',
-        }}
-      >
+      <nav className="flex overflow-x-auto border-t border-border bg-surface pl-6">
         <button
+          type="button"
           onClick={() => onTabChange('dashboard')}
-          style={{
-            padding: '0.75rem 1.25rem',
-            background: 'none',
-            border: 'none',
-            borderBottom: activeTab === 'dashboard' ? '3px solid var(--color-primary)' : '3px solid transparent',
-            fontWeight: activeTab === 'dashboard' ? 700 : 500,
-            color: activeTab === 'dashboard' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-            cursor: 'pointer',
-            fontSize: '0.875rem',
-            whiteSpace: 'nowrap',
-          }}
+          className={tabClass('dashboard')}
         >
-          📊 Dashboard & Métricas
+          Dashboard y Métricas
         </button>
 
         {hasPermission(PERMISSIONS.RECIPIENTS_READ) && (
           <button
+            type="button"
             onClick={() => onTabChange('recipients')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'recipients' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'recipients' ? 700 : 500,
-              color: activeTab === 'recipients' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('recipients')}
           >
-            👥 Padrón de Pacientes
+            Padrón de Pacientes
           </button>
         )}
 
         {hasPermission(PERMISSIONS.IMMUNIZATIONS_READ) && (
           <button
+            type="button"
             onClick={() => onTabChange('immunization')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'immunization' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'immunization' ? 700 : 500,
-              color: activeTab === 'immunization' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('immunization')}
           >
-            💉 Aplicación de Dosis
+            Aplicación de Dosis
           </button>
         )}
 
-        {(hasPermission(PERMISSIONS.CERTIFICATES_ISSUE) || hasPermission(PERMISSIONS.CERTIFICATES_VERIFY)) && (
+        {(hasPermission(PERMISSIONS.CERTIFICATES_ISSUE) ||
+          hasPermission(PERMISSIONS.CERTIFICATES_VERIFY)) && (
           <button
+            type="button"
             onClick={() => onTabChange('certificates')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'certificates' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'certificates' ? 700 : 500,
-              color: activeTab === 'certificates' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('certificates')}
           >
-            📜 Certificados Sanitarios (QR)
+            Certificados Sanitarios (QR)
           </button>
         )}
 
         {hasPermission(PERMISSIONS.CENTERS_READ) && (
           <button
+            type="button"
             onClick={() => onTabChange('centers')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'centers' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'centers' ? 700 : 500,
-              color: activeTab === 'centers' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('centers')}
           >
-            🏥 Centros de Salud
+            Centros de Salud
           </button>
         )}
 
         {hasPermission(PERMISSIONS.INVENTORY_READ) && (
           <button
+            type="button"
             onClick={() => onTabChange('inventory')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'inventory' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'inventory' ? 700 : 500,
-              color: activeTab === 'inventory' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('inventory')}
           >
-            📦 Lotes & Vacunas
+            Lotes y Vacunas
           </button>
         )}
 
         {hasPermission(PERMISSIONS.USERS_READ) && (
           <button
+            type="button"
             onClick={() => onTabChange('users')}
-            style={{
-              padding: '0.75rem 1.25rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'users' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              fontWeight: activeTab === 'users' ? 700 : 500,
-              color: activeTab === 'users' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-            }}
+            className={tabClass('users')}
           >
-            🔐 Usuarios & Matriz RBAC
+            Usuarios y Matriz RBAC
           </button>
         )}
       </nav>
     </header>
   );
 }
-

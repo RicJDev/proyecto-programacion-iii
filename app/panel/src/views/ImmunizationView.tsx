@@ -52,164 +52,150 @@ export function ImmunizationView() {
 
     setImmunizations([newRecord, ...immunizations]);
     setSuccessMsg(
-      `✓ Dosis de ${vac.name} (${selectedBatchNumber}) administrada exitosamente a ${rec.name} ${rec.last_name}. Trazabilidad vinculada a ${newRecord.centerName}.`
+      `Dosis de ${vac.name} (${selectedBatchNumber}) administrada exitosamente a ${rec.name} ${rec.last_name}. Trazabilidad vinculada a ${newRecord.centerName}.`
     );
   }
 
   return (
     <div>
-      <div style={{ marginBottom: '1.25rem' }}>
-        <h2 style={{ fontSize: '1.4rem' }}>Registro de Aplicación de Vacunas</h2>
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+      <div className="mb-5">
+        <h2 className="text-xl font-bold text-surface-text">Registro de Aplicación de Vacunas</h2>
+        <p className="text-sm text-text-muted">
           Módulo de vacunación en campo con trazabilidad territorial obligatoria e inoculación de biológicos.
         </p>
       </div>
 
       {successMsg && (
-        <div
-          style={{
-            backgroundColor: 'var(--color-success-bg)',
-            border: '1px solid var(--color-success)',
-            color: 'var(--color-success)',
-            padding: '1rem',
-            marginBottom: '1.5rem',
-            fontWeight: 600,
-          }}
-        >
+        <div className="mb-6 border border-success bg-success-soft p-4 text-sm font-semibold text-success">
           {successMsg}
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: canApply ? '1.2fr 1.8fr' : '1fr', gap: '1.5rem' }}>
+      <div className={`grid grid-cols-1 gap-6 ${canApply ? 'lg:grid-cols-12' : ''}`}>
         {/* Formulario de Aplicación (Solo visible con permiso IMMUNIZATIONS_CREATE) */}
         {canApply && (
-          <Card>
-            <CardHeader
-              title="3. Inocular y Registrar Dosis"
-              subtitle="Validación de paciente, biológico y lote del frasco"
-            />
-            <CardBody>
-              <form onSubmit={handleRegisterDose}>
-                <Select
-                  label="Paciente Receptor (Padrón Nacional)"
-                  value={selectedRecipientId}
-                  onChange={(e) => setSelectedRecipientId(Number(e.target.value))}
-                >
-                  {INITIAL_RECIPIENTS.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.identification_number} — {r.name} {r.last_name}
-                    </option>
-                  ))}
-                </Select>
-
-                <Select
-                  label="Vacuna Correspondiente a Inocular"
-                  value={selectedVaccineId}
-                  onChange={(e) => {
-                    const id = Number(e.target.value);
-                    setSelectedVaccineId(id);
-                    const b = INITIAL_BATCHES.find((item) => item.vaccineId === id);
-                    if (b) setSelectedBatchNumber(b.batchNumber);
-                  }}
-                >
-                  {INITIAL_VACCINES.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.name} ({v.type})
-                    </option>
-                  ))}
-                </Select>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div className="lg:col-span-5">
+            <Card>
+              <CardHeader
+                title="3. Inocular y Registrar Dosis"
+                subtitle="Validación de paciente, biológico y lote del frasco"
+              />
+              <CardBody>
+                <form onSubmit={handleRegisterDose} className="space-y-4">
                   <Select
-                    label="Esquema / Dosis"
-                    value={doseType}
-                    onChange={(e) => setDoseType(e.target.value)}
+                    label="Paciente Receptor (Padrón Nacional)"
+                    value={selectedRecipientId}
+                    onChange={(e) => setSelectedRecipientId(Number(e.target.value))}
                   >
-                    <option value="Primera Dosis (1ra)">1ra Dosis</option>
-                    <option value="Segunda Dosis (2da)">2da Dosis</option>
-                    <option value="Tercera Dosis (3ra)">3ra Dosis</option>
-                    <option value="Dosis Única">Dosis Única</option>
-                    <option value="Refuerzo Anual">Refuerzo Anual</option>
-                    <option value="Refuerzo Decenal (10 años)">Refuerzo Decenal (10 años)</option>
+                    {INITIAL_RECIPIENTS.map((r) => (
+                      <option key={r.id} value={r.id}>
+                        {r.identification_number} — {r.name} {r.last_name}
+                      </option>
+                    ))}
                   </Select>
 
                   <Select
-                    label="Lote de Frasco Disponible"
-                    value={selectedBatchNumber}
-                    onChange={(e) => setSelectedBatchNumber(e.target.value)}
+                    label="Vacuna Correspondiente a Inocular"
+                    value={selectedVaccineId}
+                    onChange={(e) => {
+                      const id = Number(e.target.value);
+                      setSelectedVaccineId(id);
+                      const b = INITIAL_BATCHES.find((item) => item.vaccineId === id);
+                      if (b) setSelectedBatchNumber(b.batchNumber);
+                    }}
                   >
-                    {availableBatches.length > 0 ? (
-                      availableBatches.map((b) => (
-                        <option key={b.id} value={b.batchNumber}>
-                          {b.batchNumber} ({b.availableDoses} dosis)
-                        </option>
-                      ))
-                    ) : (
-                      <option value="LOT-DEFAULT-01">LOT-DISPONIBLE-01</option>
-                    )}
+                    {INITIAL_VACCINES.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.name} ({v.type})
+                      </option>
+                    ))}
                   </Select>
-                </div>
 
-                <div
-                  style={{
-                    backgroundColor: 'var(--color-surface-muted)',
-                    padding: '0.75rem',
-                    marginBottom: '1rem',
-                    border: '1px solid var(--color-border)',
-                    fontSize: '0.825rem',
-                  }}
-                >
-                  <div>
-                    <strong>Centro Emisor:</strong> {user?.centroSalud || 'Ambulatorio La Victoria'}
-                  </div>
-                  <div>
-                    <strong>Inmunizador en Turno:</strong> {user?.name} ({user?.cedula})
-                  </div>
-                </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Select
+                      label="Esquema / Dosis"
+                      value={doseType}
+                      onChange={(e) => setDoseType(e.target.value)}
+                    >
+                      <option value="Primera Dosis (1ra)">1ra Dosis</option>
+                      <option value="Segunda Dosis (2da)">2da Dosis</option>
+                      <option value="Tercera Dosis (3ra)">3ra Dosis</option>
+                      <option value="Dosis Única">Dosis Única</option>
+                      <option value="Refuerzo Anual">Refuerzo Anual</option>
+                      <option value="Refuerzo Decenal (10 años)">Refuerzo Decenal (10 años)</option>
+                    </Select>
 
-                <Button variant="secondary" type="submit" style={{ width: '100%' }}>
-                  ✓ Guardar Aplicación e Imprimir Comprobante
-                </Button>
-              </form>
-            </CardBody>
-          </Card>
+                    <Select
+                      label="Lote de Frasco Disponible"
+                      value={selectedBatchNumber}
+                      onChange={(e) => setSelectedBatchNumber(e.target.value)}
+                    >
+                      {availableBatches.length > 0 ? (
+                        availableBatches.map((b) => (
+                          <option key={b.id} value={b.batchNumber}>
+                            {b.batchNumber} ({b.availableDoses} dosis)
+                          </option>
+                        ))
+                      ) : (
+                        <option value="LOT-DEFAULT-01">LOT-DISPONIBLE-01</option>
+                      )}
+                    </Select>
+                  </div>
+
+                  <div className="border border-border bg-surface-alt p-3 text-xs">
+                    <div>
+                      <strong className="font-semibold">Centro Emisor:</strong> {user?.centroSalud || 'Ambulatorio La Victoria'}
+                    </div>
+                    <div className="mt-1">
+                      <strong className="font-semibold">Inmunizador en Turno:</strong> {user?.name} ({user?.cedula})
+                    </div>
+                  </div>
+
+                  <Button variant="secondary" type="submit" className="w-full">
+                    Guardar Aplicación e Imprimir Comprobante
+                  </Button>
+                </form>
+              </CardBody>
+            </Card>
+          </div>
         )}
 
         {/* Tabla de Historial General de Inmunizaciones */}
-        <Card>
-          <CardHeader
-            title="Historial de Aplicaciones Realizadas"
-            subtitle="Trazabilidad territorial obligatoria (id_center, lote, biológico)"
-          />
-          <CardBody style={{ padding: 0 }}>
-            <Table
-              headers={['Paciente', 'Vacuna Administrada', 'Dosis', 'Lote', 'Centro', 'Hora / Fecha', 'Inmunizador']}
-            >
-              {immunizations.map((imm) => (
-                <TableRow key={imm.id}>
-                  <TableCell>
-                    <strong>{imm.recipientName}</strong>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                      {imm.recipientCedula}
-                    </div>
-                  </TableCell>
-                  <TableCell>{imm.vaccineName}</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{imm.doseType}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <code>{imm.batchNumber}</code>
-                  </TableCell>
-                  <TableCell>{imm.centerName}</TableCell>
-                  <TableCell>{imm.dateTime}</TableCell>
-                  <TableCell>{imm.administeredBy}</TableCell>
-                </TableRow>
-              ))}
-            </Table>
-          </CardBody>
-        </Card>
+        <div className={canApply ? 'lg:col-span-7' : ''}>
+          <Card>
+            <CardHeader
+              title="Historial de Aplicaciones Realizadas"
+              subtitle="Trazabilidad territorial obligatoria (id_center, lote, biológico)"
+            />
+            <CardBody className="p-0">
+              <Table
+                headers={['Paciente', 'Vacuna Administrada', 'Dosis', 'Lote', 'Centro', 'Hora / Fecha', 'Inmunizador']}
+              >
+                {immunizations.map((imm) => (
+                  <TableRow key={imm.id}>
+                    <TableCell>
+                      <strong className="font-semibold">{imm.recipientName}</strong>
+                      <div className="text-xs text-text-muted">
+                        {imm.recipientCedula}
+                      </div>
+                    </TableCell>
+                    <TableCell>{imm.vaccineName}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{imm.doseType}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <code className="font-mono text-xs">{imm.batchNumber}</code>
+                    </TableCell>
+                    <TableCell>{imm.centerName}</TableCell>
+                    <TableCell>{imm.dateTime}</TableCell>
+                    <TableCell>{imm.administeredBy}</TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </CardBody>
+          </Card>
+        </div>
       </div>
     </div>
   );
 }
-
