@@ -23,6 +23,7 @@ Sistema centralizado de alto nivel diseñado para la administración, control, m
 
 - [Especificación de la API](./docs/api.md)
 - [Especificaciones del sistema](./docs/specs.md)
+- [Catálogo y Matriz de Permisos (RBAC)](./docs/permissions.md)
 - [Guía de estilo](./docs/style.md)
 
 ## Licencia

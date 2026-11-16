@@ -29,6 +29,7 @@ pids
 # Build and Output directories (if using TypeScript or Babel)
 dist/
 build/
+*.tsbuildinfo
 
 # Testing and Coverage
 coverage/

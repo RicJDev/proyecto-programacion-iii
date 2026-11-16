@@ -6,17 +6,53 @@ import type {
 } from 'react'
 
 export interface TableProps extends HTMLAttributes<HTMLDivElement> {
+  headers?: string[]
+  isEmpty?: boolean
+  emptyMessage?: string
   children?: ReactNode
 }
 
-export function Table({ className = '', children, ...rest }: TableProps) {
+export function Table({
+  headers,
+  isEmpty = false,
+  emptyMessage = 'No hay registros disponibles.',
+  className = '',
+  children,
+  ...rest
+}: TableProps) {
   return (
     <div
-      className={`overflow-x-auto border border-border bg-surface ${className}`}
+      className={`w-full overflow-x-auto rounded-none border border-border bg-surface ${className}`}
       {...rest}
     >
-      <table className='w-full min-w-[640px] text-left text-sm'>
-        {children}
+      <table className='w-full min-w-[640px] border-collapse text-left text-sm'>
+        {headers ? (
+          <>
+            <TableHead>
+              <tr className='border-b border-border-strong bg-secondary-soft'>
+                {headers.map((header, index) => (
+                  <TableHeaderCell key={index}>{header}</TableHeaderCell>
+                ))}
+              </tr>
+            </TableHead>
+            <TableBody>
+              {isEmpty ? (
+                <tr>
+                  <td
+                    colSpan={headers.length}
+                    className='px-4 py-8 text-center text-sm text-text-muted'
+                  >
+                    {emptyMessage}
+                  </td>
+                </tr>
+              ) : (
+                children
+              )}
+            </TableBody>
+          </>
+        ) : (
+          children
+        )}
       </table>
     </div>
   )

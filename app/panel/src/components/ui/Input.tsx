@@ -1,14 +1,16 @@
-import type {
-  InputHTMLAttributes,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
+import {
+  useId,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from 'react'
 
 const LABEL_CLASS =
   'mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-text-muted'
 
 const CONTROL_CLASS =
-  'w-full border bg-surface px-3 text-sm text-surface-text outline-none transition-colors placeholder:text-text-muted focus:outline-2 focus:outline-offset-0 focus:outline-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-muted'
+  'w-full rounded-none border bg-surface px-3 text-sm text-surface-text outline-none transition-colors placeholder:text-text-muted focus:outline-2 focus:outline-offset-0 focus:outline-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-muted'
 
 function controlStateClass(error?: boolean) {
   return error ? 'border-danger focus:outline-danger' : 'border-border-strong'
@@ -28,7 +30,8 @@ export function Input({
   id,
   ...rest
 }: InputProps) {
-  const inputId = id ?? rest.name
+  const generatedId = useId()
+  const inputId = id ?? rest.name ?? generatedId
 
   return (
     <div className={className}>
@@ -69,7 +72,8 @@ export function Textarea({
   id,
   ...rest
 }: TextareaProps) {
-  const inputId = id ?? rest.name
+  const generatedId = useId()
+  const inputId = id ?? rest.name ?? generatedId
 
   return (
     <div className={className}>
@@ -107,7 +111,8 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   hint?: string
   error?: string
   placeholder?: string
-  options: SelectOption[]
+  options?: SelectOption[]
+  children?: ReactNode
 }
 
 export function Select({
@@ -116,11 +121,13 @@ export function Select({
   error,
   placeholder,
   options,
+  children,
   className = '',
   id,
   ...rest
 }: SelectProps) {
-  const inputId = id ?? rest.name
+  const generatedId = useId()
+  const inputId = id ?? rest.name ?? generatedId
 
   return (
     <div className={className}>
@@ -135,22 +142,24 @@ export function Select({
       <div className='relative'>
         <select
           id={inputId}
-          className={`${CONTROL_CLASS} h-10 appearance-none pr-9 ${controlStateClass(
+          className={`${CONTROL_CLASS} h-10 appearance-none pr-9 cursor-pointer ${controlStateClass(
             Boolean(error),
           )}`}
           aria-invalid={Boolean(error)}
           {...rest}
         >
           {placeholder ? <option value=''>{placeholder}</option> : null}
-          {options.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              disabled={option.disabled}
-            >
-              {option.label}
-            </option>
-          ))}
+          {options
+            ? options.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}
+                >
+                  {option.label}
+                </option>
+              ))
+            : children}
         </select>
         <svg
           className='pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted'

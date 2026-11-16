@@ -11,7 +11,7 @@ Su arquitectura garantiza la integridad de los datos mediante una estructura ter
 El sistema define 3 niveles jerárquicos de administración interna, acompañados por un nivel de acceso público para el ciudadano:
 
 - Administrador Maestro (El Ministerio del Poder Popular para la Salud)
-- Administradores Regionales ( Servicio Autónomo de Contraloría Sanitaria (SACS) / Direcciones Regionales)
+- Administradores Regionales (Servicio Autónomo de Contraloría Sanitaria (SACS) / Direcciones Regionales)
 - Administradores Locales (Centro de Salud / Institución sanitaria)
 
 ### 1. Administrador Maestro (El Ministerio)
@@ -47,6 +47,31 @@ Portal web público e independiente orientado a la consulta soberana del ciudada
 - **Consulta Express:** Verificación del estado de inmunización mediante el número de documento de identidad.
 - **Emisión Digital:** Reenvío automático de la tarjeta de vacunación digitalizada y firmada electrónicamente al correo registrado.
 
+### 2.1. Matriz Detallada de Permisos del Sistema (Catálogo RBAC)
+
+> Para el desglose individual de cada permiso con sus descripciones oficiales, scripts de inserción (Seed SQL) y tipado en TypeScript, consulte el documento especializado [Catálogo y Matriz de Permisos (RBAC)](./permissions.md).
+
+| Permiso (`permission_name`) | Administrador Maestro | Administrador Regional | Administrador Local | Personal Inmunizador |
+| :--- | :---: | :---: | :---: | :---: |
+| `users:create` / `users:update` | SI (Nacional) | SI (Regional) | SI (Local) | NO |
+| `users:suspend` | SI | SI | SI | NO |
+| `roles:manage` | SI | NO | NO | NO |
+| `centers:create` / `centers:update` | SI (Nacional) | SI (En su estado) | NO | NO |
+| `centers:read` | SI | SI | SI | SI |
+| `vaccines:manage` | SI | NO | NO | NO |
+| `inventory:manage` | SI | NO | SI (En su centro) | NO |
+| `inventory:read` | SI | SI | SI | SI |
+| `recipients:create` / `recipients:update` | NO | NO | SI | SI |
+| `recipients:read` | SI | SI | SI | SI |
+| `immunizations:create` | NO | NO | NO | SI |
+| `immunizations:read` | SI | SI | SI | SI |
+| `exams:create` / `exams:read` | NO | NO | SI | SI |
+| `certificates:issue` | NO | NO | SI | SI (Carnet local) |
+| `certificates:verify` | SI | SI | SI | SI |
+| `reports:national` | SI | NO | NO | NO |
+| `reports:regional` | SI | SI | NO | NO |
+| `reports:local` | SI | SI | SI | SI |
+
 ## 3. Arquitectura General y Módulos del Sistema
 
 ![Arquitectura](./media/arquitectura.svg)
@@ -56,6 +81,149 @@ Portal web público e independiente orientado a la consulta soberana del ciudada
 El modelo relacional garantiza la trazabilidad geográfica, la integridad clínica de las dosis aplicadas y el control de acceso estricto mediante RBAC:
 
 ![ERD](./media/ERD.svg)
+
+### 4.1. Diccionario de Datos: Módulo Territorial y Centro de Salud
+
+#### Tabla: `STATE` (Estado)
+Representa la división política territorial de primer nivel (24 entidades federales de Venezuela).
+
+| Campo | Tipo | Nulo | Restricciones | Descripción |
+| :--- | :--- | :---: | :--- | :--- |
+| `id_state` | INT (PK) | No | Auto-incremental | Identificador único del estado. |
+| `name` | VARCHAR(100) | No | UNIQUE | Nombre oficial de la entidad federal (ej. *Miranda*, *Aragua*, *Zulia*). |
+| `code` | VARCHAR(10) | No | UNIQUE | Código ISO / sigla ministerial (ej. `MIR`, `ARA`, `ZUL`, `DC`). |
+
+#### Tabla: `MUNICIPALITY` (Municipio)
+División territorial de segundo nivel adscrita a un estado específico.
+
+| Campo | Tipo | Nulo | Restricciones | Descripción |
+| :--- | :--- | :---: | :--- | :--- |
+| `id_municipality` | INT (PK) | No | Auto-incremental | Identificador único del municipio. |
+| `name` | VARCHAR(100) | No | | Nombre del municipio (ej. *Chacao*, *Sucre*, *Girardot*). |
+| `id_state` | INT (FK) | No | REFERENCES `STATE(id_state)` | Estado al que pertenece. |
+
+#### Tabla: `PARISH` (Parroquia)
+División territorial de tercer nivel adscrita a un municipio. Nivel de demarcación local para los centros de salud.
+
+| Campo | Tipo | Nulo | Restricciones | Descripción |
+| :--- | :--- | :---: | :--- | :--- |
+| `id_parish` | INT (PK) | No | Auto-incremental | Identificador único de la parroquia. |
+| `name` | VARCHAR(100) | No | | Nombre de la parroquia (ej. *Petare*, *El Recreo*, *Choroni*). |
+| `id_municipality` | INT (FK) | No | REFERENCES `MUNICIPALITY(id_municipality)` | Municipio al que pertenece. |
+
+#### Tabla: `HEALTH_CENTER` (Centro de Salud)
+Unidad médico-asistencial operativa donde se almacena biológico, se supervisa personal y se administran dosis a la población.
+
+| Campo | Tipo | Nulo | Restricciones | Descripción |
+| :--- | :--- | :---: | :--- | :--- |
+| `id_center` | INT (PK) | No | Auto-incremental | Identificador único del centro de salud. |
+| `code` | VARCHAR(50) | No | UNIQUE | Código oficial del centro (ej. `CS-MIR-001`, `AMB-ARA-042`). |
+| `name` | VARCHAR(150) | No | | Denominación oficial del centro (ej. *Ambulatorio La Victoria*). |
+| `type` | VARCHAR(50) | No | CHECK (`ambulatorio`, `hospital`, `cdi`, `clinica_popular`, `punto_vacunacion_movil`) | Tipología sanitaria del establecimiento. |
+| `address` | TEXT | No | | Dirección física o vialidad principal. |
+| `sector` | VARCHAR(100) | Sí | | Sector, caserío, barrio o comunidad específica. |
+| `status` | VARCHAR(20) | No | DEFAULT `'activo'` CHECK (`activo`, `inactivo`, `mantenimiento`) | Estatus operativo del establecimiento. |
+| `phone` | VARCHAR(20) | Sí | | Teléfono de contacto institucional. |
+| `email` | VARCHAR(120) | Sí | | Correo electrónico de coordinación médica. |
+| `id_parish` | INT (FK) | No | REFERENCES `PARISH(id_parish)` | Parroquia a la que está adscrito geográficamente. |
+
+### 4.2. Especificación DDL Relacional (Centro de Salud y Territorio)
+
+```sql
+-- 1. Tabla de Estados
+CREATE TABLE STATE (
+    id_state SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    code VARCHAR(10) NOT NULL UNIQUE
+);
+
+-- 2. Tabla de Municipios
+CREATE TABLE MUNICIPALITY (
+    id_municipality SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    id_state INT NOT NULL REFERENCES STATE(id_state) ON DELETE RESTRICT,
+    CONSTRAINT uq_municipality_state UNIQUE (name, id_state)
+);
+
+-- 3. Tabla de Parroquias
+CREATE TABLE PARISH (
+    id_parish SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    id_municipality INT NOT NULL REFERENCES MUNICIPALITY(id_municipality) ON DELETE RESTRICT,
+    CONSTRAINT uq_parish_municipality UNIQUE (name, id_municipality)
+);
+
+-- 4. Tabla de Centros de Salud
+CREATE TABLE HEALTH_CENTER (
+    id_center SERIAL PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    name VARCHAR(150) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'ambulatorio' CHECK (type IN ('ambulatorio', 'hospital', 'cdi', 'clinica_popular', 'punto_vacunacion_movil')),
+    address TEXT NOT NULL,
+    sector VARCHAR(100),
+    status VARCHAR(20) NOT NULL DEFAULT 'activo' CHECK (status IN ('activo', 'inactivo', 'mantenimiento')),
+    phone VARCHAR(20),
+    email VARCHAR(120),
+    id_parish INT NOT NULL REFERENCES PARISH(id_parish) ON DELETE RESTRICT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices de optimización geográfica y búsqueda
+CREATE INDEX idx_municipality_state ON MUNICIPALITY(id_state);
+CREATE INDEX idx_parish_municipality ON PARISH(id_municipality);
+CREATE INDEX idx_center_parish ON HEALTH_CENTER(id_parish);
+CREATE INDEX idx_center_name ON HEALTH_CENTER(name);
+```
+
+### 4.3. Implementación de Modelos en Backend (TypeScript / Mongoose)
+
+Para la implementación en Node.js/Express con TypeScript (`app/backend`):
+
+```typescript
+// src/models/HealthCenter.ts
+import { Schema, model, Document, Types } from 'mongoose';
+
+export type HealthCenterType = 'ambulatorio' | 'hospital' | 'cdi' | 'clinica_popular' | 'punto_vacunacion_movil';
+export type HealthCenterStatus = 'activo' | 'inactivo' | 'mantenimiento';
+
+export interface IHealthCenter extends Document {
+  name: string;
+  code: string;
+  type: HealthCenterType;
+  address: string;
+  sector?: string;
+  parishId: Types.ObjectId;
+  status: HealthCenterStatus;
+  phone?: string;
+  email?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+const healthCenterSchema = new Schema<IHealthCenter>(
+  {
+    name: { type: String, required: true, trim: true, maxlength: 150 },
+    code: { type: String, required: true, unique: true, uppercase: true, trim: true },
+    type: {
+      type: String,
+      enum: ['ambulatorio', 'hospital', 'cdi', 'clinica_popular', 'punto_vacunacion_movil'],
+      default: 'ambulatorio',
+    },
+    address: { type: String, required: true, trim: true },
+    sector: { type: String, trim: true },
+    parishId: { type: Schema.Types.ObjectId, ref: 'Parish', required: true, index: true },
+    status: { type: String, enum: ['activo', 'inactivo', 'mantenimiento'], default: 'activo' },
+    phone: { type: String, trim: true },
+    email: { type: String, trim: true, lowercase: true },
+  },
+  { timestamps: true }
+);
+
+healthCenterSchema.index({ name: 1, parishId: 1 });
+
+export default model<IHealthCenter>('HealthCenter', healthCenterSchema);
+```
 
 ## 5. Flujos de Trabajo e Interacción de Procesos
 

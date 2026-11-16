@@ -6,7 +6,8 @@ import { Button } from './Button'
 export type ModalSize = 'sm' | 'md' | 'lg'
 
 export interface ModalProps {
-  open: boolean
+  open?: boolean
+  isOpen?: boolean
   onClose: () => void
   title: ReactNode
   description?: ReactNode
@@ -23,6 +24,7 @@ const SIZES: Record<ModalSize, string> = {
 
 export function Modal({
   open,
+  isOpen,
   onClose,
   title,
   description,
@@ -30,8 +32,10 @@ export function Modal({
   footer,
   children,
 }: ModalProps) {
+  const active = open ?? isOpen ?? false
+
   useEffect(() => {
-    if (!open) return
+    if (!active) return
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') onClose()
@@ -45,9 +49,9 @@ export function Modal({
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [open, onClose])
+  }, [active, onClose])
 
-  if (!open) return null
+  if (!active) return null
 
   return createPortal(
     <div
@@ -60,9 +64,9 @@ export function Modal({
         role='dialog'
         aria-modal='true'
         aria-label={typeof title === 'string' ? title : undefined}
-        className={`w-full border border-border-strong bg-surface ${SIZES[size]}`}
+        className={`w-full rounded-none border border-border-strong bg-surface ${SIZES[size]}`}
       >
-        <div className='flex items-start justify-between gap-4 border-b border-border px-5 py-4'>
+        <div className='flex items-start justify-between gap-4 border-b border-border bg-surface-alt px-5 py-4'>
           <div>
             <h2 className='text-sm font-semibold uppercase tracking-wider text-surface-text'>
               {title}

@@ -1,6 +1,13 @@
 import type { HTMLAttributes } from 'react'
 
-export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'neutral'
+export type BadgeVariant =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | 'neutral'
 export type BadgeSize = 'sm' | 'md'
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -9,6 +16,8 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const VARIANTS: Record<BadgeVariant, string> = {
+  primary: 'border-primary/40 bg-primary-soft text-primary',
+  secondary: 'border-secondary/40 bg-secondary-soft text-secondary',
   success: 'border-success/40 bg-success-soft text-success',
   warning: 'border-warning/40 bg-warning-soft text-warning',
   danger: 'border-danger/40 bg-danger-soft text-danger',
@@ -30,7 +39,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1 border font-semibold uppercase tracking-wider ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-none border font-semibold uppercase tracking-wider ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...rest}
     >
       {children}

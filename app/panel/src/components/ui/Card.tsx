@@ -7,7 +7,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export function Card({ className = '', children, ...rest }: CardProps) {
   return (
     <div
-      className={`border border-border bg-surface ${className}`}
+      className={`rounded-none border border-border bg-surface ${className}`}
       {...rest}
     >
       {children}
@@ -19,6 +19,7 @@ export interface CardHeaderProps {
   title?: ReactNode
   subtitle?: ReactNode
   actions?: ReactNode
+  action?: ReactNode
   children?: ReactNode
 }
 
@@ -26,10 +27,12 @@ export function CardHeader({
   title,
   subtitle,
   actions,
+  action,
   children,
 }: CardHeaderProps) {
+  const headerActions = actions ?? action
   return (
-    <div className='flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4'>
+    <div className='flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface-alt px-5 py-4'>
       <div className='min-w-0'>
         {title ? (
           <h3 className='text-sm font-semibold uppercase tracking-wider text-surface-text'>
@@ -41,8 +44,8 @@ export function CardHeader({
         ) : null}
         {children}
       </div>
-      {actions ? (
-        <div className='flex items-center gap-2'>{actions}</div>
+      {headerActions ? (
+        <div className='flex items-center gap-2'>{headerActions}</div>
       ) : null}
     </div>
   )
@@ -56,6 +59,14 @@ export function CardContent({ className = '', children, ...rest }: CardProps) {
     >
       {children}
     </div>
+  )
+}
+
+export function CardBody({ className = '', children, ...rest }: CardProps) {
+  return (
+    <CardContent className={className} {...rest}>
+      {children}
+    </CardContent>
   )
 }
 
