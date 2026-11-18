@@ -359,18 +359,3 @@ graph TD
     L --> M
     M --> N[Envío automático de confirmación/copia digital al correo del ciudadano]
 ```
-
-## Especificaciones de Implementación y Seguridad
-
-### Autenticación y Seguridad Granular
-
-- Las contraseñas deben almacenarse encriptadas mediante un algoritmo hash seguro (atributo `hash_contrasena` en la entidad `usuario`).
-- Toda petición recibida por la API debe validar previamente la matriz de autorización definida en la entidad intermedia `rol_permiso`.
-
-### Trazabilidad Territorial Obligatoria
-
-- Cada registro de aplicación en la entidad `inmunizacion` exige la llave foránea obligatoria `id_centro_salud`, garantizando la auditoría exacta del centro de salud, parroquia, municipio y estado donde se administró el biológico.
-
-### Verificación de Certificados
-
-- El atributo `codigo` en las entidades `certificado_medico` y `tarjeta_vacunacion` almacenará un identificador alfanumérico único vinculado a un código QR impreso en el documento digital del ciudadano, permitiendo su validación pública e inalterable desde el módulo "Tu Tarjeta".
