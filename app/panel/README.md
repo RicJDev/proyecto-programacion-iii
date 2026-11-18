@@ -1,32 +1,69 @@
-# React + TypeScript + Vite
+# Panel de administración — SINACIMN
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Interfaz interna para los distintos roles administrativos del sistema. Construida con **React 19**, **TypeScript**, **Vite** y **Tailwind CSS 4**.
 
-Currently, two official plugins are available:
+- Puerto de desarrollo: `5001`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requisitos
 
-## React Compiler
+- Node.js 20.19.0 o superior
+- pnpm 10.33.0 o superior
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Ejecución independiente
 
-## Expanding the Oxlint configuration
+1. Instala las dependencias (desde la raíz instala todos los paquetes):
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+   ```bash
+   pnpm install
+   ```
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+   O solo las del panel:
+
+   ```bash
+   cd app/panel
+   pnpm install
+   ```
+
+2. Inicia el servidor de desarrollo:
+
+   ```bash
+   pnpm dev
+   ```
+
+   Abre `http://localhost:5001`.
+
+Desde la raíz también puedes ejecutarlo con:
+
+```bash
+pnpm --filter panel dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Scripts disponibles
+
+| Comando        | Descripción                                      |
+| -------------- | ------------------------------------------------ |
+| `pnpm dev`     | Inicia Vite con recarga en caliente              |
+| `pnpm build`   | Verifica tipos y genera la versión de producción |
+| `pnpm preview` | Sirve localmente la build de producción          |
+| `pnpm lint`    | Ejecuta Oxlint                                   |
+
+## Producción
+
+```bash
+cd app/panel
+pnpm build
+pnpm preview
+```
+
+La salida se genera en `dist/`.
+
+## Docker
+
+Construye la imagen desde la raíz del repositorio (el contexto de build es la raíz):
+
+```bash
+docker build -f app/panel/Dockerfile -t sinacimn-panel .
+docker run --rm -p 8081:80 sinacimn-panel
+```
+
+El panel quedará disponible en `http://localhost:8081`.

@@ -7,17 +7,19 @@ const TREND_STYLES: Record<TrendDirection, string> = {
   stable: 'text-text-muted',
 }
 
-const TREND_ARROWS: Record<TrendDirection, string> = {
-  up: '▲',
-  down: '▼',
-  stable: '■',
+const TREND_LABELS: Record<TrendDirection, string> = {
+  up: '[+]',
+  down: '[-]',
+  stable: '[=]',
 }
 
 export interface StatCardProps {
   label: string
-  value: string
+  value: string | number
   unit?: string
   hint?: string
+  subtitle?: string
+  tag?: string
   trend?: TrendDirection
   trendValue?: string
   icon?: ReactNode
@@ -28,18 +30,29 @@ export function StatCard({
   value,
   unit,
   hint,
+  subtitle,
+  tag,
   trend,
   trendValue,
   icon,
 }: StatCardProps) {
+  const descriptionText = hint ?? subtitle
+
   return (
-    <div className='flex items-start justify-between gap-4 border border-border bg-surface p-5'>
-      <div className='min-w-0'>
-        <p className='text-[11px] font-semibold uppercase tracking-wider text-text-muted'>
-          {label}
-        </p>
+    <div className='flex items-start justify-between gap-4 rounded-none border border-border border-l-4 border-l-primary bg-surface p-5'>
+      <div className='min-w-0 flex-1'>
+        <div className='flex items-center justify-between gap-2'>
+          <p className='text-[11px] font-semibold uppercase tracking-wider text-text-muted'>
+            {label}
+          </p>
+          {tag ? (
+            <span className='border border-border bg-surface-alt px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted'>
+              {tag}
+            </span>
+          ) : null}
+        </div>
         <p className='mt-2 flex items-baseline gap-1.5'>
-          <span className='text-3xl font-semibold leading-none tracking-tight text-surface-text'>
+          <span className='text-2xl font-bold leading-none tracking-tight text-surface-text'>
             {value}
           </span>
           {unit ? (
@@ -48,17 +61,21 @@ export function StatCard({
             </span>
           ) : null}
         </p>
-        <div className='mt-2 flex flex-wrap items-center gap-2 text-[11px]'>
-          {trend ? (
-            <span
-              className={`inline-flex items-center gap-1 font-semibold ${TREND_STYLES[trend]}`}
-            >
-              <span aria-hidden='true'>{TREND_ARROWS[trend]}</span>
-              {trendValue}
-            </span>
-          ) : null}
-          {hint ? <span className='text-text-muted'>{hint}</span> : null}
-        </div>
+        {(trend || descriptionText) ? (
+          <div className='mt-2 flex flex-wrap items-center gap-2 text-[11px]'>
+            {trend ? (
+              <span
+                className={`inline-flex items-center gap-1 font-semibold ${TREND_STYLES[trend]}`}
+              >
+                <span aria-hidden='true'>{TREND_LABELS[trend]}</span>
+                {trendValue}
+              </span>
+            ) : null}
+            {descriptionText ? (
+              <span className='text-text-muted'>{descriptionText}</span>
+            ) : null}
+          </div>
+        ) : null}
       </div>
       {icon ? (
         <div className='flex h-10 w-10 shrink-0 items-center justify-center border border-primary/30 bg-primary-soft text-primary'>

@@ -1,12 +1,13 @@
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { PrismaClient } from '../generated/prisma/client'
-import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER } from './variables'
+import { DB_URL } from './variables'
 
-const adapter = new PrismaMariaDb({
-  host: DB_HOST,
-  user: DB_USER,
-  database: DB_NAME,
-  password: DB_PASSWORD,
-})
+const adapter = new PrismaMariaDb(DB_URL)
 
-export const prisma = new PrismaClient({ adapter })
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+
+export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter })
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}
