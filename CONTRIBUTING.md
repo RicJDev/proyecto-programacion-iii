@@ -1,88 +1,73 @@
-He aquí la información mínima para instalar lo necesario para el desarrollo.
+# Contribuyendo
 
-## Requerimientos
+Gracias por ayudar a mantener el proyecto. Antes de empezar, revisa los issues y las pull requests abiertas para evitar duplicar trabajo.
 
-- Node.js 20.19.0 o superior
-- pnpm 10.33.0 o superior
-- Docker y Docker Compose (recomendado para trabajar con la base de datos)
+## Documentación
 
-## Instalación de dependencias
+Antes de realizar cualquier cambio, consulta la documentación disponible en [esta carpeta](./docs/). Aquí puedes encontrar información relevante como la guía de estilo, especificaciones del sistema, diseño de la api y base de datos, entre otras.
 
-Para instalar todas las dependencias, ejecuta el siguiente comando desde la raíz del proyecto:
+## Flujo de trabajo
 
-```bash
-pnpm recursive install
-```
+**Todo cambio se envía por pull request. No se hace push directo a `dev` ni a `main`.**
 
-También es posible instalar las dependencias de cada paquete por separado.
-
-Por ejemplo, para el backend sería así:
+1. Actualiza tu rama local de `dev`:
 
 ```bash
-cd backend
-pnpm install
+git switch dev
+git pull origin dev
 ```
 
-La únicas dependencias en la raíz son Prettier, que se utiliza para mantener la consistencia del formato del código, y Oxlint, nuestro linter ya configurado. Aunque no son estrictamente necesarias para el desarrollo, se recomienda instalarlas:
+2. Crea una rama de trabajo a partir de `dev`.
+
+3. Haz commits pequeños y enfocados en un solo cambio.
+
+4. Antes de abrir la PR, verifica el formato, el linter y la compilación (teniendo las dependencias ya instaladas):
 
 ```bash
-# estando en la raíz
-pnpm install
+pnpm run format:check
+pnpm run lint
+pnpm run build
 ```
 
-## Scripts
+5. Abre la PR contra **`dev`**. Indica qué cambiaste, cómo probarlo y enlaza el issue relacionado si existe.
 
-Aunque cada paquete (frontend y backend) cuenta con sus propios scripts definidos en sus respectivos `package.json`, se han añadido algunos scripts en la raíz para mayor comodidad. Para utilizarlos, es necesario haber instalado las dependencias previamente.
+6. Atiende los comentarios de revisión en la misma rama. Si `dev` avanzó mientras tanto, actualiza la rama desde `dev` y vuelve a ejecutar las verificaciones.
 
-| Comando                 | Descripción                                                        |
-| ----------------------- | ------------------------------------------------------------------ |
-| `pnpm run dev`          | Inicia todos los servidores de desarrollo en paralelo              |
-| `pnpm run build`        | Compila los paquetes y los prepara para su distribución            |
-| `pnpm run format`       | Aplica el formato a los archivos usando Prettier                   |
-| `pnpm run format:check` | Verifica que los archivos estén formateados según la configuración |
+7. Una vez aprobada, la PR se integra en `dev`.
 
-## Desarrollo con Docker
+8. Cuando `dev` quede en un estado aprobado como versión, se abre una PR de **`dev` a `main`**. `main` solo recibe esas PRs de versión; no recibe pushes directos ni PRs de ramas de trabajo.
 
-El proyecto incluye un `docker-compose.yml` con MariaDB, phpMyAdmin y el backend en modo desarrollo (sí, con hot reload).
+## Convenciones del proyecto
 
-1. Copia el archivo de variables de entorno y ajusta las credenciales si lo deseas:
+### Ramas
 
-```bash
-echo example.env > .env
+Usa nombres `<tipo>/<descripcion-corta>` en `kebab-case`, por ejemplo:
+
+- `feat/agregar-login`
+- `fix/corregir-carga-de-env`
+- `docs/actualizar-contributing`
+- `refactor/mover-enrutado`
+- `chore/actualizar-dependencias`
+
+Los tipos habituales son `feat`, `fix`, `docs`, `refactor` y `chore`. Mantén el alcance de cada rama lo más pequeño posible.
+
+### Commits
+
+Usa mensajes `<tipo>: <descripción corta>`, con la descripción en español y en modo imperativo:
+
+```text
+feat: agregar endpoint de login
+fix: corregir carga de variables de entorno
+docs: actualizar guía de contribución
 ```
 
-2. Levanta los servicios:
+Los scopes son opcionales, por ejemplo `feat(auth): agregar logout`. Evita mensajes genéricos como `cambios` o `arreglos`.
 
-```bash
-docker compose up --build
-```
+### Código y formato
 
-El backend quedará disponible en `http://localhost:5000`, MariaDB en `localhost:3306` y phpMyAdmin en `http://localhost:8080`.
-
-Para entrar a phpMyAdmin usa el usuario y la contraseña de la base de datos (por defecto `vacunas` / `vacunas`). También puedes iniciar sesión como `root` con la contraseña definida en `DB_ROOT_PASSWORD`.
-
-Para conectarte a la base de datos desde tu equipo usa las credenciales definidas en `.env`:
-
-| Variable            | Valor por defecto |
-| ------------------- | ----------------- |
-| Host                | `127.0.0.1`       |
-| Puerto              | `3306`            |
-| Base de datos       | `vacunas`         |
-| Usuario             | `vacunas`         |
-| Contraseña          | `vacunas`         |
-| Usuario root        | `root`            |
-| Contraseña root     | `root`            |
-
-Para detener los servicios:
-
-```bash
-docker compose down
-```
-
-Si necesitas reiniciar la base de datos desde cero (elimina los datos guardados):
-
-```bash
-docker compose down -v
-```
-
-El backend se monta como volumen, por lo que los cambios en `app/backend` se reflejan automáticamente sin reconstruir la imagen.
+- Se usa `pnpm` como gestor de paquetes; no mezcles `npm` ni `yarn`.
+- El código está en TypeScript y organizado por módulos dentro de `app/`.
+- Prettier define el formato: sin punto y coma, comillas simples, indentación de 2 espacios y un atributo por línea en JSX. Ejecuta `pnpm run format` antes de commitear.
+- Oxlint es el linter del proyecto. Corrige los avisos en lugar de desactivar reglas.
+- Si cambias la API, el modelo de datos o los permisos, actualiza la documentación correspondiente en la misma PR.
+- No subas archivos `.env`. Usa `example.env` como plantilla y ajusta las credenciales en tu entorno local.

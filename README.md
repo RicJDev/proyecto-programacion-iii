@@ -13,14 +13,9 @@
 
 Sistema centralizado de alto nivel diseñado para la administración, control, monitoreo y validación de esquemas de vacunación a escala nacional.
 
-## Módulos del proyecto
-
-- [Backend](./app/backend/)
-- [Panel de administración](./app/panel/)
-- ["Tu tarjeta"](./app/tu-tarjeta/)
-
 ## Documentación
 
+- [Cómo levantar el proyecto](./docs/setup.md)
 - [Especificación de la API](./docs/api.md)
 - [Especificaciones del sistema](./docs/specs.md)
 - [Guía de estilo](./docs/style.md)
