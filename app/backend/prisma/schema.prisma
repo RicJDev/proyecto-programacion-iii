@@ -16,7 +16,11 @@ model User {
   passwordHash String   @map("hash_contrasena") @db.VarChar(255)
   createdAt    DateTime @default(now()) @map("creado_en") @db.Timestamp
 
-  roles Role[]
+  userRoles          UserRole[]
+  userStates         UserState[]
+  userMunicipalities UserMunicipality[]
+  userParishes       UserParish[]
+  userCenters        UserCenter[]
 
   @@map("usuario")
 }
@@ -26,8 +30,8 @@ model Role {
   name        String  @unique @map("nombre") @db.VarChar(100)
   description String? @map("descripcion") @db.VarChar(255)
 
-  users       User[]
-  permissions Permission[]
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
 
   @@map("rol")
 }
@@ -37,9 +41,33 @@ model Permission {
   name        String  @unique @map("nombre") @db.VarChar(100)
   description String? @map("descripcion") @db.VarChar(255)
 
-  roles Role[]
+  rolePermissions RolePermission[]
 
   @@map("permiso")
+}
+
+model UserRole {
+  id     Int @id @default(autoincrement()) @map("id")
+  idUser Int @map("id_usuario")
+  idRole Int @map("id_rol")
+
+  user User @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role Role @relation(fields: [idRole], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idUser, idRole])
+  @@map("usuario_rol")
+}
+
+model RolePermission {
+  id           Int @id @default(autoincrement()) @map("id")
+  idRole       Int @map("id_rol")
+  idPermission Int @map("id_permiso")
+
+  role       Role       @relation(fields: [idRole], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission Permission @relation(fields: [idPermission], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idRole, idPermission])
+  @@map("rol_permiso")
 }
 
 // --- UBICACIÓN GEOGRÁFICA ---
@@ -48,6 +76,7 @@ model State {
   id             Int            @id @default(autoincrement()) @map("id")
   name           String         @map("nombre") @db.VarChar(150)
   municipalities Municipality[]
+  userStates     UserState[]
 
   @@map("estado")
 }
@@ -57,8 +86,9 @@ model Municipality {
   name    String @map("nombre") @db.VarChar(150)
   idState Int    @map("id_estado")
 
-  state    State    @relation(fields: [idState], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  parishes Parish[]
+  state              State              @relation(fields: [idState], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parishes           Parish[]
+  userMunicipalities UserMunicipality[]
 
   @@map("municipio")
 }
@@ -70,6 +100,7 @@ model Parish {
 
   municipality  Municipality   @relation(fields: [idMunicipality], references: [id], onDelete: Cascade, onUpdate: Cascade)
   healthCenters HealthCenter[]
+  userParishes  UserParish[]
 
   @@map("parroquia")
 }
@@ -84,8 +115,59 @@ model HealthCenter {
   inventories   Inventory[]
   shipments     Shipment[]
   immunizations Immunization[]
+  userCenters   UserCenter[]
 
   @@map("centro_salud")
+}
+
+// --- ALCANCE GEOGRÁFICO DE USUARIOS ---
+
+model UserState {
+  id      Int @id @default(autoincrement()) @map("id")
+  idUser  Int @map("id_usuario")
+  idState Int @map("id_estado")
+
+  user  User  @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  state State @relation(fields: [idState], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idUser, idState])
+  @@map("usuario_estado")
+}
+
+model UserMunicipality {
+  id             Int @id @default(autoincrement()) @map("id")
+  idUser         Int @map("id_usuario")
+  idMunicipality Int @map("id_municipio")
+
+  user         User         @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  municipality Municipality @relation(fields: [idMunicipality], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idUser, idMunicipality])
+  @@map("usuario_municipio")
+}
+
+model UserParish {
+  id       Int @id @default(autoincrement()) @map("id")
+  idUser   Int @map("id_usuario")
+  idParish Int @map("id_parroquia")
+
+  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parish Parish @relation(fields: [idParish], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idUser, idParish])
+  @@map("usuario_parroquia")
+}
+
+model UserCenter {
+  id             Int @id @default(autoincrement()) @map("id")
+  idUser         Int @map("id_usuario")
+  idHealthCenter Int @map("id_centro_salud")
+
+  user         User         @relation(fields: [idUser], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  healthCenter HealthCenter @relation(fields: [idHealthCenter], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idUser, idHealthCenter])
+  @@map("usuario_centro")
 }
 
 // --- PERSONAS Y REPRESENTACIONES ---
@@ -130,8 +212,8 @@ model Vaccine {
   name String @map("nombre") @db.VarChar(150)
   type String @map("tipo") @db.VarChar(100)
 
-  batches              Batch[]
-  vaccinationSchedules VaccinationSchedule[]
+  batches                     Batch[]
+  vaccinationScheduleVaccines VaccinationScheduleVaccine[]
 
   @@map("vacuna")
 }
@@ -141,10 +223,22 @@ model VaccinationSchedule {
   ageRange      String   @map("rango_edad") @db.VarChar(50)
   publishedDate DateTime @map("fecha_publicacion")
 
-  vaccines     Vaccine[]
-  vaccineCards VaccineCard[]
+  vaccinationScheduleVaccines VaccinationScheduleVaccine[]
+  vaccineCards                VaccineCard[]
 
   @@map("esquema_vacunacion")
+}
+
+model VaccinationScheduleVaccine {
+  id                    Int @id @default(autoincrement()) @map("id")
+  idVaccinationSchedule Int @map("id_esquema_vacunacion")
+  idVaccine             Int @map("id_vacuna")
+
+  vaccinationSchedule VaccinationSchedule @relation(fields: [idVaccinationSchedule], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vaccine             Vaccine             @relation(fields: [idVaccine], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idVaccinationSchedule, idVaccine])
+  @@map("esquema_vacunacion_vacuna")
 }
 
 model Batch {
