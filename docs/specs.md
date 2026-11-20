@@ -23,7 +23,6 @@ Su arquitectura garantiza la integridad de los datos mediante una estructura ter
 ### Requerimientos No Funcionales
 
 - **Seguridad y Cifrado de Datos:** Almacenar todas las credenciales de acceso mediante algoritmos de hash criptográfico seguro y validar la matriz de permisos en cada petición realizada a la API.
-- **Aislamiento de Bases de Datos:** Separar lógicamente la persistencia de los datos clínicos, personales y geográficos de la base de datos destinada al control de acceso, roles y autenticación de usuarios.
 - **Integridad Referencial y Trazabilidad:** Garantizar que ningún evento de inmunización o movimiento de inventario pueda registrarse sin su correspondiente vinculación territorial y de lote.
 - **Inalterabilidad y Verificabilidad Pública:** Asegurar que los códigos únicos de verificación asociados a tarjetas y certificados médicos no puedan ser falsificados y permitan una validación instantánea sin comprometer datos sensibles adicionales.
 - **Disponibilidad y Rendimiento en Punto de Atención:** Mantener tiempos de respuesta óptimos en los módulos operativos locales y en el portal ciudadano para evitar cuellos de botella durante jornadas masivas de vacunación.
@@ -135,9 +134,7 @@ flowchart TD
 
 ## Modelo de Datos Relacional
 
-El sistema opera bajo una arquitectura de persistencia desacoplada mediante dos bases de datos paralelas: una dedicada al dominio sanitario, demográfico y territorial, y otra exclusiva para la gestión de identidades y control de acceso.
-
-### Base de Datos Sanitaria, Personal y Geográfica
+Esquema que representa las entidades y sus relaciones dentro de nuestra base de datos
 
 ```mermaid
 ---
@@ -145,123 +142,187 @@ config:
   layout: elk
 ---
 erDiagram
-    estado {
-        int id PK
-        string nombre
-    }
-    municipio {
-        int id PK
-        int id_estado FK
-        string nombre
-    }
-    parroquia {
-        int id PK
-        int id_municipio FK
-        string nombre
-    }
-    centro_salud {
-        int id PK
-        int id_parroquia FK
-        string nombre
-        string direccion
-    }
-    persona {
-        int id PK
-        string genero
-        decimal peso
-        datetime fecha_nacimiento
-        string primer_nombre
-        string segundo_nombre
-        string primer_apellido
-        string segundo_apellido
-        string cedula_de_identidad UK
-    }
-    representacion {
-        int id PK
-        int id_representante FK
-        int id_representado FK
-        string tipo_relacion
-    }
-    esquema_vacunacion {
-        int id PK
-        string rango_edad
-        datetime fecha_publicacion
-    }
-    vacuna {
-        int id PK
-        string nombre
-        string tipo
-    }
-    esquema_vacunacion_vacuna {
-        int id PK
-        int id_esquema_vacunacion FK
-        int id_vacuna FK
-    }
-    tarjeta_vacunacion {
-        int id PK
-        int id_persona FK
-        int id_esquema_vacunacion FK
-        string estatus
-        datetime fecha_emision
-        string codigo UK
-    }
-    lote {
-        int id PK
-        int id_vacuna FK
-        string numero_lote
-        datetime fecha_expiracion
-    }
-    inventario {
-        int id PK
-        int id_centro_salud FK
-        int id_lote FK
-        int cantidad_disponible
-    }
-    envio {
-        int id PK
-        int id_centro_salud FK
-        string codigo_orden
-        string nombre_remitente
-        datetime fecha
-        string estatus
-    }
-    detalle_envio {
-        int id PK
-        int id_envio FK
-        int id_lote FK
-        int cantidad
-    }
-    inmunizacion {
-        int id PK
-        int id_tarjeta_vacunacion FK
-        int id_lote FK
-        int id_centro_salud FK
-        datetime fecha_hora
-    }
-    examen_medico {
-        int id PK
-        string nombre
-        string descripcion
-    }
-    parametro_examen_medico {
-        int id PK
-        int id_examen_medico FK
-        decimal minimo
-        decimal maximo
-    }
-    resultado_examen_medico {
-        int id PK
-        int id_persona FK
-        int id_parametro_examen_medico FK
-        decimal valor
-        datetime fecha
-    }
-    certificado_medico {
-        int id PK
-        int id_persona FK
-        datetime fecha
-        string codigo UK
-    }
+    subgraph ubicacion_geografica ["Ubicación y Centros de Salud"]
+        estado {
+            int id PK
+            string nombre
+        }
+        municipio {
+            int id PK
+            int id_estado FK
+            string nombre
+        }
+        parroquia {
+            int id PK
+            int id_municipio FK
+            string nombre
+        }
+        centro_salud {
+            int id PK
+            int id_parroquia FK
+            string nombre
+            string direccion
+        }
+    end
+
+    subgraph pacientes ["Pacientes y Representación"]
+        persona {
+            int id PK
+            string genero
+            decimal peso
+            datetime fecha_nacimiento
+            string primer_nombre
+            string segundo_nombre
+            string primer_apellido
+            string segundo_apellido
+            string cedula_de_identidad UK
+        }
+        representacion {
+            int id PK
+            int id_representante FK
+            int id_representado FK
+            string tipo_relacion
+        }
+    end
+
+    subgraph vacunacion_logistica ["Vacunación, Lotes e Inventario"]
+        esquema_vacunacion {
+            int id PK
+            string rango_edad
+            datetime fecha_publicacion
+        }
+        vacuna {
+            int id PK
+            string nombre
+            string tipo
+        }
+        esquema_vacunacion_vacuna {
+            int id PK
+            int id_esquema_vacunacion FK
+            int id_vacuna FK
+        }
+        tarjeta_vacunacion {
+            int id PK
+            int id_persona FK
+            int id_esquema_vacunacion FK
+            string estatus
+            datetime fecha_emision
+            string codigo UK
+        }
+        lote {
+            int id PK
+            int id_vacuna FK
+            string numero_lote
+            datetime fecha_expiracion
+        }
+        inventario {
+            int id PK
+            int id_centro_salud FK
+            int id_lote FK
+            int cantidad_disponible
+        }
+        envio {
+            int id PK
+            int id_centro_salud FK
+            string codigo_orden
+            string nombre_remitente
+            datetime fecha
+            string estatus
+        }
+        detalle_envio {
+            int id PK
+            int id_envio FK
+            int id_lote FK
+            int cantidad
+        }
+        inmunizacion {
+            int id PK
+            int id_tarjeta_vacunacion FK
+            int id_lote FK
+            int id_centro_salud FK
+            datetime fecha_hora
+        }
+    end
+
+    subgraph evaluacion_medica ["Exámenes y Certificados Médicos"]
+        examen_medico {
+            int id PK
+            string nombre
+            string descripcion
+        }
+        parametro_examen_medico {
+            int id PK
+            int id_examen_medico FK
+            decimal minimo
+            decimal maximo
+        }
+        resultado_examen_medico {
+            int id PK
+            int id_persona FK
+            int id_parametro_examen_medico FK
+            decimal valor
+            datetime fecha
+        }
+        certificado_medico {
+            int id PK
+            int id_persona FK
+            datetime fecha
+            string codigo UK
+        }
+    end
+
+    subgraph seguridad_roles ["Usuarios, Roles y Permisos"]
+        usuario {
+            int id PK
+            string nombre
+            string correo UK
+            string hash_contrasena
+            datetime creado_en
+        }
+        rol {
+            int id PK
+            string nombre UK
+            string descripcion
+        }
+        permiso {
+            int id PK
+            string nombre UK
+            string descripcion
+        }
+        usuario_rol {
+            int id PK
+            int id_usuario FK
+            int id_rol FK
+        }
+        rol_permiso {
+            int id PK
+            int id_rol FK
+            int id_permiso FK
+        }
+    end
+
+    subgraph alcance_geografico ["Alcance Geográfico de Usuarios"]
+        usuario_estado {
+            int id PK
+            int id_usuario FK
+            int id_estado FK
+        }
+        usuario_municipio {
+            int id PK
+            int id_usuario FK
+            int id_municipio FK
+        }
+        usuario_parroquia {
+            int id PK
+            int id_usuario FK
+            int id_parroquia FK
+        }
+        usuario_centro {
+            int id PK
+            int id_usuario FK
+            int id_centro_salud FK
+        }
+    end
 
     estado ||--o{ municipio : "contiene"
     municipio ||--o{ parroquia : "contiene"
@@ -269,6 +330,7 @@ erDiagram
     centro_salud ||--o{ inmunizacion : "realiza"
     centro_salud ||--o{ envio : "recibe"
     centro_salud ||--o{ inventario : "mantiene"
+
     esquema_vacunacion ||--o{ esquema_vacunacion_vacuna : "contiene"
     vacuna ||--o{ esquema_vacunacion_vacuna : "contiene"
     vacuna ||--o{ lote : "tiene"
@@ -276,59 +338,34 @@ erDiagram
     lote ||--o{ detalle_envio : "incluye"
     lote ||--o{ inmunizacion : "utiliza"
     envio ||--o{ detalle_envio : "contiene"
+
     representacion }o--|| persona : "representado por"
     representacion }o--|| persona : "representa a"
     persona ||--o{ tarjeta_vacunacion : "posee"
     esquema_vacunacion ||--o{ tarjeta_vacunacion : "plantilla para"
     tarjeta_vacunacion ||--o{ inmunizacion : "registra"
+
     persona ||--o{ certificado_medico : "recibe"
     persona ||--o{ resultado_examen_medico : "tiene"
     examen_medico ||--o{ parametro_examen_medico : "tiene"
     parametro_examen_medico ||--o{ resultado_examen_medico : "evaluado en"
 
-```
+    usuario ||--o{ usuario_rol : "tiene"
+    rol ||--o{ usuario_rol : "tiene"
+    rol ||--o{ rol_permiso : "tiene"
+    permiso ||--o{ rol_permiso : "tiene"
 
-### Base de Datos de Usuarios, Roles y Permisos
+    usuario ||--o{ usuario_estado : "tiene"
+    estado ||--o{ usuario_estado : "asigna"
 
-```mermaid
----
-config:
-  layout: elk
----
-erDiagram
-  usuario {
-      int id PK
-      string nombre
-      string correo UK
-      string hash_contrasena
-      datetime creado_en
-  }
-  rol {
-      int id PK
-      string nombre UK
-      string descripcion
-  }
-  permiso {
-      int id PK
-      string nombre UK
-      string descripcion
-  }
-  usuario_rol {
-      int id PK
-      int id_usuario FK
-      int id_rol FK
-  }
-  rol_permiso {
-      int id PK
-      int id_rol FK
-      int id_permiso FK
-  }
+    usuario ||--o{ usuario_municipio : "tiene"
+    municipio ||--o{ usuario_municipio : "asigna"
 
-  usuario ||--o{ usuario_rol : "tiene"
-  rol ||--o{ usuario_rol : "tiene"
-  rol ||--o{ rol_permiso : "tiene"
-  permiso ||--o{ rol_permiso : "tiene"
+    usuario ||--o{ usuario_parroquia : "tiene"
+    parroquia ||--o{ usuario_parroquia : "asigna"
 
+    usuario ||--o{ usuario_centro : "tiene"
+    centro_salud ||--o{ usuario_centro : "asigna"
 ```
 
 ## Flujos de Trabajo e Interacción de Procesos
