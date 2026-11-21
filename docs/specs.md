@@ -1,20 +1,42 @@
 # Documento Técnico de Especificaciones del Sistema Nacional de Inmunización y Control de Vacunación (SINACIMN)
 
-## 1. Descripción General del Sistema
+## TL;DR
 
 El **Sistema Nacional de Inmunización y Control de Vacunación (SINACIMN)** es una plataforma centralizada de gestión de salud pública diseñada para el registro, trazabilidad, administración y validación del esquema de vacunación a nivel nacional.
 
-Su arquitectura garantiza la integridad de los datos mediante una estructura territorial jerárquica (Estado, Municipio, Parroquia y Centro de Salud), un control de acceso basado en roles dinámico y granular (RBAC), y un módulo público independiente que permite al ciudadano consultar y certificar su estado de inmunización en tiempo real.
+Su arquitectura garantiza la integridad de los datos mediante una estructura territorial jerárquica (Estado, Municipio, Parroquia y Centro de Salud), un control de acceso basado en roles dinámico y granular, y un módulo público independiente que permite al ciudadano consultar y certificar su estado de inmunización en tiempo real.
 
-## 2. Estructura de Roles y Niveles de Permiso (RBAC)
+## Requerimientos del Sistema
 
-El sistema define 3 niveles jerárquicos de administración interna, acompañados por un nivel de acceso público para el ciudadano:
+### Requerimientos Funcionales
 
-- Administrador Maestro (El Ministerio del Poder Popular para la Salud)
-- Administradores Regionales (Servicio Autónomo de Contraloría Sanitaria (SACS) / Direcciones Regionales)
-- Administradores Locales (Centro de Salud / Institución sanitaria)
+- **Gestión de Identidad y Control de Acceso (RBAC):** Permitir la creación, modificación, suspensión y asignación granular de roles y permisos a usuarios administrativos según su jurisdicción territorial.
+- **Administración de Estructura Territorial e Infraestructura:** Registrar, habilitar y actualizar centros de salud asociados jerárquicamente a su respectiva parroquia, municipio y estado.
+- **Registro y Gestión de Ciudadanos:** Dar de alta nuevos pacientes en el sistema, actualizar sus datos demográficos o clínicos y gestionar vínculos de representación legal (menores de edad o dependientes).
+- **Control de Inventario y Logística de Biológicos:** Registrar la recepción de envíos, gestionar lotes de vacunas con sus fechas de expiración y mantener el inventario actualizado por cada centro de salud.
+- **Registro de Inmunización:** Documentar la aplicación de cada dosis asociando obligatoriamente al paciente, el esquema de vacunación, el lote utilizado, la fecha/hora y el centro de salud ejecutor.
+- **Gestión de Exámenes y Certificación Médica:** Registrar parámetros y resultados de exámenes médicos clínicos para evaluar la aptitud del paciente y emitir certificados oficiales vinculados a su historial.
+- **Emisión y Validación de Tarjetas de Vacunación:** Generar tarjetas digitales firmadas electrónicamente con un código QR único verificable.
+- **Consulta Ciudadana Autónoma ("Tu Tarjeta"):** Proveer un portal público que permita a cualquier ciudadano verificar su estado de inmunización mediante su cédula de identidad y solicitar el reenvío de su tarjeta digital al correo electrónico registrado.
+- **Analítica y Monitoreo Epidemiológico:** Consolidar datos a nivel regional y nacional para generar métricas en tiempo real, mapas interactivos de distribución y cuadros comparativos de cobertura.
 
-### 1. Administrador Maestro (El Ministerio)
+### Requerimientos No Funcionales
+
+- **Seguridad y Cifrado de Datos:** Almacenar todas las credenciales de acceso mediante algoritmos de hash criptográfico seguro y validar la matriz de permisos en cada petición realizada a la API.
+- **Integridad Referencial y Trazabilidad:** Garantizar que ningún evento de inmunización o movimiento de inventario pueda registrarse sin su correspondiente vinculación territorial y de lote.
+- **Inalterabilidad y Verificabilidad Pública:** Asegurar que los códigos únicos de verificación asociados a tarjetas y certificados médicos no puedan ser falsificados y permitan una validación instantánea sin comprometer datos sensibles adicionales.
+- **Disponibilidad y Rendimiento en Punto de Atención:** Mantener tiempos de respuesta óptimos en los módulos operativos locales y en el portal ciudadano para evitar cuellos de botella durante jornadas masivas de vacunación.
+- **Escalabilidad Territorial:** Soportar el crecimiento progresivo de centros de salud, esquemas de vacunación y registros poblacionales a escala nacional sin degradación en la consolidación de reportes.
+
+## Estructura de Roles y Niveles de Permiso
+
+El sistema define tres niveles jerárquicos de administración interna, acompañados por un nivel de acceso público para el ciudadano:
+
+- **Administrador Maestro:** Ministerio del Poder Popular para la Salud.
+- **Administradores Regionales:** Direcciones Regionales de Salud.
+- **Administradores Locales:** Centros de Salud e instituciones sanitarias.
+
+### Administrador Maestro (El Ministerio)
 
 Nivel de autoridad máxima con acceso global sin restricciones.
 
@@ -22,228 +44,355 @@ Nivel de autoridad máxima con acceso global sin restricciones.
 - **Consolidación Nacional de Datos:** Acceso unificado a los registros de vacunación y exámenes de todo el país.
 - **Dashboard Centralizado:** Visualización de métricas nacionales en tiempo real, análisis de coberturas epidemiológicas y cuadros comparativos por estado y municipio.
 
-### 2. Administradores Regionales (SACS / Direcciones Regionales)
+### Administradores Regionales (Direcciones Regionales)
 
-Supervisan la gestión de salud pública dentro de una jurisdicción geográfica específica (estatalmente).
+Supervisan la gestión de salud pública dentro de una jurisdicción geográfica específica (nivel estatal).
 
 - **Gestión de Infraestructura Regional:** Registro, habilitación y actualización de centros de salud dentro de sus municipios y parroquias.
 - **Gestión de Administradores Locales:** Alta y asignación de administradores para los centros habilitados en su región.
 - **Supervisión y Análisis:** Monitoreo de coberturas y mapas interactivos de distribución a nivel regional.
 - **Módulo de Validación y Emisión:** Verificación de certificados presentados físicamente, tarjeta de vacunación digital y emisión del Certificado Oficial de Salud del centro.
 
-### 3. Administradores Locales (Centro de Salud / Institución)
+### Administradores Locales (Centro de Salud / Institución Sanitaria)
 
 Perfil optimizado para la atención directa y expedita en el punto de vacunación.
 
 - **Registro de Pacientes:** Alta de nuevos ciudadanos en el sistema.
 - **Consulta y Actualización:** Verificación del historial de dosis administradas y actualización de datos demográficos o clínicos.
 - **Aplicación de Vacunas:** Registro de la dosis administrada, fecha/hora, lote y tipo de vacuna aplicada.
-- **Emisión de Carnet Local:** Generación e impresión de la tarjeta de vacunación del paciente.
+- **Emisión de Tarjeta local:** Generación e impresión de la tarjeta de vacunación del paciente.
 
-### 5. Módulo Ciudadano: "Tu Tarjeta"
+## Módulo Ciudadano: "Tu Tarjeta"
 
 Portal web público e independiente orientado a la consulta soberana del ciudadano.
 
 - **Consulta Express:** Verificación del estado de inmunización mediante el número de documento de identidad.
 - **Emisión Digital:** Reenvío automático de la tarjeta de vacunación digitalizada y firmada electrónicamente al correo registrado.
 
-### 2.1. Matriz Detallada de Permisos del Sistema (Catálogo RBAC)
+## Arquitectura General y Módulos del Sistema
 
-> Para el desglose individual de cada permiso con sus descripciones oficiales, scripts de inserción (Seed SQL) y tipado en TypeScript, consulte el documento especializado [Catálogo y Matriz de Permisos (RBAC)](./permissions.md).
+```mermaid
+---
+config:
+  layout: elk
+---
+flowchart TD
+    Ciudadano["Ciudadano"]
+    
+    %% subgraph Admins["Administradores"]
+        AdminMaestro["Administrador Maestro (Ministerio)"]
+        AdminRegional["Administradores Regionales"]
+        AdminLocal["Administradores Locales (Centros de Salud)"]
+    %% end
 
-| Permiso (`permission_name`) | Administrador Maestro | Administrador Regional | Administrador Local | Personal Inmunizador |
-| :--- | :---: | :---: | :---: | :---: |
-| `users:create` / `users:update` | SI (Nacional) | SI (Regional) | SI (Local) | NO |
-| `users:suspend` | SI | SI | SI | NO |
-| `roles:manage` | SI | NO | NO | NO |
-| `centers:create` / `centers:update` | SI (Nacional) | SI (En su estado) | NO | NO |
-| `centers:read` | SI | SI | SI | SI |
-| `vaccines:manage` | SI | NO | NO | NO |
-| `inventory:manage` | SI | NO | SI (En su centro) | NO |
-| `inventory:read` | SI | SI | SI | SI |
-| `recipients:create` / `recipients:update` | NO | NO | SI | SI |
-| `recipients:read` | SI | SI | SI | SI |
-| `immunizations:create` | NO | NO | NO | SI |
-| `immunizations:read` | SI | SI | SI | SI |
-| `exams:create` / `exams:read` | NO | NO | SI | SI |
-| `certificates:issue` | NO | NO | SI | SI (Carnet local) |
-| `certificates:verify` | SI | SI | SI | SI |
-| `reports:national` | SI | NO | NO | NO |
-| `reports:regional` | SI | SI | NO | NO |
-| `reports:local` | SI | SI | SI | SI |
+    ModCiudadano["Módulo Ciudadano: Tu Tarjeta"]
 
-## 3. Arquitectura General y Módulos del Sistema
+    ModIAM["Identidades y Acceso"]
+    ModTerritorial["Estructura Territorial e Infraestructura"]
+    ModPacientes["Registro Demográfico y Pacientes"]
+    ModInventario["Cadena de Suministro e Inventario"]
+    ModClinico["Registro Clínico y Esquemas de Inmunización"]
+    ModCertificacion["Certificación y Validación Criptográfica"]
+    ModAnalitica["Analítica y Monitoreo Epidemiológico"]
 
-![Arquitectura](./media/arquitectura.svg)
+    BD[("vacunas_bd")]
 
-## 4. Modelo de Datos Relacional (Entidad-Relación)
+    AdminMaestro --> ModIAM
+    AdminMaestro --> ModTerritorial
+    AdminMaestro --> ModClinico
+    AdminMaestro --> ModAnalitica
 
-El modelo relacional garantiza la trazabilidad geográfica, la integridad clínica de las dosis aplicadas y el control de acceso estricto mediante RBAC:
+    AdminRegional --> ModIAM
+    AdminRegional --> ModTerritorial
+    AdminRegional --> ModInventario
+    AdminRegional --> ModCertificacion
+    AdminRegional --> ModAnalitica
 
-![ERD](./media/ERD.svg)
+    AdminLocal --> ModPacientes
+    AdminLocal --> ModInventario
+    AdminLocal --> ModClinico
+    AdminLocal --> ModCertificacion
 
-### 4.1. Diccionario de Datos: Módulo Territorial y Centro de Salud
+    Ciudadano --> ModCiudadano
+    ModCiudadano --> ModCertificacion
+    %% ModCiudadano --> ModPacientes
 
-#### Tabla: `STATE` (Estado)
-Representa la división política territorial de primer nivel (24 entidades federales de Venezuela).
+    ModIAM --> ModTerritorial
+    ModTerritorial --> ModPacientes
+    ModPacientes --> ModClinico
+    ModInventario --> ModClinico
+    ModClinico --> ModCertificacion
 
-| Campo | Tipo | Nulo | Restricciones | Descripción |
-| :--- | :--- | :---: | :--- | :--- |
-| `id_state` | INT (PK) | No | Auto-incremental | Identificador único del estado. |
-| `name` | VARCHAR(100) | No | UNIQUE | Nombre oficial de la entidad federal (ej. *Miranda*, *Aragua*, *Zulia*). |
-| `code` | VARCHAR(10) | No | UNIQUE | Código ISO / sigla ministerial (ej. `MIR`, `ARA`, `ZUL`, `DC`). |
-
-#### Tabla: `MUNICIPALITY` (Municipio)
-División territorial de segundo nivel adscrita a un estado específico.
-
-| Campo | Tipo | Nulo | Restricciones | Descripción |
-| :--- | :--- | :---: | :--- | :--- |
-| `id_municipality` | INT (PK) | No | Auto-incremental | Identificador único del municipio. |
-| `name` | VARCHAR(100) | No | | Nombre del municipio (ej. *Chacao*, *Sucre*, *Girardot*). |
-| `id_state` | INT (FK) | No | REFERENCES `STATE(id_state)` | Estado al que pertenece. |
-
-#### Tabla: `PARISH` (Parroquia)
-División territorial de tercer nivel adscrita a un municipio. Nivel de demarcación local para los centros de salud.
-
-| Campo | Tipo | Nulo | Restricciones | Descripción |
-| :--- | :--- | :---: | :--- | :--- |
-| `id_parish` | INT (PK) | No | Auto-incremental | Identificador único de la parroquia. |
-| `name` | VARCHAR(100) | No | | Nombre de la parroquia (ej. *Petare*, *El Recreo*, *Choroni*). |
-| `id_municipality` | INT (FK) | No | REFERENCES `MUNICIPALITY(id_municipality)` | Municipio al que pertenece. |
-
-#### Tabla: `HEALTH_CENTER` (Centro de Salud)
-Unidad médico-asistencial operativa donde se almacena biológico, se supervisa personal y se administran dosis a la población.
-
-| Campo | Tipo | Nulo | Restricciones | Descripción |
-| :--- | :--- | :---: | :--- | :--- |
-| `id_center` | INT (PK) | No | Auto-incremental | Identificador único del centro de salud. |
-| `code` | VARCHAR(50) | No | UNIQUE | Código oficial del centro (ej. `CS-MIR-001`, `AMB-ARA-042`). |
-| `name` | VARCHAR(150) | No | | Denominación oficial del centro (ej. *Ambulatorio La Victoria*). |
-| `type` | VARCHAR(50) | No | CHECK (`ambulatorio`, `hospital`, `cdi`, `clinica_popular`, `punto_vacunacion_movil`) | Tipología sanitaria del establecimiento. |
-| `address` | TEXT | No | | Dirección física o vialidad principal. |
-| `sector` | VARCHAR(100) | Sí | | Sector, caserío, barrio o comunidad específica. |
-| `status` | VARCHAR(20) | No | DEFAULT `'activo'` CHECK (`activo`, `inactivo`, `mantenimiento`) | Estatus operativo del establecimiento. |
-| `phone` | VARCHAR(20) | Sí | | Teléfono de contacto institucional. |
-| `email` | VARCHAR(120) | Sí | | Correo electrónico de coordinación médica. |
-| `id_parish` | INT (FK) | No | REFERENCES `PARISH(id_parish)` | Parroquia a la que está adscrito geográficamente. |
-
-### 4.2. Especificación DDL Relacional (Centro de Salud y Territorio)
-
-```sql
--- 1. Tabla de Estados
-CREATE TABLE STATE (
-    id_state SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    code VARCHAR(10) NOT NULL UNIQUE
-);
-
--- 2. Tabla de Municipios
-CREATE TABLE MUNICIPALITY (
-    id_municipality SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    id_state INT NOT NULL REFERENCES STATE(id_state) ON DELETE RESTRICT,
-    CONSTRAINT uq_municipality_state UNIQUE (name, id_state)
-);
-
--- 3. Tabla de Parroquias
-CREATE TABLE PARISH (
-    id_parish SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    id_municipality INT NOT NULL REFERENCES MUNICIPALITY(id_municipality) ON DELETE RESTRICT,
-    CONSTRAINT uq_parish_municipality UNIQUE (name, id_municipality)
-);
-
--- 4. Tabla de Centros de Salud
-CREATE TABLE HEALTH_CENTER (
-    id_center SERIAL PRIMARY KEY,
-    code VARCHAR(50) NOT NULL UNIQUE,
-    name VARCHAR(150) NOT NULL,
-    type VARCHAR(50) NOT NULL DEFAULT 'ambulatorio' CHECK (type IN ('ambulatorio', 'hospital', 'cdi', 'clinica_popular', 'punto_vacunacion_movil')),
-    address TEXT NOT NULL,
-    sector VARCHAR(100),
-    status VARCHAR(20) NOT NULL DEFAULT 'activo' CHECK (status IN ('activo', 'inactivo', 'mantenimiento')),
-    phone VARCHAR(20),
-    email VARCHAR(120),
-    id_parish INT NOT NULL REFERENCES PARISH(id_parish) ON DELETE RESTRICT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Índices de optimización geográfica y búsqueda
-CREATE INDEX idx_municipality_state ON MUNICIPALITY(id_state);
-CREATE INDEX idx_parish_municipality ON PARISH(id_municipality);
-CREATE INDEX idx_center_parish ON HEALTH_CENTER(id_parish);
-CREATE INDEX idx_center_name ON HEALTH_CENTER(name);
+    ModIAM --> BD
+    ModTerritorial --> BD
+    ModPacientes --> BD
+    ModInventario --> BD
+    ModClinico --> BD
+    ModCertificacion --> BD
+    ModAnalitica --> BD
 ```
 
-### 4.3. Implementación de Modelos en Backend (TypeScript / Mongoose)
+## Modelo de Datos Relacional
 
-Para la implementación en Node.js/Express con TypeScript (`app/backend`):
+Esquema que representa las entidades y sus relaciones dentro de nuestra base de datos
 
-```typescript
-// src/models/HealthCenter.ts
-import { Schema, model, Document, Types } from 'mongoose';
+```mermaid
+---
+config:
+  layout: elk
+---
+erDiagram
+    subgraph ubicacion_geografica ["Ubicación y Centros de Salud"]
+        estado {
+            int id PK
+            string nombre
+        }
+        municipio {
+            int id PK
+            int id_estado FK
+            string nombre
+        }
+        parroquia {
+            int id PK
+            int id_municipio FK
+            string nombre
+        }
+        centro_salud {
+            int id PK
+            int id_parroquia FK
+            string nombre
+            string direccion
+        }
+    end
 
-export type HealthCenterType = 'ambulatorio' | 'hospital' | 'cdi' | 'clinica_popular' | 'punto_vacunacion_movil';
-export type HealthCenterStatus = 'activo' | 'inactivo' | 'mantenimiento';
+    subgraph pacientes ["Pacientes y Representación"]
+        persona {
+            int id PK
+            string genero
+            decimal peso
+            datetime fecha_nacimiento
+            string primer_nombre
+            string segundo_nombre
+            string primer_apellido
+            string segundo_apellido
+            string cedula_de_identidad UK
+        }
+        representacion {
+            int id PK
+            int id_representante FK
+            int id_representado FK
+            string tipo_relacion
+        }
+    end
 
-export interface IHealthCenter extends Document {
-  name: string;
-  code: string;
-  type: HealthCenterType;
-  address: string;
-  sector?: string;
-  parishId: Types.ObjectId;
-  status: HealthCenterStatus;
-  phone?: string;
-  email?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+    subgraph vacunacion_logistica ["Vacunación, Lotes e Inventario"]
+        esquema_vacunacion {
+            int id PK
+            string rango_edad
+            datetime fecha_publicacion
+        }
+        vacuna {
+            int id PK
+            string nombre
+            string tipo
+        }
+        esquema_vacunacion_vacuna {
+            int id PK
+            int id_esquema_vacunacion FK
+            int id_vacuna FK
+        }
+        tarjeta_vacunacion {
+            int id PK
+            int id_persona FK
+            int id_esquema_vacunacion FK
+            string estatus
+            datetime fecha_emision
+            string codigo UK
+        }
+        lote {
+            int id PK
+            int id_vacuna FK
+            string numero_lote
+            datetime fecha_expiracion
+        }
+        inventario {
+            int id PK
+            int id_centro_salud FK
+            int id_lote FK
+            int cantidad_disponible
+        }
+        envio {
+            int id PK
+            int id_centro_salud FK
+            string codigo_orden
+            string nombre_remitente
+            datetime fecha
+            string estatus
+        }
+        detalle_envio {
+            int id PK
+            int id_envio FK
+            int id_lote FK
+            int cantidad
+        }
+        inmunizacion {
+            int id PK
+            int id_tarjeta_vacunacion FK
+            int id_lote FK
+            int id_centro_salud FK
+            datetime fecha_hora
+        }
+    end
 
-const healthCenterSchema = new Schema<IHealthCenter>(
-  {
-    name: { type: String, required: true, trim: true, maxlength: 150 },
-    code: { type: String, required: true, unique: true, uppercase: true, trim: true },
-    type: {
-      type: String,
-      enum: ['ambulatorio', 'hospital', 'cdi', 'clinica_popular', 'punto_vacunacion_movil'],
-      default: 'ambulatorio',
-    },
-    address: { type: String, required: true, trim: true },
-    sector: { type: String, trim: true },
-    parishId: { type: Schema.Types.ObjectId, ref: 'Parish', required: true, index: true },
-    status: { type: String, enum: ['activo', 'inactivo', 'mantenimiento'], default: 'activo' },
-    phone: { type: String, trim: true },
-    email: { type: String, trim: true, lowercase: true },
-  },
-  { timestamps: true }
-);
+    subgraph evaluacion_medica ["Exámenes y Certificados Médicos"]
+        examen_medico {
+            int id PK
+            string nombre
+            string descripcion
+        }
+        parametro_examen_medico {
+            int id PK
+            int id_examen_medico FK
+            decimal minimo
+            decimal maximo
+        }
+        resultado_examen_medico {
+            int id PK
+            int id_persona FK
+            int id_parametro_examen_medico FK
+            decimal valor
+            datetime fecha
+        }
+        certificado_medico {
+            int id PK
+            int id_persona FK
+            datetime fecha
+            string codigo UK
+        }
+    end
 
-healthCenterSchema.index({ name: 1, parishId: 1 });
+    subgraph seguridad_roles ["Usuarios, Roles y Permisos"]
+        usuario {
+            int id PK
+            string nombre
+            string correo UK
+            string hash_contrasena
+            datetime creado_en
+        }
+        rol {
+            int id PK
+            string nombre UK
+            string descripcion
+        }
+        permiso {
+            int id PK
+            string nombre UK
+            string descripcion
+        }
+        usuario_rol {
+            int id PK
+            int id_usuario FK
+            int id_rol FK
+        }
+        rol_permiso {
+            int id PK
+            int id_rol FK
+            int id_permiso FK
+        }
+    end
 
-export default model<IHealthCenter>('HealthCenter', healthCenterSchema);
+    subgraph alcance_geografico ["Alcance Geográfico de Usuarios"]
+        usuario_estado {
+            int id PK
+            int id_usuario FK
+            int id_estado FK
+        }
+        usuario_municipio {
+            int id PK
+            int id_usuario FK
+            int id_municipio FK
+        }
+        usuario_parroquia {
+            int id PK
+            int id_usuario FK
+            int id_parroquia FK
+        }
+        usuario_centro {
+            int id PK
+            int id_usuario FK
+            int id_centro_salud FK
+        }
+    end
+
+    estado ||--o{ municipio : "contiene"
+    municipio ||--o{ parroquia : "contiene"
+    parroquia ||--o{ centro_salud : "contiene"
+    centro_salud ||--o{ inmunizacion : "realiza"
+    centro_salud ||--o{ envio : "recibe"
+    centro_salud ||--o{ inventario : "mantiene"
+
+    esquema_vacunacion ||--o{ esquema_vacunacion_vacuna : "contiene"
+    vacuna ||--o{ esquema_vacunacion_vacuna : "contiene"
+    vacuna ||--o{ lote : "tiene"
+    lote ||--o{ inventario : "registrado en"
+    lote ||--o{ detalle_envio : "incluye"
+    lote ||--o{ inmunizacion : "utiliza"
+    envio ||--o{ detalle_envio : "contiene"
+
+    representacion }o--|| persona : "representado por"
+    representacion }o--|| persona : "representa a"
+    persona ||--o{ tarjeta_vacunacion : "posee"
+    esquema_vacunacion ||--o{ tarjeta_vacunacion : "plantilla para"
+    tarjeta_vacunacion ||--o{ inmunizacion : "registra"
+
+    persona ||--o{ certificado_medico : "recibe"
+    persona ||--o{ resultado_examen_medico : "tiene"
+    examen_medico ||--o{ parametro_examen_medico : "tiene"
+    parametro_examen_medico ||--o{ resultado_examen_medico : "evaluado en"
+
+    usuario ||--o{ usuario_rol : "tiene"
+    rol ||--o{ usuario_rol : "tiene"
+    rol ||--o{ rol_permiso : "tiene"
+    permiso ||--o{ rol_permiso : "tiene"
+
+    usuario ||--o{ usuario_estado : "tiene"
+    estado ||--o{ usuario_estado : "asigna"
+
+    usuario ||--o{ usuario_municipio : "tiene"
+    municipio ||--o{ usuario_municipio : "asigna"
+
+    usuario ||--o{ usuario_parroquia : "tiene"
+    parroquia ||--o{ usuario_parroquia : "asigna"
+
+    usuario ||--o{ usuario_centro : "tiene"
+    centro_salud ||--o{ usuario_centro : "asigna"
 ```
 
-## 5. Flujos de Trabajo e Interacción de Procesos
+## Flujos de Trabajo e Interacción de Procesos
 
-### 5.1. Diagrama de Flujo del Proceso de Inmunización y Certificación
+### Proceso de Inmunización y Certificación
 
 Modela el flujo de decisión clínica para la atención de pacientes, evaluación del esquema de vacunación y generación final de certificados médicos sanitarios:
 
-![Diagrama de flujo](./media/diagrama-de-flujo.svg)
-
-## 6. Especificaciones de Implementación y Seguridad
-
-1. **Autenticación y Seguridad Granular:**
-
-- Las contraseñas deben almacenarse encriptadas con algoritmo hash seguro (`passwordHash` en la tabla `USER`).
-- Toda petición a la API debe validar la matriz de permisos de la tabla intermedia `ROLE_PERMISSION`.
-
-2. **Trazabilidad Territorial Obligatoria:**
-
-- Cada registro de aplicación en `IMMUNIZATION` requiere la llave foránea obligatoria `idCenter`, garantizando la auditoría exacta del centro de salud, parroquia, municipio y estado donde se aplicó el biológico.
-
-3. **Verificación de Certificados:**
-
-- El atributo `code` en la tabla `MEDICAL_CERTIFICATE` contendrá un hash alfanumérico único asociado a un código QR impreso en la tarjeta digital del ciudadano, permitiendo la validación pública e inalterable desde el módulo "Tu Tarjeta".
+```mermaid
+graph TD
+    A[Ciudadano acude al Centro de Salud] --> B{¿Está registrado en el sistema?}
+    B -- No --> C[Administrador Local realiza Alta de Paciente]
+    C --> D[Verificación de Esquema de Vacunación según Edad/Historial]
+    B -- Sí --> D
+    
+    D --> E[Evaluación de Aptitud y Exámenes Médicos previos si aplica]
+    E --> F[Selección de Vacuna y Lote disponible en Inventario Local]
+    
+    F --> G[Aplicación de la Dosis]
+    G --> H[Registro de Inmunización vinculado a Centro y Lote]
+    H --> I[Descuento automático de stock en Inventario del Centro]
+    
+    I --> J{¿Completa esquema requerido?}
+    J -- Sí --> K[Generación de Tarjeta de Vacunación y Código QR Único]
+    J -- No --> L[Actualización parcial del historial en Tarjeta Digital]
+    
+    K --> M[Emisión de Certificado Oficial]
+    L --> M
+    M --> N[Envío automático de confirmación/copia digital al correo del ciudadano]
+```
