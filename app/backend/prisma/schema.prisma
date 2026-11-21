@@ -7,256 +7,282 @@ datasource db {
   provider = "mysql"
 }
 
-model State {
-  id             Int            @id @default(autoincrement()) @map("id_state")
-  name           String         @db.VarChar(150)
-  municipalities Municipality[]
-
-  @@map("states")
-}
-
-model Municipality {
-  id       Int      @id @default(autoincrement()) @map("id_municipality")
-  name     String   @db.VarChar(150)
-  idState  Int      @map("id_state")
-  state    State    @relation(fields: [idState], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  parishes Parish[]
-
-  @@map("municipalities")
-}
-
-model Parish {
-  id             Int            @id @default(autoincrement()) @map("id_parish")
-  name           String         @db.VarChar(150)
-  idMunicipality Int            @map("id_municipality")
-  municipality   Municipality   @relation(fields: [idMunicipality], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  healthCenters  HealthCenter[]
-
-  @@map("parishes")
-}
-
-model HealthCenter {
-  id       Int    @id @default(autoincrement()) @map("id_center")
-  name     String @db.VarChar(200)
-  address  String @db.Text
-  idParish Int    @map("id_parish")
-  parish   Parish @relation(fields: [idParish], references: [id], onDelete: Restrict, onUpdate: Cascade)
-
-  immunizations Immunization[]
-  shipments     Shipment[]
-  inventories   Inventory[]
-
-  @@map("health_centers")
-}
-
-model Person {
-  id                   Int      @id @default(autoincrement()) @map("id_person")
-  genre                String   @db.Char(1)
-  birthday             DateTime
-  name                 String   @db.VarChar(100)
-  weight               Decimal  @default(0)
-  secondName           String?  @map("second_name") @db.VarChar(100)
-  lastName             String   @map("last_name") @db.VarChar(100)
-  secondLastName       String?  @map("second_last_name") @db.VarChar(100)
-  identificationNumber String?  @unique @map("identification_number") @db.VarChar(50)
-
-  parentRelations ParentChild[] @relation("ChildToParents")
-  childRelations  ParentChild[] @relation("ParentToChildren")
-
-  immunizations       Immunization[]
-  medicalExamResults  MedicalExamResult[]
-  medicalCertificates MedicalCertificate[]
-
-  @@map("person")
-}
-
-model ParentChild {
-  id Int @id @default(autoincrement()) @map("id_parent_child")
-
-  parentId Int    @map("parent_id")
-  parent   Person @relation("ParentToChildren", fields: [parentId], references: [id], onDelete: Cascade)
-
-  childId Int    @map("child_id")
-  child   Person @relation("ChildToParents", fields: [childId], references: [id], onDelete: Cascade)
-
-  relationType String? @map("relation_type") @db.VarChar(50)
-
-  @@unique([parentId, childId])
-  @@map("parent_child")
-}
-
-model VaccineCard {
-  id            Int      @id
-  ageRange      String   @map("age_range")
-  publishedDate DateTime @map("published_date")
-
-  vaccines Vaccine[]
-
-  @@map("vaccine_card")
-}
-
-model Vaccine {
-  id   Int    @id @default(autoincrement()) @map("id_vaccine")
-  name String @db.VarChar(150)
-  type String @db.VarChar(100)
-
-  batches       Batch[]
-  immunizations Immunization[]
-  vaccineCards  VaccineCard[]
-
-  @@map("vaccines")
-}
-
-model Batch {
-  id             Int      @id @default(autoincrement()) @map("id_batch")
-  idVaccine      Int      @map("vaccine_id")
-  lotNumber      String   @map("lot_number") @db.VarChar(100)
-  expirationDate DateTime @map("expiration_date") @db.Date
-
-  vaccine       Vaccine        @relation(fields: [idVaccine], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  inventories   Inventory[]
-  immunizations Immunization[]
-  shipmentItems ShipmentItem[]
-
-  @@map("batch")
-}
-
-model Inventory {
-  id                Int @id @default(autoincrement()) @map("id_inventory")
-  idCenter          Int @map("health_center_id")
-  idBatch           Int @map("batch_id")
-  quantityAvailable Int @map("quantity_available")
-
-  healthCenter HealthCenter @relation(fields: [idCenter], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  batch        Batch        @relation(fields: [idBatch], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([idCenter, idBatch])
-  @@map("inventory")
-}
-
-enum ShipmentStatus {
-  PENDING
-  SENT
-}
-
-model Shipment {
-  id         Int            @id @default(autoincrement()) @map("id_shipment")
-  idCenter   Int            @map("health_center_id")
-  orderCode  String         @map("order_code")
-  senderName String         @map("sender_name")
-  date       DateTime       @map("order_date")
-  status     ShipmentStatus
-
-  healthCenter  HealthCenter   @relation(fields: [idCenter], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  shipmentItems ShipmentItem[]
-
-  @@map("shipment")
-}
-
-model ShipmentItem {
-  id         Int @id @default(autoincrement()) @map("id_shipment_item")
-  idShipment Int @map("id_shipment")
-  idBatch    Int @map("batch_id")
-  quantity   Int
-
-  shipment Shipment @relation(fields: [idShipment], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  batch    Batch    @relation(fields: [idBatch], references: [id], onDelete: Restrict, onUpdate: Cascade)
-
-  @@map("shipment_item")
-}
-
-model Immunization {
-  idDose    Int      @id @default(autoincrement()) @map("id_dose")
-  idPerson  Int      @map("id_person")
-  idVaccine Int      @map("id_vaccine")
-  idBatch   Int      @map("batch_id")
-  idCenter  Int      @map("id_center")
-  dateTime  DateTime @map("immunization_date") @db.DateTime
-
-  person       Person               @relation(fields: [idPerson], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  vaccine      Vaccine              @relation(fields: [idVaccine], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  batch        Batch                @relation(fields: [idBatch], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  healthCenter HealthCenter         @relation(fields: [idCenter], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  certificates MedicalCertificate[]
-
-  @@map("immunizations")
-}
-
-model MedicalExam {
-  id         Int                    @id @default(autoincrement()) @map("id_exam")
-  name       String                 @db.VarChar(50)
-  parameters MedicalExamParameter[]
-
-  @@map("medical_exams")
-}
-
-model MedicalExamParameter {
-  id            Int                 @id @default(autoincrement())
-  medicalExamId Int                 @map("medical_exam_id")
-  min           Decimal
-  max           Decimal
-  medicalExam   MedicalExam         @relation(fields: [medicalExamId], references: [id])
-  results       MedicalExamResult[]
-
-  @@map("medical_exam_parameter")
-}
-
-model MedicalExamResult {
-  id                     Int                  @id @default(autoincrement())
-  medicalExamParameterId Int                  @map("medical_exam_parameter_id")
-  medicalCertificateId   Int                  @map("medical_certificate_id")
-  personId               Int                  @map("person_id")
-  value                  Decimal
-  date                   DateTime
-  medicalExamParameter   MedicalExamParameter @relation(fields: [medicalExamParameterId], references: [id])
-  medicalCertificate     MedicalCertificate   @relation(fields: [medicalCertificateId], references: [id])
-  person                 Person               @relation(fields: [personId], references: [id])
-
-  @@map("medical_exam_result")
-}
-
-model MedicalCertificate {
-  id       Int    @id @default(autoincrement()) @map("id_certificate")
-  idDose   Int    @map("id_dose")
-  idPerson Int    @map("id_person")
-  code     String @unique @db.VarChar(100)
-
-  results      MedicalExamResult[]
-  immunization Immunization        @relation(fields: [idDose], references: [idDose], onDelete: Restrict, onUpdate: Cascade)
-  person       Person              @relation(fields: [idPerson], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@map("medical_certificates")
-}
+// --- AUTENTICACIÓN Y ROLES ---
 
 model User {
-  id           Int      @id @default(autoincrement())
-  name         String   @db.VarChar(150)
-  email        String   @unique @db.VarChar(150)
-  passwordHash String   @map("password_hash") @db.VarChar(255)
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp
+  id           Int      @id @default(autoincrement()) @map("id")
+  name         String   @map("nombre") @db.VarChar(150)
+  email        String   @unique @map("correo") @db.VarChar(150)
+  passwordHash String   @map("hash_contrasena") @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("creado_en") @db.Timestamp
 
-  roles Role[]
+  roles          Role[]
+  states         State[]
+  municipalities Municipality[]
+  parishes       Parish[]
+  healthCenters  HealthCenter[]
 
-  @@map("users")
+  @@map("usuario")
 }
 
 model Role {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique @db.VarChar(100)
-  description String? @db.VarChar(255)
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @unique @map("nombre") @db.VarChar(100)
+  description String? @map("descripcion") @db.VarChar(255)
 
   users       User[]
   permissions Permission[]
 
-  @@map("roles")
+  @@map("rol")
 }
 
 model Permission {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique @db.VarChar(100)
-  description String? @db.VarChar(255)
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @unique @map("nombre") @db.VarChar(100)
+  description String? @map("descripcion") @db.VarChar(255)
 
   roles Role[]
 
-  @@map("permissions")
+  @@map("permiso")
+}
+
+// --- UBICACIÓN GEOGRÁFICA ---
+
+model State {
+  id             Int            @id @default(autoincrement()) @map("id")
+  name           String         @map("nombre") @db.VarChar(150)
+  municipalities Municipality[]
+  users          User[]
+
+  @@map("estado")
+}
+
+model Municipality {
+  id      Int    @id @default(autoincrement()) @map("id")
+  name    String @map("nombre") @db.VarChar(150)
+  idState Int    @map("id_estado")
+
+  state    State    @relation(fields: [idState], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parishes Parish[]
+  users    User[]
+
+  @@map("municipio")
+}
+
+model Parish {
+  id             Int    @id @default(autoincrement()) @map("id")
+  name           String @map("nombre") @db.VarChar(150)
+  idMunicipality Int    @map("id_municipio")
+
+  municipality  Municipality   @relation(fields: [idMunicipality], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  healthCenters HealthCenter[]
+  users         User[]
+
+  @@map("parroquia")
+}
+
+model HealthCenter {
+  id       Int    @id @default(autoincrement()) @map("id")
+  idParish Int    @map("id_parroquia")
+  name     String @map("nombre") @db.VarChar(200)
+  address  String @map("direccion") @db.Text
+
+  parish        Parish         @relation(fields: [idParish], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  inventories   Inventory[]
+  shipments     Shipment[]
+  immunizations Immunization[]
+  users         User[]
+
+  @@map("centro_salud")
+}
+
+// --- PERSONAS Y REPRESENTACIONES ---
+
+model Person {
+  id                   Int      @id @default(autoincrement()) @map("id")
+  genre                String   @map("genero") @db.Char(1)
+  weight               Decimal  @default(0) @map("peso")
+  birthday             DateTime @map("fecha_nacimiento")
+  firstName            String   @map("primer_nombre") @db.VarChar(100)
+  secondName           String?  @map("segundo_nombre") @db.VarChar(100)
+  lastName             String   @map("primer_apellido") @db.VarChar(100)
+  secondLastName       String?  @map("segundo_apellido") @db.VarChar(100)
+  identificationNumber String?  @unique @map("cedula_de_identidad") @db.VarChar(50)
+
+  representatives     Representation[]     @relation("RepresentedToRepresentative")
+  represented         Representation[]     @relation("RepresentativeToRepresented")
+  vaccineCards        VaccineCard[]
+  medicalCertificates MedicalCertificate[]
+  medicalExamResults  MedicalExamResult[]
+
+  @@map("persona")
+}
+
+model Representation {
+  id               Int     @id @default(autoincrement()) @map("id")
+  idRepresentative Int     @map("id_representante")
+  idRepresented    Int     @map("id_representado")
+  relationType     String? @map("tipo_relacion") @db.VarChar(50)
+
+  representative Person @relation("RepresentativeToRepresented", fields: [idRepresentative], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  represented    Person @relation("RepresentedToRepresentative", fields: [idRepresented], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idRepresentative, idRepresented])
+  @@map("representacion")
+}
+
+// --- VACUNAS Y ESQUEMAS ---
+
+model Vaccine {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @map("nombre") @db.VarChar(150)
+  type String @map("tipo") @db.VarChar(100)
+
+  batches              Batch[]
+  vaccinationSchedules VaccinationSchedule[]
+
+  @@map("vacuna")
+}
+
+model VaccinationSchedule {
+  id            Int      @id @default(autoincrement()) @map("id")
+  ageRange      String   @map("rango_edad") @db.VarChar(50)
+  publishedDate DateTime @map("fecha_publicacion")
+
+  vaccines     Vaccine[]
+  vaccineCards VaccineCard[]
+
+  @@map("esquema_vacunacion")
+}
+
+model Batch {
+  id             Int      @id @default(autoincrement()) @map("id")
+  idVaccine      Int      @map("id_vacuna")
+  lotNumber      String   @map("numero_lote") @db.VarChar(100)
+  expirationDate DateTime @map("fecha_expiracion") @db.Date
+
+  vaccine       Vaccine        @relation(fields: [idVaccine], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  inventories   Inventory[]
+  shipmentItems ShipmentItem[]
+  immunizations Immunization[]
+
+  @@map("lote")
+}
+
+model VaccineCard {
+  id                    Int      @id @default(autoincrement()) @map("id")
+  idPerson              Int      @map("id_persona")
+  idVaccinationSchedule Int      @map("id_esquema_vacunacion")
+  status                String   @map("estatus") @db.VarChar(50)
+  emissionDate          DateTime @map("fecha_emision")
+  code                  String   @unique @map("codigo") @db.VarChar(100)
+
+  person              Person              @relation(fields: [idPerson], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vaccinationSchedule VaccinationSchedule @relation(fields: [idVaccinationSchedule], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  immunizations       Immunization[]
+
+  @@map("tarjeta_vacunacion")
+}
+
+// --- INVENTARIO Y ENVÍOS ---
+
+model Inventory {
+  id                Int @id @default(autoincrement()) @map("id")
+  idHealthCenter    Int @map("id_centro_salud")
+  idBatch           Int @map("id_lote")
+  quantityAvailable Int @map("cantidad_disponible")
+
+  healthCenter HealthCenter @relation(fields: [idHealthCenter], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  batch        Batch        @relation(fields: [idBatch], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([idHealthCenter, idBatch])
+  @@map("inventario")
+}
+
+model Shipment {
+  id         Int      @id @default(autoincrement()) @map("id")
+  idCenter   Int      @map("id_centro_salud")
+  orderCode  String   @map("codigo_orden") @db.VarChar(100)
+  senderName String   @map("nombre_remitente") @db.VarChar(150)
+  date       DateTime @map("fecha")
+  status     String   @map("estatus") @db.VarChar(50)
+
+  healthCenter  HealthCenter   @relation(fields: [idCenter], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shipmentItems ShipmentItem[]
+
+  @@map("envio")
+}
+
+model ShipmentItem {
+  id         Int @id @default(autoincrement()) @map("id")
+  idShipment Int @map("id_envio")
+  idBatch    Int @map("id_lote")
+  quantity   Int @map("cantidad")
+
+  shipment Shipment @relation(fields: [idShipment], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  batch    Batch    @relation(fields: [idBatch], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@map("detalle_envio")
+}
+
+// --- INMUNIZACIONES Y EXÁMENES MÉDICOS ---
+
+model Immunization {
+  id             Int      @id @default(autoincrement()) @map("id")
+  idVaccineCard  Int      @map("id_tarjeta_vacunacion")
+  idBatch        Int      @map("id_lote")
+  idHealthCenter Int      @map("id_centro_salud")
+  dateTime       DateTime @map("fecha_hora")
+
+  vaccineCard  VaccineCard  @relation(fields: [idVaccineCard], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  batch        Batch        @relation(fields: [idBatch], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  healthCenter HealthCenter @relation(fields: [idHealthCenter], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@map("inmunizacion")
+}
+
+model MedicalExam {
+  id          Int     @id @default(autoincrement()) @map("id")
+  name        String  @map("nombre") @db.VarChar(100)
+  description String? @map("descripcion") @db.VarChar(255)
+
+  parameters MedicalExamParameter[]
+
+  @@map("examen_medico")
+}
+
+model MedicalExamParameter {
+  id            Int     @id @default(autoincrement()) @map("id")
+  idMedicalExam Int     @map("id_examen_medico")
+  min           Decimal @map("minimo")
+  max           Decimal @map("maximo")
+
+  medicalExam MedicalExam         @relation(fields: [idMedicalExam], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  results     MedicalExamResult[]
+
+  @@map("parametro_examen_medico")
+}
+
+model MedicalCertificate {
+  id       Int      @id @default(autoincrement()) @map("id")
+  idPerson Int      @map("id_persona")
+  date     DateTime @map("fecha")
+  code     String   @unique @map("codigo") @db.VarChar(100)
+
+  person Person @relation(fields: [idPerson], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("certificado_medico")
+}
+
+model MedicalExamResult {
+  id                     Int      @id @default(autoincrement()) @map("id")
+  idPerson               Int      @map("id_persona")
+  idMedicalExamParameter Int      @map("id_parametro_examen_medico")
+  value                  Decimal  @map("valor")
+  date                   DateTime @map("fecha")
+
+  person               Person               @relation(fields: [idPerson], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  medicalExamParameter MedicalExamParameter @relation(fields: [idMedicalExamParameter], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("resultado_examen_medico")
 }
