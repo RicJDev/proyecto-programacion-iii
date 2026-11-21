@@ -5,15 +5,15 @@ Este documento describe la arquitectura de semillas SQL del sistema para garanti
 ## 1. Archivos de Semilla SQL
 
 - **[`app/backend/prisma/seed.base.sql`](../app/backend/prisma/seed.base.sql)** (y copia de referencia en **[`docs/seed.base.sql`](./seed.base.sql)**):
-  Contiene las sentencias `INSERT INTO ... ON DUPLICATE KEY UPDATE` con los datos base obligatorios que se cargan **siempre** en cualquier entorno:
-  - **25 Estados / Entidades Federales** (`states`)
-  - **335 Municipios** (`municipalities`)
-  - **1,138 Parroquias** (`parishes`)
-  - **11 Vacunas del Esquema Nacional** (`vaccines`)
-  - **23 Permisos RBAC** (`permissions`)
-  - **4 Roles Jerárquicos y sus asignaciones** (`roles`, `_PermissionToRole`)
+  Contiene las sentencias `INSERT INTO ... ON DUPLICATE KEY UPDATE` alineadas con el esquema actual (`schema.prisma`) con los datos base obligatorios que se cargan **siempre** en cualquier entorno:
+  - **25 Estados / Entidades Federales** (`estado`)
+  - **335 Municipios** (`municipio`)
+  - **1,138 Parroquias** (`parroquia`)
+  - **11 Vacunas del Esquema Nacional** (`vacuna`)
+  - **27 Permisos RBAC** (`permiso`)
+  - **3 Roles Jerárquicos y sus asignaciones** (`rol`, `_PermissionToRole`)
 - **[`app/backend/prisma/seed.dev.sql`](../app/backend/prisma/seed.dev.sql)**:
-  Datos de prueba para entornos de desarrollo (usuarios demostrativos por rol, centros de salud vinculados a parroquias reales, lotes, inventario, pacientes, relaciones parentales, inmunizaciones, exámenes médicos y certificados).
+  Datos de prueba para entornos de desarrollo (usuarios demostrativos por rol, centros de salud vinculados a parroquias reales, esquemas de vacunación, lotes, inventario, pacientes, representaciones, tarjetas, inmunizaciones, exámenes médicos y certificados).
 - **[`app/backend/prisma/seed.prod.sql`](../app/backend/prisma/seed.prod.sql)**:
   Datos mínimos iniciales para producción (usuario Administrador Maestro inicial).
 - **[`app/backend/prisma/seed.ts`](../app/backend/prisma/seed.ts)**:

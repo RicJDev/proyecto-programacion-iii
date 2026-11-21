@@ -5,7 +5,7 @@
 -- =============================================================================
 
 -- VACUNAS
-INSERT INTO `vaccines` (`id_vaccine`, `name`, `type`) VALUES
+INSERT INTO `vacuna` (`id`, `nombre`, `tipo`) VALUES
 (1, 'BCG (Bacilo Calmette-Guérin)', 'Bacteriana viva atenuada'),
 (2, 'Hepatitis B Pediátrica', 'Recombinante vírica'),
 (3, 'Pentavalente (DPT + HB + Hib)', 'Combinada bacteriana/vírica'),
@@ -17,42 +17,45 @@ INSERT INTO `vaccines` (`id_vaccine`, `name`, `type`) VALUES
 (9, 'Neumococo Conjugada (PCV13)', 'Bacteriana conjugada'),
 (10, 'Influenza Estacional', 'Vírica inactivada'),
 (11, 'COVID-19 (Sputnik V / Sinopharm)', 'Vector viral / Inactivada')
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `type` = VALUES(`type`);
+ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`), `tipo` = VALUES(`tipo`);
 
 -- PERMISOS
-INSERT INTO `permissions` (`id`, `name`, `description`) VALUES
-(1, 'users:create', 'Crear y registrar nuevos usuarios en el sistema'),
+INSERT INTO `permiso` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'users:create', 'Crear y registrar nuevas cuentas de usuario administrativas en el sistema'),
 (2, 'users:read', 'Consultar y listar cuentas de usuario existentes'),
-(3, 'users:update', 'Actualizar datos, credenciales y perfiles de usuarios'),
+(3, 'users:update', 'Actualizar datos, credenciales y perfiles de usuarios administrativos'),
 (4, 'users:suspend', 'Suspender, desactivar o revocar el acceso a un usuario'),
-(5, 'roles:manage', 'Crear roles y gestionar la asignación de permisos globales'),
-(6, 'centers:create', 'Registrar y dar de alta un nuevo centro de salud'),
-(7, 'centers:read', 'Consultar el directorio y detalles de centros de salud'),
-(8, 'centers:update', 'Modificar datos y estatus operativo de centros'),
-(9, 'recipients:create', 'Dar de alta a un nuevo paciente en el padrón nacional'),
-(10, 'recipients:read', 'Buscar y consultar expedientes de pacientes'),
-(11, 'recipients:update', 'Actualizar información de pacientes'),
-(12, 'vaccines:manage', 'Administrar el catálogo nacional de vacunas'),
-(13, 'inventory:read', 'Consultar existencias de stock y lotes disponibles'),
-(14, 'inventory:manage', 'Recepcionar y controlar el stock de biológicos'),
-(15, 'immunizations:create', 'Registrar formalmente la aplicación de una dosis'),
-(16, 'immunizations:read', 'Consultar historial de dosis aplicadas'),
-(17, 'exams:create', 'Registrar resultados de evaluaciones médicas'),
-(18, 'exams:read', 'Consultar historial de exámenes médicos'),
-(19, 'certificates:issue', 'Emitir y firmar certificados sanitarios oficiales y carnets'),
-(20, 'certificates:verify', 'Validar autenticidad de certificados mediante código QR'),
-(21, 'reports:national', 'Acceder al dashboard de métricas epidemiológicas nacionales'),
-(22, 'reports:regional', 'Visualizar estadísticas de cobertura regional'),
-(23, 'reports:local', 'Generar reporte diario de dosis del centro de salud')
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `description` = VALUES(`description`);
+(5, 'roles:manage', 'Crear roles y gestionar la asignación granular de permisos'),
+(6, 'centers:create', 'Registrar y habilitar un nuevo centro de salud asociado a su parroquia, municipio y estado'),
+(7, 'centers:read', 'Consultar el directorio, ubicación y detalles de centros de salud'),
+(8, 'centers:update', 'Modificar datos, estatus operativo e información de centros de salud'),
+(9, 'recipients:create', 'Dar de alta a un nuevo ciudadano/paciente en el sistema'),
+(10, 'recipients:read', 'Buscar y consultar expedientes de pacientes por cédula de identidad o nombre'),
+(11, 'recipients:update', 'Actualizar información demográfica, peso o datos clínicos base de los pacientes'),
+(12, 'representations:manage', 'Crear y gestionar vínculos de representación legal para menores o dependientes'),
+(13, 'vaccines:manage', 'Administrar el catálogo nacional de vacunas y biológicos'),
+(14, 'schemes:manage', 'Definir y publicar esquemas de vacunación por rango de edad y vacunas asociadas'),
+(15, 'shipments:manage', 'Registrar órdenes de envío, remitentes y detalles de lotes despachados a los centros'),
+(16, 'inventory:read', 'Consultar existencias de stock, lotes y fechas de expiración disponibles en el centro'),
+(17, 'inventory:manage', 'Recepcionar lotes, actualizar existencias y controlar el inventario local del centro'),
+(18, 'immunizations:create', 'Registrar la aplicación de una dosis vinculando paciente, tarjeta, lote, fecha/hora y centro'),
+(19, 'immunizations:read', 'Consultar el historial de dosis aplicadas de un paciente'),
+(20, 'exams:create', 'Configurar exámenes médicos, parámetros (mínimo/máximo) y registrar resultados de aptitud'),
+(21, 'exams:read', 'Consultar el historial de evaluaciones y resultados de exámenes médicos de un paciente'),
+(22, 'cards:issue', 'Generar, actualizar e imprimir/reenviar la tarjeta digital de vacunación con código QR único'),
+(23, 'certificates:issue', 'Emitir y firmar electrónicamente el Certificado Oficial de Salud del paciente'),
+(24, 'certificates:verify', 'Validar públicamente la autenticidad de tarjetas y certificados mediante su código único/QR'),
+(25, 'reports:national', 'Acceder al dashboard centralizado de métricas epidemiológicas y comparativas nacionales'),
+(26, 'reports:regional', 'Visualizar mapas interactivos y estadísticas de cobertura a nivel estatal/regional'),
+(27, 'reports:local', 'Generar reportes operativos de dosis aplicadas y movimientos de inventario por centro')
+ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`), `descripcion` = VALUES(`descripcion`);
 
 -- ROLES
-INSERT INTO `roles` (`id`, `name`, `description`) VALUES
-(1, 'admin_maestro', 'Autoridad central máxima del Ministerio de Salud con acceso irrestricto'),
-(2, 'admin_regional', 'Dirección regional de salud para supervisión de estado'),
-(3, 'admin_local', 'Administración y control operativo directo de un centro de salud'),
-(4, 'personal_inmunizador', 'Operador de campo para registro de pacientes y aplicación de dosis')
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `description` = VALUES(`description`);
+INSERT INTO `rol` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'admin_maestro', 'Administrador Maestro (Ministerio del Poder Popular para la Salud)'),
+(2, 'admin_regional', 'Administrador Regional (Direcciones Regionales de Salud / SACS)'),
+(3, 'admin_local', 'Administrador Local (Centro de Salud / Institución sanitaria)')
+ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`), `descripcion` = VALUES(`descripcion`);
 
 -- ASIGNACIÓN DE PERMISOS A ROLES
 INSERT IGNORE INTO `_PermissionToRole` (`A`, `B`) VALUES
@@ -65,15 +68,18 @@ INSERT IGNORE INTO `_PermissionToRole` (`A`, `B`) VALUES
 (7, 1),
 (8, 1),
 (10, 1),
-(12, 1),
 (13, 1),
 (14, 1),
+(15, 1),
 (16, 1),
-(18, 1),
+(17, 1),
+(19, 1),
 (20, 1),
 (21, 1),
-(22, 1),
-(23, 1),
+(24, 1),
+(25, 1),
+(26, 1),
+(27, 1),
 (1, 2),
 (2, 2),
 (3, 2),
@@ -82,43 +88,34 @@ INSERT IGNORE INTO `_PermissionToRole` (`A`, `B`) VALUES
 (7, 2),
 (8, 2),
 (10, 2),
-(13, 2),
+(15, 2),
 (16, 2),
-(18, 2),
-(20, 2),
+(19, 2),
+(21, 2),
 (22, 2),
 (23, 2),
-(1, 3),
+(24, 2),
+(26, 2),
+(27, 2),
 (2, 3),
 (3, 3),
-(4, 3),
 (7, 3),
 (9, 3),
 (10, 3),
 (11, 3),
-(13, 3),
-(14, 3),
+(12, 3),
 (16, 3),
 (17, 3),
 (18, 3),
 (19, 3),
 (20, 3),
-(23, 3),
-(7, 4),
-(9, 4),
-(10, 4),
-(11, 4),
-(13, 4),
-(15, 4),
-(16, 4),
-(17, 4),
-(18, 4),
-(19, 4),
-(20, 4),
-(23, 4);
+(21, 3),
+(22, 3),
+(24, 3),
+(27, 3);
 
 -- ESTADOS (25 Entidades Federales)
-INSERT INTO `states` (`id_state`, `name`) VALUES
+INSERT INTO `estado` (`id`, `nombre`) VALUES
 (1, 'Amazonas'),
 (2, 'Anzoátegui'),
 (3, 'Apure'),
@@ -144,10 +141,10 @@ INSERT INTO `states` (`id_state`, `name`) VALUES
 (23, 'Zulia'),
 (24, 'Distrito Capital'),
 (25, 'Dependencias Federales')
-ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
+ON DUPLICATE KEY UPDATE `nombre` = VALUES(`nombre`);
 
 -- MUNICIPIOS (335 Municipios de Venezuela)
-INSERT INTO `municipalities` (`id_municipality`, `id_state`, `name`) VALUES
+INSERT INTO `municipio` (`id`, `id_estado`, `nombre`) VALUES
 (1, 1, 'Alto Orinoco'),
 (2, 1, 'Atabapo'),
 (3, 1, 'Atures'),
@@ -483,10 +480,10 @@ INSERT INTO `municipalities` (`id_municipality`, `id_state`, `name`) VALUES
 (460, 23, 'Sucre'),
 (461, 23, 'Valmore Rodríguez'),
 (462, 24, 'Libertador')
-ON DUPLICATE KEY UPDATE `id_state` = VALUES(`id_state`), `name` = VALUES(`name`);
+ON DUPLICATE KEY UPDATE `id_estado` = VALUES(`id_estado`), `nombre` = VALUES(`nombre`);
 
 -- PARROQUIAS (1138 Parroquias de Venezuela)
-INSERT INTO `parishes` (`id_parish`, `id_municipality`, `name`) VALUES
+INSERT INTO `parroquia` (`id`, `id_municipio`, `nombre`) VALUES
 (1, 1, 'Alto Orinoco'),
 (2, 1, 'Huachamacare Acanaña'),
 (3, 1, 'Marawaka Toky Shamanaña'),
@@ -1625,4 +1622,4 @@ INSERT INTO `parishes` (`id_parish`, `id_municipality`, `name`) VALUES
 (1136, 462, 'Santa Teresa'),
 (1137, 462, 'Sucre (Catia)'),
 (1138, 462, '23 de enero')
-ON DUPLICATE KEY UPDATE `id_municipality` = VALUES(`id_municipality`), `name` = VALUES(`name`);
+ON DUPLICATE KEY UPDATE `id_municipio` = VALUES(`id_municipio`), `nombre` = VALUES(`nombre`);
