@@ -3,6 +3,7 @@ import path from 'node:path'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { PrismaClient } from '../src/generated/prisma/client'
 import { DB_URL } from '../src/config/variables'
+import { seedBase } from './seed.base'
 
 const adapter = new PrismaMariaDb(DB_URL)
 const prisma = new PrismaClient({ adapter })
@@ -38,7 +39,7 @@ async function runSqlFile(filePath: string, label: string) {
 }
 
 async function main() {
-  console.log('Iniciando carga de semilla SQL...')
+  console.log('Iniciando carga de semilla...')
 
   const prismaDir = __dirname
   const baseSqlPath = path.join(prismaDir, 'seed.base.sql')
@@ -46,16 +47,29 @@ async function main() {
     process.env.NODE_ENV === 'production' ? 'seed.prod.sql' : 'seed.dev.sql'
   const envSqlPath = path.join(prismaDir, envSqlFile)
 
-  // 1. Cargar SIEMPRE los datos base (Vacunas, Permisos, Roles, Estados, Municipios y Parroquias)
-  await runSqlFile(baseSqlPath, 'Semilla Base (seed.base.sql)')
+  // 1. Cargar SIEMPRE los datos geográficos base en SQL (Estados, Municipios y Parroquias)
+  await runSqlFile(baseSqlPath, 'Semilla Geográfica Base (seed.base.sql)')
 
-  // 2. Cargar datos según el entorno (desarrollo o producción)
+  // 2. Cargar SIEMPRE el resto de datos base desde seed.base.ts (Vacunas, Permisos y Roles)
+  await seedBase(prisma)
+
+  // 3. Cargar datos según el entorno (desarrollo o producción)
   await runSqlFile(envSqlPath, `Semilla de Entorno (${envSqlFile})`)
 
-  const [statesCount, municipalitiesCount, parishesCount] = await Promise.all([
+  const [
+    statesCount,
+    municipalitiesCount,
+    parishesCount,
+    vaccinesCount,
+    permissionsCount,
+    rolesCount,
+  ] = await Promise.all([
     prisma.state.count(),
     prisma.municipality.count(),
     prisma.parish.count(),
+    prisma.vaccine.count(),
+    prisma.permission.count(),
+    prisma.role.count(),
   ])
 
   console.log('------------------------------------------------------------')
@@ -63,6 +77,9 @@ async function main() {
   console.log(`- Estados cargados: ${statesCount}`)
   console.log(`- Municipios cargados: ${municipalitiesCount}`)
   console.log(`- Parroquias cargadas: ${parishesCount}`)
+  console.log(`- Vacunas cargadas: ${vaccinesCount}`)
+  console.log(`- Permisos cargados: ${permissionsCount}`)
+  console.log(`- Roles cargados: ${rolesCount}`)
   console.log('------------------------------------------------------------')
 }
 
