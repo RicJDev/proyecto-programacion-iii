@@ -5,6 +5,7 @@ import { PrismaClient } from '../src/generated/prisma/client'
 import { DB_URL } from '../src/config/variables'
 import { seedBase } from './seed.base'
 import { seedDev } from './seed.dev'
+import { seedProd } from './seed.prod'
 
 const adapter = new PrismaMariaDb(DB_URL)
 const prisma = new PrismaClient({ adapter })
@@ -42,9 +43,7 @@ async function runSqlFile(filePath: string, label: string) {
 async function main() {
   console.log('Iniciando carga de semilla...')
 
-  const prismaDir = __dirname
-  const baseSqlPath = path.join(prismaDir, 'seed.base.sql')
-  const prodSqlPath = path.join(prismaDir, 'seed.prod.sql')
+  const baseSqlPath = path.join(__dirname, 'seed.base.sql')
 
   // 1. Cargar SIEMPRE los datos geográficos base en SQL (Estados, Municipios y Parroquias)
   await runSqlFile(baseSqlPath, 'Semilla Geográfica Base (seed.base.sql)')
@@ -54,7 +53,7 @@ async function main() {
 
   // 3. Cargar datos según el entorno (producción o desarrollo)
   if (process.env.NODE_ENV === 'production') {
-    await runSqlFile(prodSqlPath, 'Semilla de Producción (seed.prod.sql)')
+    await seedProd(prisma)
   } else {
     await seedDev(prisma)
   }

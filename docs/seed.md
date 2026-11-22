@@ -1,6 +1,6 @@
-# Semilla de Datos Base y Geografía Nacional (`seed.base.sql`, `seed.base.ts` y `seed.dev.ts`)
+# Semilla de Datos Base y Geografía Nacional (`seed.base.sql`, `seed.base.ts`, `seed.dev.ts` y `seed.prod.ts`)
 
-Este documento describe la arquitectura de semillas del sistema para garantizar que los datos fundamentales —la división político-territorial completa de Venezuela (**Estados, Municipios y Parroquias**) en SQL, los datos base (**Vacunas, Permisos y Roles**) en `seed.base.ts` y los datos de desarrollo en `seed.dev.ts`— se carguen siempre de forma idempotente en la base de datos.
+Este documento describe la arquitectura de semillas del sistema para garantizar que los datos fundamentales —la división político-territorial completa de Venezuela (**Estados, Municipios y Parroquias**) en SQL, los datos base (**Vacunas, Permisos y Roles**) en `seed.base.ts`, los datos de desarrollo en `seed.dev.ts` y la inicialización segura de producción en `seed.prod.ts`— se carguen siempre de forma idempotente en la base de datos.
 
 ## 1. Estructura de Archivos de Semilla
 
@@ -19,13 +19,16 @@ Este documento describe la arquitectura de semillas del sistema para garantizar 
   - Usuarios de prueba por rol (contraseña hasheada con `bcrypt`)
   - Centros de salud vinculados a parroquias reales de `seed.base.sql`
   - Esquemas de vacunación, lotes, inventario, personas, representaciones, tarjetas, inmunizaciones, exámenes médicos, parámetros, certificados y resultados
-- **[`app/backend/prisma/seed.prod.sql`](../app/backend/prisma/seed.prod.sql)**:
-  Datos mínimos iniciales para producción (usuario Administrador Maestro inicial).
+- **[`app/backend/prisma/seed.prod.ts`](../app/backend/prisma/seed.prod.ts)**:
+  Módulo TypeScript exportado (`seedProd(prisma)`) e importado en `seed.ts` para entornos de producción (`NODE_ENV=production`). Crea el usuario Administrador Maestro inicial usando Prisma y `bcrypt`, inyectando la primera clave mediante variable de entorno:
+  - `ADMIN_INITIAL_PASSWORD` (**obligatoria** en producción): primera contraseña del administrador maestro, hasheada con `bcrypt`.
+  - `ADMIN_INITIAL_EMAIL` (opcional, por defecto `admin@salud.gob`): correo del administrador inicial.
+  - `ADMIN_INITIAL_NAME` (opcional, por defecto `Administrador Maestro MPPS`): nombre del administrador inicial.
 - **[`app/backend/prisma/seed.ts`](../app/backend/prisma/seed.ts)**:
   Punto de entrada ejecutado por Prisma (`pnpm --filter backend db:seed`):
   1. Ejecuta `seed.base.sql` directamente mediante `prisma.$executeRawUnsafe`.
   2. Ejecuta `seedBase(prisma)` importado desde `./seed.base`.
-  3. Ejecuta `seedDev(prisma)` (en desarrollo) o `seed.prod.sql` (cuando `NODE_ENV === 'production'`).
+  3. Ejecuta `seedProd(prisma)` (cuando `NODE_ENV === 'production'`) o `seedDev(prisma)` (en desarrollo).
 
 ## 2. Fuente de Información Geográfica
 
@@ -33,10 +36,16 @@ La división político-territorial oficial (estados, municipios y parroquias de 
 
 ## 3. Ejecución de la Semilla
 
-Para cargar la semilla completa en la base de datos MariaDB:
+Para cargar la semilla completa en desarrollo:
 
 ```bash
 pnpm --filter backend db:seed
+```
+
+Para cargar la semilla en producción inyectando la primera clave del administrador:
+
+```bash
+NODE_ENV=production ADMIN_INITIAL_PASSWORD="TuClaveSegura2026!" pnpm --filter backend db:seed
 ```
 
 O para cargar únicamente la división geográfica directamente desde MariaDB / phpMyAdmin:
